@@ -2,9 +2,9 @@ name: Hourly ticket watch
 
 on:
   schedule:
-    # GitHub Actions cron is UTC and best-effort. 05:00 UTC = 10:30 IST; the
-    # workflow then runs once per hour at :05 UTC (5 minutes past every IST hour,
-    # since IST is UTC+05:30). Runs may start late during peak load.
+    # GitHub Actions cron is UTC and best-effort. 05:00 UTC = 10:30 IST, then
+    # hourly at :35 past each IST hour (IST is UTC+05:30). Runs may start late
+    # during peak load.
     - cron: "5 * * * *"
   workflow_dispatch:
     inputs:
@@ -39,7 +39,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: master
-          fetch-depth: 1
+          # Full history keeps the post-run rebase/push reliable if a human push
+          # lands while the monitor is running.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
