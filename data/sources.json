@@ -1,39 +1,59 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-17T21:04:20+05:30",
+  "checked_at": "2026-11-17T23:17:45+05:30",
   "sources": {
     "district": {
       "source": "district",
-      "status": "blocked",
-      "message": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed.",
-      "checked_at": "2026-11-17T21:04:20+05:30",
+      "status": "ok",
+      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres.",
+      "checked_at": "2026-11-17T17:45:00Z",
       "evidence": {
-        "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
-        "status": "blocked",
-        "http_status": 403,
-        "latency_ms": 83,
-        "attempts": 1,
-        "error": "HTTP 403",
-        "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed."
+        "transport": "nas_inbox",
+        "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "session_groups": 3,
+        "matches_configured_cinemas": 3,
+        "dates_with_sessions": [
+          "2026-12-17"
+        ],
+        "collector": {
+          "name": "openwrt-ucode",
+          "version": "1.0.0",
+          "host": "openwrt",
+          "egress": "IN",
+          "parser": "district-next-data"
+        }
       },
-      "movie": {},
-      "notes": [],
-      "last_success_at": "2026-11-17T20:51:53+05:30"
+      "movie": {
+        "content_id": "176735",
+        "title": "Avengers: Doomsday",
+        "release_date": "2026-12-17",
+        "duration_minutes": 165,
+        "primary_language": "English",
+        "languages": [
+          "English"
+        ],
+        "poster": "https://b.zmtcdn.com/data/edition_assets/17948391026094715.jpg",
+        "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "show_dates": [
+          "2026-12-17"
+        ]
+      },
+      "notes": [
+        "Collected by the Indian-egress NAS collector and ingested without a network fetch.",
+        "Area-wise seat counts are published by District; individual seat numbers are not invented. Missing data stays missing."
+      ],
+      "last_success_at": "2026-11-17T17:45:00Z"
     },
     "bookmyshow": {
       "source": "bookmyshow",
       "status": "blocked",
-      "message": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-      "checked_at": "2026-11-17T21:04:20+05:30",
+      "message": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+      "checked_at": "2026-11-17T23:17:45+05:30",
       "evidence": {
-        "url": "https://in.bookmyshow.com/explore/movies-bengaluru",
-        "status": "blocked",
+        "transport": "nas_inbox",
+        "bypassed": false,
         "http_status": 403,
-        "latency_ms": 29,
-        "attempts": 1,
-        "error": "HTTP 403",
-        "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'challenge-platform'). Not bypassed.",
-        "explore_url": "https://in.bookmyshow.com/explore/movies-bengaluru"
+        "checked_at": "2026-11-17T17:45:00Z"
       },
       "movie": {},
       "notes": [],

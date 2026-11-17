@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "run_id": "20261117T210420-00e7c4",
-  "checked_at": "2026-11-17T21:04:20+05:30",
-  "started_at": "2026-11-17T21:04:20+05:30",
-  "duration_ms": 496,
-  "status": "degraded",
+  "run_id": "20261117T231745-f110e4",
+  "checked_at": "2026-11-17T23:17:45+05:30",
+  "started_at": "2026-11-17T23:17:45+05:30",
+  "duration_ms": 0,
+  "status": "partial",
   "movie": {
     "title": "Avengers: Doomsday",
     "release_date": "2026-12-17",
@@ -13,26 +13,26 @@
       "2026-12-18"
     ],
     "district_content_id": "176735",
-    "district_url": null,
-    "poster": null,
-    "duration_minutes": null
+    "district_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+    "poster": "https://b.zmtcdn.com/data/edition_assets/17948391026094715.jpg",
+    "duration_minutes": 165
   },
   "totals": {
     "theatres_monitored": 6,
     "theatres_with_listings": 3,
-    "shows_total": 20,
-    "shows_3d": 20,
-    "shows_infinity_vision_3d": 20,
+    "shows_total": 19,
+    "shows_3d": 19,
+    "shows_infinity_vision_3d": 19,
     "shows_imax_3d": 0,
     "shows_4dx": 4,
-    "bookable_shows": 6,
-    "seats_available_total": 1849,
+    "bookable_shows": 5,
+    "seats_available_total": 1295,
     "dates": {
       "2026-12-17": {
-        "shows": 20,
+        "shows": 19,
         "theatres": 3,
-        "shows_3d": 20,
-        "shows_infinity_vision_3d": 20
+        "shows_3d": 19,
+        "shows_infinity_vision_3d": 19
       },
       "2026-12-18": {
         "shows": 0,
@@ -58,12 +58,12 @@
         "district": {
           "platform": "district",
           "theatre_id": "lulu-global-mall",
-          "status": "stale",
+          "status": "ok",
           "listed": true,
           "venue": {
             "id": "56450",
             "name": "Cinepolis Lulu Global Mall, Bengaluru, Bengaluru",
-            "url": "https://www.district.in/movies/cinepolis-lulu-global-mall-bengaluru-bengaluru-CD56450",
+            "url": "https://www.district.in/movies/cinepolis-lulu-global-mall-bengaluru-bengaluru-c/56450",
             "verified_name": true,
             "address": "3rd Floor, Lulu Global Mall, Rajajinagar, Bengaluru, Karnataka 560023, India",
             "distance_km": 8.0
@@ -87,7 +87,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 890,
@@ -186,7 +188,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -285,7 +289,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -294,7 +300,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 277,
-                "available_seats": 91,
+                "available_seats": 78,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -313,7 +319,7 @@
                     "code": "0000000002",
                     "price": 920,
                     "total_seats": 60,
-                    "available_seats": 49,
+                    "available_seats": 47,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -324,9 +330,9 @@
                     "code": "0000000001",
                     "price": 940,
                     "total_seats": 129,
-                    "available_seats": 23,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 12,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -384,7 +390,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -483,22 +491,24 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
-                "min": 840,
-                "max": 980
+                "min": 890,
+                "max": 1030
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 277,
-                "available_seats": 56,
+                "available_seats": 49,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
                     "label": "NORMAL",
                     "code": "0000000000",
-                    "price": 840,
+                    "price": 890,
                     "total_seats": 19,
                     "available_seats": 19,
                     "status": "bookable",
@@ -509,9 +519,9 @@
                   {
                     "label": "EXECUTIVE",
                     "code": "0000000002",
-                    "price": 920,
+                    "price": 970,
                     "total_seats": 60,
-                    "available_seats": 33,
+                    "available_seats": 30,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -520,18 +530,18 @@
                   {
                     "label": "PREMIUM",
                     "code": "0000000001",
-                    "price": 940,
+                    "price": 990,
                     "total_seats": 129,
-                    "available_seats": 4,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
                     "label": "PREMIUM PLUS",
                     "code": "0000000020",
-                    "price": 960,
+                    "price": 1010,
                     "total_seats": 46,
                     "available_seats": 0,
                     "status": "sold_out",
@@ -542,7 +552,7 @@
                   {
                     "label": "PREMIUM XL",
                     "code": "0000000023",
-                    "price": 980,
+                    "price": 1030,
                     "total_seats": 23,
                     "available_seats": 0,
                     "status": "sold_out",
@@ -585,7 +595,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -695,7 +707,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 890,
@@ -794,7 +808,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 840,
@@ -893,7 +909,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 840,
@@ -902,7 +920,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 277,
-                    "available_seats": 91,
+                    "available_seats": 78,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -921,7 +939,7 @@
                         "code": "0000000002",
                         "price": 920,
                         "total_seats": 60,
-                        "available_seats": 49,
+                        "available_seats": 47,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -932,9 +950,9 @@
                         "code": "0000000001",
                         "price": 940,
                         "total_seats": 129,
-                        "available_seats": 23,
-                        "status": "filling_fast",
-                        "status_raw": "Filling Fast",
+                        "available_seats": 12,
+                        "status": "few_left",
+                        "status_raw": "Almost Full",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -992,7 +1010,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 840,
@@ -1091,22 +1111,24 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
-                    "min": 840,
-                    "max": 980
+                    "min": 890,
+                    "max": 1030
                   },
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 277,
-                    "available_seats": 56,
+                    "available_seats": 49,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
                         "label": "NORMAL",
                         "code": "0000000000",
-                        "price": 840,
+                        "price": 890,
                         "total_seats": 19,
                         "available_seats": 19,
                         "status": "bookable",
@@ -1117,9 +1139,9 @@
                       {
                         "label": "EXECUTIVE",
                         "code": "0000000002",
-                        "price": 920,
+                        "price": 970,
                         "total_seats": 60,
-                        "available_seats": 33,
+                        "available_seats": 30,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -1128,18 +1150,18 @@
                       {
                         "label": "PREMIUM",
                         "code": "0000000001",
-                        "price": 940,
+                        "price": 990,
                         "total_seats": 129,
-                        "available_seats": 4,
-                        "status": "few_left",
-                        "status_raw": "Almost Full",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       },
                       {
                         "label": "PREMIUM PLUS",
                         "code": "0000000020",
-                        "price": 960,
+                        "price": 1010,
                         "total_seats": 46,
                         "available_seats": 0,
                         "status": "sold_out",
@@ -1150,7 +1172,7 @@
                       {
                         "label": "PREMIUM XL",
                         "code": "0000000023",
-                        "price": 980,
+                        "price": 1030,
                         "total_seats": 23,
                         "available_seats": 0,
                         "status": "sold_out",
@@ -1193,7 +1215,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 840,
@@ -1283,14 +1307,10 @@
               ]
             }
           },
-          "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
-          "notes": [
-            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (12 minutes old)."
-          ],
-          "stale": true,
-          "data_age_minutes": 12,
-          "last_success_at": "2026-11-17T20:51:53+05:30"
+          "error": null,
+          "checked_at": "2026-11-17T23:17:45+05:30",
+          "notes": [],
+          "last_success_at": "2026-11-17T23:17:45+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -1300,8 +1320,8 @@
           "venue": {},
           "shows": [],
           "dates": {},
-          "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
+          "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+          "checked_at": "2026-11-17T23:17:45+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -1330,7 +1350,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 890,
@@ -1432,7 +1454,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -1534,7 +1558,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -1543,7 +1569,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 277,
-                "available_seats": 91,
+                "available_seats": 78,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -1562,7 +1588,7 @@
                     "code": "0000000002",
                     "price": 920,
                     "total_seats": 60,
-                    "available_seats": 49,
+                    "available_seats": 47,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -1573,9 +1599,9 @@
                     "code": "0000000001",
                     "price": 940,
                     "total_seats": 129,
-                    "available_seats": 23,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 12,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -1636,7 +1662,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -1738,22 +1766,24 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
-                "min": 840,
-                "max": 980
+                "min": 890,
+                "max": 1030
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 277,
-                "available_seats": 56,
+                "available_seats": 49,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
                     "label": "NORMAL",
                     "code": "0000000000",
-                    "price": 840,
+                    "price": 890,
                     "total_seats": 19,
                     "available_seats": 19,
                     "status": "bookable",
@@ -1764,9 +1794,9 @@
                   {
                     "label": "EXECUTIVE",
                     "code": "0000000002",
-                    "price": 920,
+                    "price": 970,
                     "total_seats": 60,
-                    "available_seats": 33,
+                    "available_seats": 30,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -1775,18 +1805,18 @@
                   {
                     "label": "PREMIUM",
                     "code": "0000000001",
-                    "price": 940,
+                    "price": 990,
                     "total_seats": 129,
-                    "available_seats": 4,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
                     "label": "PREMIUM PLUS",
                     "code": "0000000020",
-                    "price": 960,
+                    "price": 1010,
                     "total_seats": 46,
                     "available_seats": 0,
                     "status": "sold_out",
@@ -1797,7 +1827,7 @@
                   {
                     "label": "PREMIUM XL",
                     "code": "0000000023",
-                    "price": 980,
+                    "price": 1030,
                     "total_seats": 23,
                     "available_seats": 0,
                     "status": "sold_out",
@@ -1843,7 +1873,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 840,
@@ -1945,7 +1977,7 @@
             }
           ],
           "booking_status": "filling_fast",
-          "seats_available": 391,
+          "seats_available": 371,
           "price_min": 840,
           "price_max": 1030,
           "first_show": "01:00",
@@ -2010,7 +2042,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 890,
@@ -2112,7 +2146,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 840,
@@ -2214,7 +2250,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 840,
@@ -2223,7 +2261,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 277,
-            "available_seats": 91,
+            "available_seats": 78,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -2242,7 +2280,7 @@
                 "code": "0000000002",
                 "price": 920,
                 "total_seats": 60,
-                "available_seats": 49,
+                "available_seats": 47,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -2253,9 +2291,9 @@
                 "code": "0000000001",
                 "price": 940,
                 "total_seats": 129,
-                "available_seats": 23,
-                "status": "filling_fast",
-                "status_raw": "Filling Fast",
+                "available_seats": 12,
+                "status": "few_left",
+                "status_raw": "Almost Full",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -2316,7 +2354,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 840,
@@ -2418,22 +2458,24 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
-            "min": 840,
-            "max": 980
+            "min": 890,
+            "max": 1030
           },
           "availability": {
             "status": "filling_fast",
             "total_seats": 277,
-            "available_seats": 56,
+            "available_seats": 49,
             "status_raw": "Filling Fast",
             "areas": [
               {
                 "label": "NORMAL",
                 "code": "0000000000",
-                "price": 840,
+                "price": 890,
                 "total_seats": 19,
                 "available_seats": 19,
                 "status": "bookable",
@@ -2444,9 +2486,9 @@
               {
                 "label": "EXECUTIVE",
                 "code": "0000000002",
-                "price": 920,
+                "price": 970,
                 "total_seats": 60,
-                "available_seats": 33,
+                "available_seats": 30,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -2455,18 +2497,18 @@
               {
                 "label": "PREMIUM",
                 "code": "0000000001",
-                "price": 940,
+                "price": 990,
                 "total_seats": 129,
-                "available_seats": 4,
-                "status": "few_left",
-                "status_raw": "Almost Full",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               },
               {
                 "label": "PREMIUM PLUS",
                 "code": "0000000020",
-                "price": 960,
+                "price": 1010,
                 "total_seats": 46,
                 "available_seats": 0,
                 "status": "sold_out",
@@ -2477,7 +2519,7 @@
               {
                 "label": "PREMIUM XL",
                 "code": "0000000023",
-                "price": 980,
+                "price": 1030,
                 "total_seats": 23,
                 "available_seats": 0,
                 "status": "sold_out",
@@ -2523,7 +2565,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 840,
@@ -2632,7 +2676,7 @@
         "source_urls": [
           {
             "platform": "district",
-            "url": "https://www.district.in/movies/cinepolis-lulu-global-mall-bengaluru-bengaluru-CD56450"
+            "url": "https://www.district.in/movies/cinepolis-lulu-global-mall-bengaluru-bengaluru-c/56450"
           }
         ],
         "status": "filling_fast",
@@ -2711,12 +2755,12 @@
         }
       },
       "health": {
-        "status": "stale",
-        "age_minutes": 12,
-        "platforms_live": [],
-        "platforms_stale": [
+        "status": "live",
+        "age_minutes": 0,
+        "platforms_live": [
           "district"
-        ]
+        ],
+        "platforms_stale": []
       },
       "other_dates_seen": []
     },
@@ -2733,12 +2777,12 @@
         "district": {
           "platform": "district",
           "theatre_id": "orion-mall",
-          "status": "stale",
+          "status": "ok",
           "listed": true,
           "venue": {
             "id": "1022299",
             "name": "PVR Orion Mall, Dr Rajkumar Road, Bengaluru",
-            "url": "https://www.district.in/movies/pvr-orion-mall-dr-rajkumar-road-bengaluru-CD1022299",
+            "url": "https://www.district.in/movies/pvr-orion-mall-dr-rajkumar-road-bengaluru-c/1022299",
             "verified_name": true,
             "address": "3rd Floor, Orion Mall, Brigade Gateway, Dr. Rajkumar Road, Malleshwaram West, Bengaluru, Karnataka 560055, India",
             "distance_km": 8.8
@@ -2762,7 +2806,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1000,
@@ -2771,7 +2817,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 62,
+                "available_seats": 54,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -2779,7 +2825,7 @@
                     "code": "CR",
                     "price": 1000,
                     "total_seats": 32,
-                    "available_seats": 31,
+                    "available_seats": 29,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -2801,10 +2847,10 @@
                     "code": "QR",
                     "price": 1200,
                     "total_seats": 80,
-                    "available_seats": 4,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -2823,10 +2869,10 @@
                     "code": "BR",
                     "price": 1710,
                     "total_seats": 17,
-                    "available_seats": 2,
-                    "status": "few_left",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -2835,8 +2881,6 @@
               "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58521-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
               "source_show_id": "58521",
               "tags": [
-                "recliner",
-                "price_1500_2000",
                 "8_am_to_12_pm",
                 "ms_infinity_vision_3d",
                 "price_1000_1500",
@@ -2862,7 +2906,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
@@ -2871,7 +2917,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 72,
+                "available_seats": 68,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -2888,9 +2934,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 820,
+                    "price": 920,
                     "total_seats": 96,
-                    "available_seats": 33,
+                    "available_seats": 36,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -2901,10 +2947,10 @@
                     "code": "QR",
                     "price": 950,
                     "total_seats": 80,
-                    "available_seats": 7,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -2935,7 +2981,6 @@
               "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58522-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
               "source_show_id": "58522",
               "tags": [
-                "price_800_900",
                 "8_am_to_12_pm",
                 "ms_infinity_vision_3d",
                 "price_700_800",
@@ -2962,7 +3007,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1170,
@@ -2971,7 +3018,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 26,
+                "available_seats": 20,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -2979,7 +3026,7 @@
                     "code": "CR",
                     "price": 1170,
                     "total_seats": 60,
-                    "available_seats": 23,
+                    "available_seats": 20,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -2990,10 +3037,10 @@
                     "code": "QR",
                     "price": 1420,
                     "total_seats": 36,
-                    "available_seats": 3,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -3026,16 +3073,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1360
+                "max": 1460
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 74,
+                "available_seats": 60,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -3043,7 +3092,7 @@
                     "code": "CR",
                     "price": 750,
                     "total_seats": 32,
-                    "available_seats": 28,
+                    "available_seats": 30,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -3052,9 +3101,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 820,
+                    "price": 920,
                     "total_seats": 96,
-                    "available_seats": 37,
+                    "available_seats": 26,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -3065,7 +3114,7 @@
                     "code": "QR",
                     "price": 950,
                     "total_seats": 80,
-                    "available_seats": 6,
+                    "available_seats": 2,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -3085,11 +3134,11 @@
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1360,
+                    "price": 1460,
                     "total_seats": 17,
-                    "available_seats": 2,
+                    "available_seats": 1,
                     "status": "few_left",
-                    "status_raw": "Filling Fast",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -3101,7 +3150,6 @@
               "tags": [
                 "recliner",
                 "12_pm_to_4_pm",
-                "price_800_900",
                 "ms_infinity_vision_3d",
                 "price_700_800",
                 "price_1000_1500",
@@ -3128,7 +3176,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1170,
@@ -3192,7 +3242,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 800,
@@ -3201,7 +3253,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 62,
+                "available_seats": 51,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -3220,7 +3272,7 @@
                     "code": "PC",
                     "price": 920,
                     "total_seats": 96,
-                    "available_seats": 28,
+                    "available_seats": 22,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -3231,10 +3283,10 @@
                     "code": "QR",
                     "price": 950,
                     "total_seats": 80,
-                    "available_seats": 5,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -3294,7 +3346,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1370,
@@ -3303,7 +3357,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 25,
+                "available_seats": 15,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -3311,9 +3365,9 @@
                     "code": "CR",
                     "price": 1370,
                     "total_seats": 60,
-                    "available_seats": 24,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 15,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -3322,10 +3376,10 @@
                     "code": "QR",
                     "price": 1620,
                     "total_seats": 36,
-                    "available_seats": 1,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -3335,7 +3389,6 @@
               "source_show_id": "58529",
               "tags": [
                 "after_5_pm",
-                "price_1500_2000",
                 "after_6_pm",
                 "after_7_pm",
                 "price_1000_1500",
@@ -3362,7 +3415,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 850,
@@ -3371,7 +3426,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 79,
+                "available_seats": 70,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -3379,7 +3434,7 @@
                     "code": "CR",
                     "price": 850,
                     "total_seats": 32,
-                    "available_seats": 30,
+                    "available_seats": 32,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -3388,11 +3443,11 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 920,
+                    "price": 1020,
                     "total_seats": 96,
-                    "available_seats": 41,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 32,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -3423,10 +3478,10 @@
                     "code": "BR",
                     "price": 1560,
                     "total_seats": 17,
-                    "available_seats": 2,
-                    "status": "few_left",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -3435,20 +3490,17 @@
               "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58525-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
               "source_show_id": "58525",
               "tags": [
-                "recliner",
-                "price_1500_2000",
-                "after_10_pm",
-                "price_1000_1500",
-                "price_900_1000",
-                "7_pm_to_12_am",
                 "after_9_pm",
                 "after_8_pm",
                 "price_800_900",
                 "after_5_pm",
+                "after_10_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
                 "after_7_pm",
-                "wheelchair_friendly"
+                "price_1000_1500",
+                "wheelchair_friendly",
+                "7_pm_to_12_am"
               ],
               "notes": []
             },
@@ -3470,7 +3522,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1420,
@@ -3479,7 +3533,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 34,
+                "available_seats": 27,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -3487,7 +3541,7 @@
                     "code": "CR",
                     "price": 1420,
                     "total_seats": 60,
-                    "available_seats": 34,
+                    "available_seats": 24,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -3498,10 +3552,10 @@
                     "code": "QR",
                     "price": 1720,
                     "total_seats": 36,
-                    "available_seats": 0,
-                    "status": "sold_out",
-                    "status_raw": "Sold Out",
-                    "bookable": false,
+                    "available_seats": 3,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
+                    "bookable": true,
                     "seat_classes": []
                   }
                 ],
@@ -3513,6 +3567,7 @@
                 "after_9_pm",
                 "after_8_pm",
                 "after_5_pm",
+                "price_1500_2000",
                 "after_10_pm",
                 "after_6_pm",
                 "after_7_pm",
@@ -3545,7 +3600,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 1000,
@@ -3554,7 +3611,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 245,
-                    "available_seats": 62,
+                    "available_seats": 54,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -3562,7 +3619,7 @@
                         "code": "CR",
                         "price": 1000,
                         "total_seats": 32,
-                        "available_seats": 31,
+                        "available_seats": 29,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -3584,10 +3641,10 @@
                         "code": "QR",
                         "price": 1200,
                         "total_seats": 80,
-                        "available_seats": 4,
-                        "status": "few_left",
-                        "status_raw": "Almost Full",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       },
                       {
@@ -3606,10 +3663,10 @@
                         "code": "BR",
                         "price": 1710,
                         "total_seats": 17,
-                        "available_seats": 2,
-                        "status": "few_left",
-                        "status_raw": "Filling Fast",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       }
                     ],
@@ -3618,8 +3675,6 @@
                   "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58521-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
                   "source_show_id": "58521",
                   "tags": [
-                    "recliner",
-                    "price_1500_2000",
                     "8_am_to_12_pm",
                     "ms_infinity_vision_3d",
                     "price_1000_1500",
@@ -3645,7 +3700,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 750,
@@ -3654,7 +3711,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 245,
-                    "available_seats": 72,
+                    "available_seats": 68,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -3671,9 +3728,9 @@
                       {
                         "label": "CLASSIC PLUS ROWS",
                         "code": "PC",
-                        "price": 820,
+                        "price": 920,
                         "total_seats": 96,
-                        "available_seats": 33,
+                        "available_seats": 36,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -3684,10 +3741,10 @@
                         "code": "QR",
                         "price": 950,
                         "total_seats": 80,
-                        "available_seats": 7,
-                        "status": "few_left",
-                        "status_raw": "Almost Full",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       },
                       {
@@ -3718,7 +3775,6 @@
                   "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58522-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
                   "source_show_id": "58522",
                   "tags": [
-                    "price_800_900",
                     "8_am_to_12_pm",
                     "ms_infinity_vision_3d",
                     "price_700_800",
@@ -3745,7 +3801,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 4DX-3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 1170,
@@ -3754,7 +3812,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 96,
-                    "available_seats": 26,
+                    "available_seats": 20,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -3762,7 +3820,7 @@
                         "code": "CR",
                         "price": 1170,
                         "total_seats": 60,
-                        "available_seats": 23,
+                        "available_seats": 20,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -3773,10 +3831,10 @@
                         "code": "QR",
                         "price": 1420,
                         "total_seats": 36,
-                        "available_seats": 3,
-                        "status": "few_left",
-                        "status_raw": "Almost Full",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       }
                     ],
@@ -3809,16 +3867,18 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 750,
-                    "max": 1360
+                    "max": 1460
                   },
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 245,
-                    "available_seats": 74,
+                    "available_seats": 60,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -3826,7 +3886,7 @@
                         "code": "CR",
                         "price": 750,
                         "total_seats": 32,
-                        "available_seats": 28,
+                        "available_seats": 30,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -3835,9 +3895,9 @@
                       {
                         "label": "CLASSIC PLUS ROWS",
                         "code": "PC",
-                        "price": 820,
+                        "price": 920,
                         "total_seats": 96,
-                        "available_seats": 37,
+                        "available_seats": 26,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -3848,7 +3908,7 @@
                         "code": "QR",
                         "price": 950,
                         "total_seats": 80,
-                        "available_seats": 6,
+                        "available_seats": 2,
                         "status": "few_left",
                         "status_raw": "Almost Full",
                         "bookable": true,
@@ -3868,11 +3928,11 @@
                       {
                         "label": "RECLINER ROWS",
                         "code": "BR",
-                        "price": 1360,
+                        "price": 1460,
                         "total_seats": 17,
-                        "available_seats": 2,
+                        "available_seats": 1,
                         "status": "few_left",
-                        "status_raw": "Filling Fast",
+                        "status_raw": "Almost Full",
                         "bookable": true,
                         "seat_classes": []
                       }
@@ -3884,7 +3944,6 @@
                   "tags": [
                     "recliner",
                     "12_pm_to_4_pm",
-                    "price_800_900",
                     "ms_infinity_vision_3d",
                     "price_700_800",
                     "price_1000_1500",
@@ -3911,7 +3970,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 4DX-3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 1170,
@@ -3975,7 +4036,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 800,
@@ -3984,7 +4047,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 245,
-                    "available_seats": 62,
+                    "available_seats": 51,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -4003,7 +4066,7 @@
                         "code": "PC",
                         "price": 920,
                         "total_seats": 96,
-                        "available_seats": 28,
+                        "available_seats": 22,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -4014,10 +4077,10 @@
                         "code": "QR",
                         "price": 950,
                         "total_seats": 80,
-                        "available_seats": 5,
-                        "status": "few_left",
-                        "status_raw": "Almost Full",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       },
                       {
@@ -4077,7 +4140,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 4DX-3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 1370,
@@ -4086,7 +4151,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 96,
-                    "available_seats": 25,
+                    "available_seats": 15,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -4094,9 +4159,9 @@
                         "code": "CR",
                         "price": 1370,
                         "total_seats": 60,
-                        "available_seats": 24,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 15,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -4105,10 +4170,10 @@
                         "code": "QR",
                         "price": 1620,
                         "total_seats": 36,
-                        "available_seats": 1,
-                        "status": "few_left",
-                        "status_raw": "Almost Full",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       }
                     ],
@@ -4118,7 +4183,6 @@
                   "source_show_id": "58529",
                   "tags": [
                     "after_5_pm",
-                    "price_1500_2000",
                     "after_6_pm",
                     "after_7_pm",
                     "price_1000_1500",
@@ -4145,7 +4209,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 850,
@@ -4154,7 +4220,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 245,
-                    "available_seats": 79,
+                    "available_seats": 70,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -4162,7 +4228,7 @@
                         "code": "CR",
                         "price": 850,
                         "total_seats": 32,
-                        "available_seats": 30,
+                        "available_seats": 32,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -4171,11 +4237,11 @@
                       {
                         "label": "CLASSIC PLUS ROWS",
                         "code": "PC",
-                        "price": 920,
+                        "price": 1020,
                         "total_seats": 96,
-                        "available_seats": 41,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 32,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -4206,10 +4272,10 @@
                         "code": "BR",
                         "price": 1560,
                         "total_seats": 17,
-                        "available_seats": 2,
-                        "status": "few_left",
-                        "status_raw": "Filling Fast",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       }
                     ],
@@ -4218,20 +4284,17 @@
                   "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58525-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
                   "source_show_id": "58525",
                   "tags": [
-                    "recliner",
-                    "price_1500_2000",
-                    "after_10_pm",
-                    "price_1000_1500",
-                    "price_900_1000",
-                    "7_pm_to_12_am",
                     "after_9_pm",
                     "after_8_pm",
                     "price_800_900",
                     "after_5_pm",
+                    "after_10_pm",
                     "ms_infinity_vision_3d",
                     "after_6_pm",
                     "after_7_pm",
-                    "wheelchair_friendly"
+                    "price_1000_1500",
+                    "wheelchair_friendly",
+                    "7_pm_to_12_am"
                   ],
                   "notes": []
                 },
@@ -4253,7 +4316,9 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 4DX-3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 1420,
@@ -4262,7 +4327,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 96,
-                    "available_seats": 34,
+                    "available_seats": 27,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -4270,7 +4335,7 @@
                         "code": "CR",
                         "price": 1420,
                         "total_seats": 60,
-                        "available_seats": 34,
+                        "available_seats": 24,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -4281,10 +4346,10 @@
                         "code": "QR",
                         "price": 1720,
                         "total_seats": 36,
-                        "available_seats": 0,
-                        "status": "sold_out",
-                        "status_raw": "Sold Out",
-                        "bookable": false,
+                        "available_seats": 3,
+                        "status": "few_left",
+                        "status_raw": "Almost Full",
+                        "bookable": true,
                         "seat_classes": []
                       }
                     ],
@@ -4296,6 +4361,7 @@
                     "after_9_pm",
                     "after_8_pm",
                     "after_5_pm",
+                    "price_1500_2000",
                     "after_10_pm",
                     "after_6_pm",
                     "after_7_pm",
@@ -4308,14 +4374,10 @@
               ]
             }
           },
-          "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
-          "notes": [
-            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (12 minutes old)."
-          ],
-          "stale": true,
-          "data_age_minutes": 12,
-          "last_success_at": "2026-11-17T20:51:53+05:30"
+          "error": null,
+          "checked_at": "2026-11-17T23:17:45+05:30",
+          "notes": [],
+          "last_success_at": "2026-11-17T23:17:45+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -4325,8 +4387,8 @@
           "venue": {},
           "shows": [],
           "dates": {},
-          "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
+          "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+          "checked_at": "2026-11-17T23:17:45+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -4355,7 +4417,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1000,
@@ -4364,7 +4428,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 62,
+                "available_seats": 54,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4372,7 +4436,7 @@
                     "code": "CR",
                     "price": 1000,
                     "total_seats": 32,
-                    "available_seats": 31,
+                    "available_seats": 29,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -4394,10 +4458,10 @@
                     "code": "QR",
                     "price": 1200,
                     "total_seats": 80,
-                    "available_seats": 4,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -4416,10 +4480,10 @@
                     "code": "BR",
                     "price": 1710,
                     "total_seats": 17,
-                    "available_seats": 2,
-                    "status": "few_left",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -4428,8 +4492,6 @@
               "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58521-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
               "source_show_id": "58521",
               "tags": [
-                "recliner",
-                "price_1500_2000",
                 "8_am_to_12_pm",
                 "ms_infinity_vision_3d",
                 "price_1000_1500",
@@ -4458,7 +4520,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
@@ -4467,7 +4531,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 72,
+                "available_seats": 68,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4484,9 +4548,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 820,
+                    "price": 920,
                     "total_seats": 96,
-                    "available_seats": 33,
+                    "available_seats": 36,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4497,10 +4561,10 @@
                     "code": "QR",
                     "price": 950,
                     "total_seats": 80,
-                    "available_seats": 7,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -4531,7 +4595,6 @@
               "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58522-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
               "source_show_id": "58522",
               "tags": [
-                "price_800_900",
                 "8_am_to_12_pm",
                 "ms_infinity_vision_3d",
                 "price_700_800",
@@ -4561,7 +4624,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1170,
@@ -4570,7 +4635,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 26,
+                "available_seats": 20,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4578,7 +4643,7 @@
                     "code": "CR",
                     "price": 1170,
                     "total_seats": 60,
-                    "available_seats": 23,
+                    "available_seats": 20,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4589,10 +4654,10 @@
                     "code": "QR",
                     "price": 1420,
                     "total_seats": 36,
-                    "available_seats": 3,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -4628,16 +4693,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1360
+                "max": 1460
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 74,
+                "available_seats": 60,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4645,7 +4712,7 @@
                     "code": "CR",
                     "price": 750,
                     "total_seats": 32,
-                    "available_seats": 28,
+                    "available_seats": 30,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -4654,9 +4721,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 820,
+                    "price": 920,
                     "total_seats": 96,
-                    "available_seats": 37,
+                    "available_seats": 26,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4667,7 +4734,7 @@
                     "code": "QR",
                     "price": 950,
                     "total_seats": 80,
-                    "available_seats": 6,
+                    "available_seats": 2,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -4687,11 +4754,11 @@
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1360,
+                    "price": 1460,
                     "total_seats": 17,
-                    "available_seats": 2,
+                    "available_seats": 1,
                     "status": "few_left",
-                    "status_raw": "Filling Fast",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -4703,7 +4770,6 @@
               "tags": [
                 "recliner",
                 "12_pm_to_4_pm",
-                "price_800_900",
                 "ms_infinity_vision_3d",
                 "price_700_800",
                 "price_1000_1500",
@@ -4733,7 +4799,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1170,
@@ -4800,7 +4868,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 800,
@@ -4809,7 +4879,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 62,
+                "available_seats": 51,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4828,7 +4898,7 @@
                     "code": "PC",
                     "price": 920,
                     "total_seats": 96,
-                    "available_seats": 28,
+                    "available_seats": 22,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4839,10 +4909,10 @@
                     "code": "QR",
                     "price": 950,
                     "total_seats": 80,
-                    "available_seats": 5,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -4905,7 +4975,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1370,
@@ -4914,7 +4986,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 25,
+                "available_seats": 15,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4922,9 +4994,9 @@
                     "code": "CR",
                     "price": 1370,
                     "total_seats": 60,
-                    "available_seats": 24,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 15,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -4933,10 +5005,10 @@
                     "code": "QR",
                     "price": 1620,
                     "total_seats": 36,
-                    "available_seats": 1,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -4946,7 +5018,6 @@
               "source_show_id": "58529",
               "tags": [
                 "after_5_pm",
-                "price_1500_2000",
                 "after_6_pm",
                 "after_7_pm",
                 "price_1000_1500",
@@ -4976,7 +5047,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 850,
@@ -4985,7 +5058,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 79,
+                "available_seats": 70,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4993,7 +5066,7 @@
                     "code": "CR",
                     "price": 850,
                     "total_seats": 32,
-                    "available_seats": 30,
+                    "available_seats": 32,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -5002,11 +5075,11 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 920,
+                    "price": 1020,
                     "total_seats": 96,
-                    "available_seats": 41,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 32,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -5037,10 +5110,10 @@
                     "code": "BR",
                     "price": 1560,
                     "total_seats": 17,
-                    "available_seats": 2,
-                    "status": "few_left",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   }
                 ],
@@ -5049,20 +5122,17 @@
               "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58525-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
               "source_show_id": "58525",
               "tags": [
-                "recliner",
-                "price_1500_2000",
-                "after_10_pm",
-                "price_1000_1500",
-                "price_900_1000",
-                "7_pm_to_12_am",
                 "after_9_pm",
                 "after_8_pm",
                 "price_800_900",
                 "after_5_pm",
+                "after_10_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
                 "after_7_pm",
-                "wheelchair_friendly"
+                "price_1000_1500",
+                "wheelchair_friendly",
+                "7_pm_to_12_am"
               ],
               "notes": [],
               "platforms": [
@@ -5087,7 +5157,9 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 4DX-3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 1420,
@@ -5096,7 +5168,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 34,
+                "available_seats": 27,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -5104,7 +5176,7 @@
                     "code": "CR",
                     "price": 1420,
                     "total_seats": 60,
-                    "available_seats": 34,
+                    "available_seats": 24,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -5115,10 +5187,10 @@
                     "code": "QR",
                     "price": 1720,
                     "total_seats": 36,
-                    "available_seats": 0,
-                    "status": "sold_out",
-                    "status_raw": "Sold Out",
-                    "bookable": false,
+                    "available_seats": 3,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
+                    "bookable": true,
                     "seat_classes": []
                   }
                 ],
@@ -5130,6 +5202,7 @@
                 "after_9_pm",
                 "after_8_pm",
                 "after_5_pm",
+                "price_1500_2000",
                 "after_10_pm",
                 "after_6_pm",
                 "after_7_pm",
@@ -5161,7 +5234,7 @@
             }
           ],
           "booking_status": "filling_fast",
-          "seats_available": 458,
+          "seats_available": 389,
           "price_min": 750,
           "price_max": 1720,
           "first_show": "02:50",
@@ -5226,7 +5299,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 1000,
@@ -5235,7 +5310,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 245,
-            "available_seats": 62,
+            "available_seats": 54,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5243,7 +5318,7 @@
                 "code": "CR",
                 "price": 1000,
                 "total_seats": 32,
-                "available_seats": 31,
+                "available_seats": 29,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -5265,10 +5340,10 @@
                 "code": "QR",
                 "price": 1200,
                 "total_seats": 80,
-                "available_seats": 4,
-                "status": "few_left",
-                "status_raw": "Almost Full",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               },
               {
@@ -5287,10 +5362,10 @@
                 "code": "BR",
                 "price": 1710,
                 "total_seats": 17,
-                "available_seats": 2,
-                "status": "few_left",
-                "status_raw": "Filling Fast",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               }
             ],
@@ -5299,8 +5374,6 @@
           "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58521-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
           "source_show_id": "58521",
           "tags": [
-            "recliner",
-            "price_1500_2000",
             "8_am_to_12_pm",
             "ms_infinity_vision_3d",
             "price_1000_1500",
@@ -5329,7 +5402,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 750,
@@ -5338,7 +5413,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 245,
-            "available_seats": 72,
+            "available_seats": 68,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5355,9 +5430,9 @@
               {
                 "label": "CLASSIC PLUS ROWS",
                 "code": "PC",
-                "price": 820,
+                "price": 920,
                 "total_seats": 96,
-                "available_seats": 33,
+                "available_seats": 36,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5368,10 +5443,10 @@
                 "code": "QR",
                 "price": 950,
                 "total_seats": 80,
-                "available_seats": 7,
-                "status": "few_left",
-                "status_raw": "Almost Full",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               },
               {
@@ -5402,7 +5477,6 @@
           "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58522-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
           "source_show_id": "58522",
           "tags": [
-            "price_800_900",
             "8_am_to_12_pm",
             "ms_infinity_vision_3d",
             "price_700_800",
@@ -5432,7 +5506,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 4DX-3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 1170,
@@ -5441,7 +5517,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 96,
-            "available_seats": 26,
+            "available_seats": 20,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5449,7 +5525,7 @@
                 "code": "CR",
                 "price": 1170,
                 "total_seats": 60,
-                "available_seats": 23,
+                "available_seats": 20,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5460,10 +5536,10 @@
                 "code": "QR",
                 "price": 1420,
                 "total_seats": 36,
-                "available_seats": 3,
-                "status": "few_left",
-                "status_raw": "Almost Full",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               }
             ],
@@ -5499,16 +5575,18 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 750,
-            "max": 1360
+            "max": 1460
           },
           "availability": {
             "status": "filling_fast",
             "total_seats": 245,
-            "available_seats": 74,
+            "available_seats": 60,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5516,7 +5594,7 @@
                 "code": "CR",
                 "price": 750,
                 "total_seats": 32,
-                "available_seats": 28,
+                "available_seats": 30,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -5525,9 +5603,9 @@
               {
                 "label": "CLASSIC PLUS ROWS",
                 "code": "PC",
-                "price": 820,
+                "price": 920,
                 "total_seats": 96,
-                "available_seats": 37,
+                "available_seats": 26,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5538,7 +5616,7 @@
                 "code": "QR",
                 "price": 950,
                 "total_seats": 80,
-                "available_seats": 6,
+                "available_seats": 2,
                 "status": "few_left",
                 "status_raw": "Almost Full",
                 "bookable": true,
@@ -5558,11 +5636,11 @@
               {
                 "label": "RECLINER ROWS",
                 "code": "BR",
-                "price": 1360,
+                "price": 1460,
                 "total_seats": 17,
-                "available_seats": 2,
+                "available_seats": 1,
                 "status": "few_left",
-                "status_raw": "Filling Fast",
+                "status_raw": "Almost Full",
                 "bookable": true,
                 "seat_classes": []
               }
@@ -5574,7 +5652,6 @@
           "tags": [
             "recliner",
             "12_pm_to_4_pm",
-            "price_800_900",
             "ms_infinity_vision_3d",
             "price_700_800",
             "price_1000_1500",
@@ -5604,7 +5681,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 4DX-3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 1170,
@@ -5671,7 +5750,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 800,
@@ -5680,7 +5761,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 245,
-            "available_seats": 62,
+            "available_seats": 51,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5699,7 +5780,7 @@
                 "code": "PC",
                 "price": 920,
                 "total_seats": 96,
-                "available_seats": 28,
+                "available_seats": 22,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5710,10 +5791,10 @@
                 "code": "QR",
                 "price": 950,
                 "total_seats": 80,
-                "available_seats": 5,
-                "status": "few_left",
-                "status_raw": "Almost Full",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               },
               {
@@ -5776,7 +5857,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 4DX-3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 1370,
@@ -5785,7 +5868,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 96,
-            "available_seats": 25,
+            "available_seats": 15,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5793,9 +5876,9 @@
                 "code": "CR",
                 "price": 1370,
                 "total_seats": 60,
-                "available_seats": 24,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 15,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -5804,10 +5887,10 @@
                 "code": "QR",
                 "price": 1620,
                 "total_seats": 36,
-                "available_seats": 1,
-                "status": "few_left",
-                "status_raw": "Almost Full",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               }
             ],
@@ -5817,7 +5900,6 @@
           "source_show_id": "58529",
           "tags": [
             "after_5_pm",
-            "price_1500_2000",
             "after_6_pm",
             "after_7_pm",
             "price_1000_1500",
@@ -5847,7 +5929,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 850,
@@ -5856,7 +5940,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 245,
-            "available_seats": 79,
+            "available_seats": 70,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5864,7 +5948,7 @@
                 "code": "CR",
                 "price": 850,
                 "total_seats": 32,
-                "available_seats": 30,
+                "available_seats": 32,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -5873,11 +5957,11 @@
               {
                 "label": "CLASSIC PLUS ROWS",
                 "code": "PC",
-                "price": 920,
+                "price": 1020,
                 "total_seats": 96,
-                "available_seats": 41,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 32,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -5908,10 +5992,10 @@
                 "code": "BR",
                 "price": 1560,
                 "total_seats": 17,
-                "available_seats": 2,
-                "status": "few_left",
-                "status_raw": "Filling Fast",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               }
             ],
@@ -5920,20 +6004,17 @@
           "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022299-58525-obeovx-1022299&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
           "source_show_id": "58525",
           "tags": [
-            "recliner",
-            "price_1500_2000",
-            "after_10_pm",
-            "price_1000_1500",
-            "price_900_1000",
-            "7_pm_to_12_am",
             "after_9_pm",
             "after_8_pm",
             "price_800_900",
             "after_5_pm",
+            "after_10_pm",
             "ms_infinity_vision_3d",
             "after_6_pm",
             "after_7_pm",
-            "wheelchair_friendly"
+            "price_1000_1500",
+            "wheelchair_friendly",
+            "7_pm_to_12_am"
           ],
           "notes": [],
           "platforms": [
@@ -5958,7 +6039,9 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 4DX-3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 1420,
@@ -5967,7 +6050,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 96,
-            "available_seats": 34,
+            "available_seats": 27,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5975,7 +6058,7 @@
                 "code": "CR",
                 "price": 1420,
                 "total_seats": 60,
-                "available_seats": 34,
+                "available_seats": 24,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -5986,10 +6069,10 @@
                 "code": "QR",
                 "price": 1720,
                 "total_seats": 36,
-                "available_seats": 0,
-                "status": "sold_out",
-                "status_raw": "Sold Out",
-                "bookable": false,
+                "available_seats": 3,
+                "status": "few_left",
+                "status_raw": "Almost Full",
+                "bookable": true,
                 "seat_classes": []
               }
             ],
@@ -6001,6 +6084,7 @@
             "after_9_pm",
             "after_8_pm",
             "after_5_pm",
+            "price_1500_2000",
             "after_10_pm",
             "after_6_pm",
             "after_7_pm",
@@ -6040,7 +6124,7 @@
         "source_urls": [
           {
             "platform": "district",
-            "url": "https://www.district.in/movies/pvr-orion-mall-dr-rajkumar-road-bengaluru-CD1022299"
+            "url": "https://www.district.in/movies/pvr-orion-mall-dr-rajkumar-road-bengaluru-c/1022299"
           }
         ],
         "status": "filling_fast",
@@ -6061,21 +6145,11 @@
           {
             "area": "CLASSIC ROWS",
             "price": 1000,
-            "available_seats": 31,
+            "available_seats": 29,
             "total_seats": 32,
-            "fill_percent": 97,
+            "fill_percent": 91,
             "status": "bookable"
           },
-          {
-            "area": "RECLINER ROWS",
-            "price": 1710,
-            "available_seats": 2,
-            "total_seats": 17,
-            "fill_percent": 12,
-            "status": "few_left"
-          }
-        ],
-        "second_best": [
           {
             "area": "CLASSIC PLUS ROWS",
             "price": 1170,
@@ -6083,20 +6157,23 @@
             "total_seats": 96,
             "fill_percent": 26,
             "status": "filling_fast"
-          },
+          }
+        ],
+        "second_best": [],
+        "avoid": [
           {
             "area": "PRIME ROWS",
             "price": 1200,
-            "available_seats": 4,
-            "total_seats": 80,
-            "fill_percent": 5,
-            "status": "few_left"
-          }
-        ],
-        "avoid": [
+            "reason": "reported sold out by the source"
+          },
           {
             "area": "EXTRA LEGROOM ROWS",
             "price": 1250,
+            "reason": "reported sold out by the source"
+          },
+          {
+            "area": "RECLINER ROWS",
+            "price": 1710,
             "reason": "reported sold out by the source"
           }
         ],
@@ -6126,12 +6203,12 @@
         }
       },
       "health": {
-        "status": "stale",
-        "age_minutes": 12,
-        "platforms_live": [],
-        "platforms_stale": [
+        "status": "live",
+        "age_minutes": 0,
+        "platforms_live": [
           "district"
-        ]
+        ],
+        "platforms_stale": []
       },
       "other_dates_seen": []
     },
@@ -6148,14 +6225,22 @@
         "district": {
           "platform": "district",
           "theatre_id": "mantri-square-mall",
-          "status": "error",
-          "listed": null,
-          "venue": {},
+          "status": "not_listed",
+          "listed": false,
+          "venue": {
+            "id": "1020725",
+            "name": "Mantri Square Mall, Malleshwaram",
+            "url": null,
+            "verified_name": false
+          },
           "shows": [],
           "dates": {},
-          "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
-          "notes": []
+          "error": null,
+          "checked_at": "2026-11-17T23:17:45+05:30",
+          "notes": [
+            "Cinema not present in District's session list for this movie."
+          ],
+          "last_success_at": "2026-11-17T23:17:45+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -6165,8 +6250,8 @@
           "venue": {},
           "shows": [],
           "dates": {},
-          "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
+          "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+          "checked_at": "2026-11-17T23:17:45+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -6212,11 +6297,22 @@
         "platforms": []
       },
       "best_seats": null,
-      "verification": {},
+      "verification": {
+        "district": {
+          "status": "verified",
+          "source_name": "Mantri Square Mall, Malleshwaram",
+          "source_id": "1020725",
+          "configured_id": "1020725",
+          "matched_alias": "mantri square mall malleshwaram",
+          "note": "Cinema ID and name both confirmed on the platform's public Bengaluru directory."
+        }
+      },
       "health": {
-        "status": "unavailable",
+        "status": "live",
         "age_minutes": 0,
-        "platforms_live": [],
+        "platforms_live": [
+          "district"
+        ],
         "platforms_stale": []
       },
       "other_dates_seen": []
@@ -6234,118 +6330,17 @@
         "district": {
           "platform": "district",
           "theatre_id": "gt-world-mall",
-          "status": "stale",
+          "status": "ok",
           "listed": true,
           "venue": {
             "id": "1022303",
             "name": "PVR GT World Mall, Magadi Road, Bengaluru",
-            "url": "https://www.district.in/movies/pvr-gt-world-mall-magadi-road-bengaluru-CD1022303",
+            "url": "https://www.district.in/movies/pvr-gt-world-mall-magadi-road-bengaluru-c/1022303",
             "verified_name": true,
             "address": "92, Magadi Road Tollgate, Next to Prasanna Theatre, Magadi Road, Bengaluru, Karnataka 560023, India",
             "distance_km": 9.6
           },
           "shows": [
-            {
-              "id": "district|gt-world-mall|2026-12-17|02:50|SCREEN 5|infinity_vision_3d|26533",
-              "platform": "district",
-              "theatre_id": "gt-world-mall",
-              "date": "2026-12-17",
-              "start": "02:50",
-              "start_iso": "2026-12-17T02:50:00+05:30",
-              "screen": "SCREEN 5",
-              "format": {
-                "key": "infinity_vision_3d",
-                "label": "Infinity Vision 3D",
-                "family": "premium",
-                "is_3d": true,
-                "is_premium": true,
-                "is_large_format": true,
-                "confidence": "explicit",
-                "raw": "MS INFINITY VISION 3D"
-              },
-              "languages": [],
-              "price": {
-                "currency": "INR",
-                "min": 750,
-                "max": 1250
-              },
-              "availability": {
-                "status": "bookable",
-                "total_seats": 270,
-                "available_seats": 173,
-                "status_raw": "Available",
-                "areas": [
-                  {
-                    "label": "CLASSIC ROWS",
-                    "code": "CR",
-                    "price": 750,
-                    "total_seats": 30,
-                    "available_seats": 30,
-                    "status": "bookable",
-                    "status_raw": "Available",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "CLASSIC PLUS ROWS",
-                    "code": "PC",
-                    "price": 770,
-                    "total_seats": 90,
-                    "available_seats": 66,
-                    "status": "bookable",
-                    "status_raw": "Available",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "PRIME ROWS",
-                    "code": "QR",
-                    "price": 800,
-                    "total_seats": 108,
-                    "available_seats": 62,
-                    "status": "bookable",
-                    "status_raw": "Available",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "PICTURE PERFECT",
-                    "code": "PI",
-                    "price": 970,
-                    "total_seats": 30,
-                    "available_seats": 11,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "RECLINER ROWS",
-                    "code": "BR",
-                    "price": 1250,
-                    "total_seats": 12,
-                    "available_seats": 4,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
-                    "seat_classes": []
-                  }
-                ],
-                "source_exposes_seat_count": true
-              },
-              "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26533-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
-              "source_show_id": "26533",
-              "tags": [
-                "recliner",
-                "price_800_900",
-                "8_am_to_12_pm",
-                "ms_infinity_vision_3d",
-                "price_700_800",
-                "price_1000_1500",
-                "price_900_1000"
-              ],
-              "notes": []
-            },
             {
               "id": "district|gt-world-mall|2026-12-17|06:15|SCREEN 5|infinity_vision_3d|26534",
               "platform": "district",
@@ -6364,16 +6359,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1100
+                "max": 1250
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 215,
+                "available_seats": 146,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -6392,7 +6389,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 78,
+                    "available_seats": 59,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6401,9 +6398,9 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 800,
+                    "price": 900,
                     "total_seats": 108,
-                    "available_seats": 83,
+                    "available_seats": 46,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6412,20 +6409,20 @@
                   {
                     "label": "PICTURE PERFECT",
                     "code": "PI",
-                    "price": 920,
+                    "price": 970,
                     "total_seats": 30,
-                    "available_seats": 20,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 9,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1100,
+                    "price": 1250,
                     "total_seats": 12,
-                    "available_seats": 4,
+                    "available_seats": 2,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -6438,7 +6435,6 @@
               "source_show_id": "26534",
               "tags": [
                 "recliner",
-                "price_800_900",
                 "8_am_to_12_pm",
                 "ms_infinity_vision_3d",
                 "price_700_800",
@@ -6465,16 +6461,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1100
+                "max": 1250
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 254,
+                "available_seats": 136,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -6482,7 +6480,7 @@
                     "code": "CR",
                     "price": 750,
                     "total_seats": 30,
-                    "available_seats": 30,
+                    "available_seats": 27,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6493,7 +6491,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 90,
+                    "available_seats": 59,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6502,31 +6500,31 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 800,
+                    "price": 900,
                     "total_seats": 108,
-                    "available_seats": 95,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 40,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "PICTURE PERFECT",
                     "code": "PI",
-                    "price": 820,
+                    "price": 970,
                     "total_seats": 30,
-                    "available_seats": 30,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 5,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1100,
+                    "price": 1250,
                     "total_seats": 12,
-                    "available_seats": 9,
+                    "available_seats": 5,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6540,10 +6538,10 @@
               "tags": [
                 "recliner",
                 "12_pm_to_4_pm",
-                "price_800_900",
                 "ms_infinity_vision_3d",
                 "price_700_800",
-                "price_1000_1500"
+                "price_1000_1500",
+                "price_900_1000"
               ],
               "notes": []
             },
@@ -6565,16 +6563,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1250
+                "max": 1300
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 157,
+                "available_seats": 111,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -6591,9 +6591,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 770,
+                    "price": 870,
                     "total_seats": 90,
-                    "available_seats": 72,
+                    "available_seats": 51,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6602,11 +6602,11 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 900,
+                    "price": 950,
                     "total_seats": 108,
-                    "available_seats": 44,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 28,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -6615,20 +6615,20 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 7,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1250,
+                    "price": 1300,
                     "total_seats": 12,
-                    "available_seats": 4,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -6639,6 +6639,7 @@
               "source_show_id": "26536",
               "tags": [
                 "recliner",
+                "price_800_900",
                 "4_pm_to_7_pm",
                 "after_5_pm",
                 "ms_infinity_vision_3d",
@@ -6667,16 +6668,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1250
+                "max": 1300
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 201,
+                "available_seats": 142,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -6695,7 +6698,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 79,
+                    "available_seats": 65,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6704,11 +6707,11 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 800,
+                    "price": 900,
                     "total_seats": 108,
-                    "available_seats": 76,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 42,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -6717,20 +6720,20 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 12,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 4,
+                    "status": "few_left",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1250,
+                    "price": 1300,
                     "total_seats": 12,
-                    "available_seats": 4,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -6741,18 +6744,17 @@
               "source_show_id": "26537",
               "tags": [
                 "recliner",
-                "after_10_pm",
-                "price_1000_1500",
-                "price_900_1000",
-                "7_pm_to_12_am",
                 "after_9_pm",
                 "after_8_pm",
-                "price_800_900",
                 "after_5_pm",
+                "after_10_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
                 "after_7_pm",
-                "price_700_800"
+                "price_700_800",
+                "price_1000_1500",
+                "price_900_1000",
+                "7_pm_to_12_am"
               ],
               "notes": []
             }
@@ -6761,107 +6763,6 @@
             "2026-12-17": {
               "listed": true,
               "shows": [
-                {
-                  "id": "district|gt-world-mall|2026-12-17|02:50|SCREEN 5|infinity_vision_3d|26533",
-                  "platform": "district",
-                  "theatre_id": "gt-world-mall",
-                  "date": "2026-12-17",
-                  "start": "02:50",
-                  "start_iso": "2026-12-17T02:50:00+05:30",
-                  "screen": "SCREEN 5",
-                  "format": {
-                    "key": "infinity_vision_3d",
-                    "label": "Infinity Vision 3D",
-                    "family": "premium",
-                    "is_3d": true,
-                    "is_premium": true,
-                    "is_large_format": true,
-                    "confidence": "explicit",
-                    "raw": "MS INFINITY VISION 3D"
-                  },
-                  "languages": [],
-                  "price": {
-                    "currency": "INR",
-                    "min": 750,
-                    "max": 1250
-                  },
-                  "availability": {
-                    "status": "bookable",
-                    "total_seats": 270,
-                    "available_seats": 173,
-                    "status_raw": "Available",
-                    "areas": [
-                      {
-                        "label": "CLASSIC ROWS",
-                        "code": "CR",
-                        "price": 750,
-                        "total_seats": 30,
-                        "available_seats": 30,
-                        "status": "bookable",
-                        "status_raw": "Available",
-                        "bookable": true,
-                        "seat_classes": []
-                      },
-                      {
-                        "label": "CLASSIC PLUS ROWS",
-                        "code": "PC",
-                        "price": 770,
-                        "total_seats": 90,
-                        "available_seats": 66,
-                        "status": "bookable",
-                        "status_raw": "Available",
-                        "bookable": true,
-                        "seat_classes": []
-                      },
-                      {
-                        "label": "PRIME ROWS",
-                        "code": "QR",
-                        "price": 800,
-                        "total_seats": 108,
-                        "available_seats": 62,
-                        "status": "bookable",
-                        "status_raw": "Available",
-                        "bookable": true,
-                        "seat_classes": []
-                      },
-                      {
-                        "label": "PICTURE PERFECT",
-                        "code": "PI",
-                        "price": 970,
-                        "total_seats": 30,
-                        "available_seats": 11,
-                        "status": "filling_fast",
-                        "status_raw": "Filling Fast",
-                        "bookable": true,
-                        "seat_classes": []
-                      },
-                      {
-                        "label": "RECLINER ROWS",
-                        "code": "BR",
-                        "price": 1250,
-                        "total_seats": 12,
-                        "available_seats": 4,
-                        "status": "filling_fast",
-                        "status_raw": "Filling Fast",
-                        "bookable": true,
-                        "seat_classes": []
-                      }
-                    ],
-                    "source_exposes_seat_count": true
-                  },
-                  "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26533-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
-                  "source_show_id": "26533",
-                  "tags": [
-                    "recliner",
-                    "price_800_900",
-                    "8_am_to_12_pm",
-                    "ms_infinity_vision_3d",
-                    "price_700_800",
-                    "price_1000_1500",
-                    "price_900_1000"
-                  ],
-                  "notes": []
-                },
                 {
                   "id": "district|gt-world-mall|2026-12-17|06:15|SCREEN 5|infinity_vision_3d|26534",
                   "platform": "district",
@@ -6880,16 +6781,18 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 750,
-                    "max": 1100
+                    "max": 1250
                   },
                   "availability": {
                     "status": "bookable",
                     "total_seats": 270,
-                    "available_seats": 215,
+                    "available_seats": 146,
                     "status_raw": "Available",
                     "areas": [
                       {
@@ -6908,7 +6811,7 @@
                         "code": "PC",
                         "price": 770,
                         "total_seats": 90,
-                        "available_seats": 78,
+                        "available_seats": 59,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -6917,9 +6820,9 @@
                       {
                         "label": "PRIME ROWS",
                         "code": "QR",
-                        "price": 800,
+                        "price": 900,
                         "total_seats": 108,
-                        "available_seats": 83,
+                        "available_seats": 46,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -6928,20 +6831,20 @@
                       {
                         "label": "PICTURE PERFECT",
                         "code": "PI",
-                        "price": 920,
+                        "price": 970,
                         "total_seats": 30,
-                        "available_seats": 20,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 9,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
                       {
                         "label": "RECLINER ROWS",
                         "code": "BR",
-                        "price": 1100,
+                        "price": 1250,
                         "total_seats": 12,
-                        "available_seats": 4,
+                        "available_seats": 2,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -6954,7 +6857,6 @@
                   "source_show_id": "26534",
                   "tags": [
                     "recliner",
-                    "price_800_900",
                     "8_am_to_12_pm",
                     "ms_infinity_vision_3d",
                     "price_700_800",
@@ -6981,16 +6883,18 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 750,
-                    "max": 1100
+                    "max": 1250
                   },
                   "availability": {
                     "status": "bookable",
                     "total_seats": 270,
-                    "available_seats": 254,
+                    "available_seats": 136,
                     "status_raw": "Available",
                     "areas": [
                       {
@@ -6998,7 +6902,7 @@
                         "code": "CR",
                         "price": 750,
                         "total_seats": 30,
-                        "available_seats": 30,
+                        "available_seats": 27,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -7009,7 +6913,7 @@
                         "code": "PC",
                         "price": 770,
                         "total_seats": 90,
-                        "available_seats": 90,
+                        "available_seats": 59,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -7018,31 +6922,31 @@
                       {
                         "label": "PRIME ROWS",
                         "code": "QR",
-                        "price": 800,
+                        "price": 900,
                         "total_seats": 108,
-                        "available_seats": 95,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 40,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
                       {
                         "label": "PICTURE PERFECT",
                         "code": "PI",
-                        "price": 820,
+                        "price": 970,
                         "total_seats": 30,
-                        "available_seats": 30,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 5,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
                       {
                         "label": "RECLINER ROWS",
                         "code": "BR",
-                        "price": 1100,
+                        "price": 1250,
                         "total_seats": 12,
-                        "available_seats": 9,
+                        "available_seats": 5,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -7056,10 +6960,10 @@
                   "tags": [
                     "recliner",
                     "12_pm_to_4_pm",
-                    "price_800_900",
                     "ms_infinity_vision_3d",
                     "price_700_800",
-                    "price_1000_1500"
+                    "price_1000_1500",
+                    "price_900_1000"
                   ],
                   "notes": []
                 },
@@ -7081,16 +6985,18 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 750,
-                    "max": 1250
+                    "max": 1300
                   },
                   "availability": {
                     "status": "bookable",
                     "total_seats": 270,
-                    "available_seats": 157,
+                    "available_seats": 111,
                     "status_raw": "Available",
                     "areas": [
                       {
@@ -7107,9 +7013,9 @@
                       {
                         "label": "CLASSIC PLUS ROWS",
                         "code": "PC",
-                        "price": 770,
+                        "price": 870,
                         "total_seats": 90,
-                        "available_seats": 72,
+                        "available_seats": 51,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -7118,11 +7024,11 @@
                       {
                         "label": "PRIME ROWS",
                         "code": "QR",
-                        "price": 900,
+                        "price": 950,
                         "total_seats": 108,
-                        "available_seats": 44,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 28,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -7131,20 +7037,20 @@
                         "code": "PI",
                         "price": 970,
                         "total_seats": 30,
-                        "available_seats": 7,
-                        "status": "filling_fast",
-                        "status_raw": "Filling Fast",
+                        "available_seats": 1,
+                        "status": "few_left",
+                        "status_raw": "Almost Full",
                         "bookable": true,
                         "seat_classes": []
                       },
                       {
                         "label": "RECLINER ROWS",
                         "code": "BR",
-                        "price": 1250,
+                        "price": 1300,
                         "total_seats": 12,
-                        "available_seats": 4,
-                        "status": "filling_fast",
-                        "status_raw": "Filling Fast",
+                        "available_seats": 1,
+                        "status": "few_left",
+                        "status_raw": "Almost Full",
                         "bookable": true,
                         "seat_classes": []
                       }
@@ -7155,6 +7061,7 @@
                   "source_show_id": "26536",
                   "tags": [
                     "recliner",
+                    "price_800_900",
                     "4_pm_to_7_pm",
                     "after_5_pm",
                     "ms_infinity_vision_3d",
@@ -7183,16 +7090,18 @@
                     "confidence": "explicit",
                     "raw": "MS INFINITY VISION 3D"
                   },
-                  "languages": [],
+                  "languages": [
+                    "English"
+                  ],
                   "price": {
                     "currency": "INR",
                     "min": 750,
-                    "max": 1250
+                    "max": 1300
                   },
                   "availability": {
                     "status": "bookable",
                     "total_seats": 270,
-                    "available_seats": 201,
+                    "available_seats": 142,
                     "status_raw": "Available",
                     "areas": [
                       {
@@ -7211,7 +7120,7 @@
                         "code": "PC",
                         "price": 770,
                         "total_seats": 90,
-                        "available_seats": 79,
+                        "available_seats": 65,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -7220,11 +7129,11 @@
                       {
                         "label": "PRIME ROWS",
                         "code": "QR",
-                        "price": 800,
+                        "price": 900,
                         "total_seats": 108,
-                        "available_seats": 76,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 42,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -7233,20 +7142,20 @@
                         "code": "PI",
                         "price": 970,
                         "total_seats": 30,
-                        "available_seats": 12,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 4,
+                        "status": "few_left",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
                       {
                         "label": "RECLINER ROWS",
                         "code": "BR",
-                        "price": 1250,
+                        "price": 1300,
                         "total_seats": 12,
-                        "available_seats": 4,
-                        "status": "filling_fast",
-                        "status_raw": "Filling Fast",
+                        "available_seats": 1,
+                        "status": "few_left",
+                        "status_raw": "Almost Full",
                         "bookable": true,
                         "seat_classes": []
                       }
@@ -7257,32 +7166,27 @@
                   "source_show_id": "26537",
                   "tags": [
                     "recliner",
-                    "after_10_pm",
-                    "price_1000_1500",
-                    "price_900_1000",
-                    "7_pm_to_12_am",
                     "after_9_pm",
                     "after_8_pm",
-                    "price_800_900",
                     "after_5_pm",
+                    "after_10_pm",
                     "ms_infinity_vision_3d",
                     "after_6_pm",
                     "after_7_pm",
-                    "price_700_800"
+                    "price_700_800",
+                    "price_1000_1500",
+                    "price_900_1000",
+                    "7_pm_to_12_am"
                   ],
                   "notes": []
                 }
               ]
             }
           },
-          "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
-          "notes": [
-            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (12 minutes old)."
-          ],
-          "stale": true,
-          "data_age_minutes": 12,
-          "last_success_at": "2026-11-17T20:51:53+05:30"
+          "error": null,
+          "checked_at": "2026-11-17T23:17:45+05:30",
+          "notes": [],
+          "last_success_at": "2026-11-17T23:17:45+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -7292,8 +7196,8 @@
           "venue": {},
           "shows": [],
           "dates": {},
-          "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
+          "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+          "checked_at": "2026-11-17T23:17:45+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -7304,110 +7208,6 @@
         "2026-12-17": {
           "listed": true,
           "shows": [
-            {
-              "id": "district|gt-world-mall|2026-12-17|02:50|SCREEN 5|infinity_vision_3d|26533",
-              "platform": "district",
-              "theatre_id": "gt-world-mall",
-              "date": "2026-12-17",
-              "start": "02:50",
-              "start_iso": "2026-12-17T02:50:00+05:30",
-              "screen": "SCREEN 5",
-              "format": {
-                "key": "infinity_vision_3d",
-                "label": "Infinity Vision 3D",
-                "family": "premium",
-                "is_3d": true,
-                "is_premium": true,
-                "is_large_format": true,
-                "confidence": "explicit",
-                "raw": "MS INFINITY VISION 3D"
-              },
-              "languages": [],
-              "price": {
-                "currency": "INR",
-                "min": 750,
-                "max": 1250
-              },
-              "availability": {
-                "status": "bookable",
-                "total_seats": 270,
-                "available_seats": 173,
-                "status_raw": "Available",
-                "areas": [
-                  {
-                    "label": "CLASSIC ROWS",
-                    "code": "CR",
-                    "price": 750,
-                    "total_seats": 30,
-                    "available_seats": 30,
-                    "status": "bookable",
-                    "status_raw": "Available",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "CLASSIC PLUS ROWS",
-                    "code": "PC",
-                    "price": 770,
-                    "total_seats": 90,
-                    "available_seats": 66,
-                    "status": "bookable",
-                    "status_raw": "Available",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "PRIME ROWS",
-                    "code": "QR",
-                    "price": 800,
-                    "total_seats": 108,
-                    "available_seats": 62,
-                    "status": "bookable",
-                    "status_raw": "Available",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "PICTURE PERFECT",
-                    "code": "PI",
-                    "price": 970,
-                    "total_seats": 30,
-                    "available_seats": 11,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
-                    "seat_classes": []
-                  },
-                  {
-                    "label": "RECLINER ROWS",
-                    "code": "BR",
-                    "price": 1250,
-                    "total_seats": 12,
-                    "available_seats": 4,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
-                    "bookable": true,
-                    "seat_classes": []
-                  }
-                ],
-                "source_exposes_seat_count": true
-              },
-              "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26533-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
-              "source_show_id": "26533",
-              "tags": [
-                "recliner",
-                "price_800_900",
-                "8_am_to_12_pm",
-                "ms_infinity_vision_3d",
-                "price_700_800",
-                "price_1000_1500",
-                "price_900_1000"
-              ],
-              "notes": [],
-              "platforms": [
-                "district"
-              ]
-            },
             {
               "id": "district|gt-world-mall|2026-12-17|06:15|SCREEN 5|infinity_vision_3d|26534",
               "platform": "district",
@@ -7426,16 +7226,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1100
+                "max": 1250
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 215,
+                "available_seats": 146,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -7454,7 +7256,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 78,
+                    "available_seats": 59,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7463,9 +7265,9 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 800,
+                    "price": 900,
                     "total_seats": 108,
-                    "available_seats": 83,
+                    "available_seats": 46,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7474,20 +7276,20 @@
                   {
                     "label": "PICTURE PERFECT",
                     "code": "PI",
-                    "price": 920,
+                    "price": 970,
                     "total_seats": 30,
-                    "available_seats": 20,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 9,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1100,
+                    "price": 1250,
                     "total_seats": 12,
-                    "available_seats": 4,
+                    "available_seats": 2,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -7500,7 +7302,6 @@
               "source_show_id": "26534",
               "tags": [
                 "recliner",
-                "price_800_900",
                 "8_am_to_12_pm",
                 "ms_infinity_vision_3d",
                 "price_700_800",
@@ -7530,16 +7331,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1100
+                "max": 1250
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 254,
+                "available_seats": 136,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -7547,7 +7350,7 @@
                     "code": "CR",
                     "price": 750,
                     "total_seats": 30,
-                    "available_seats": 30,
+                    "available_seats": 27,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7558,7 +7361,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 90,
+                    "available_seats": 59,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7567,31 +7370,31 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 800,
+                    "price": 900,
                     "total_seats": 108,
-                    "available_seats": 95,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 40,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "PICTURE PERFECT",
                     "code": "PI",
-                    "price": 820,
+                    "price": 970,
                     "total_seats": 30,
-                    "available_seats": 30,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 5,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1100,
+                    "price": 1250,
                     "total_seats": 12,
-                    "available_seats": 9,
+                    "available_seats": 5,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7605,10 +7408,10 @@
               "tags": [
                 "recliner",
                 "12_pm_to_4_pm",
-                "price_800_900",
                 "ms_infinity_vision_3d",
                 "price_700_800",
-                "price_1000_1500"
+                "price_1000_1500",
+                "price_900_1000"
               ],
               "notes": [],
               "platforms": [
@@ -7633,16 +7436,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1250
+                "max": 1300
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 157,
+                "available_seats": 111,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -7659,9 +7464,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 770,
+                    "price": 870,
                     "total_seats": 90,
-                    "available_seats": 72,
+                    "available_seats": 51,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7670,11 +7475,11 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 900,
+                    "price": 950,
                     "total_seats": 108,
-                    "available_seats": 44,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 28,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -7683,20 +7488,20 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 7,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1250,
+                    "price": 1300,
                     "total_seats": 12,
-                    "available_seats": 4,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -7707,6 +7512,7 @@
               "source_show_id": "26536",
               "tags": [
                 "recliner",
+                "price_800_900",
                 "4_pm_to_7_pm",
                 "after_5_pm",
                 "ms_infinity_vision_3d",
@@ -7738,16 +7544,18 @@
                 "confidence": "explicit",
                 "raw": "MS INFINITY VISION 3D"
               },
-              "languages": [],
+              "languages": [
+                "English"
+              ],
               "price": {
                 "currency": "INR",
                 "min": 750,
-                "max": 1250
+                "max": 1300
               },
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 201,
+                "available_seats": 142,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -7766,7 +7574,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 79,
+                    "available_seats": 65,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7775,11 +7583,11 @@
                   {
                     "label": "PRIME ROWS",
                     "code": "QR",
-                    "price": 800,
+                    "price": 900,
                     "total_seats": 108,
-                    "available_seats": 76,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 42,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -7788,20 +7596,20 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 12,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 4,
+                    "status": "few_left",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
                   {
                     "label": "RECLINER ROWS",
                     "code": "BR",
-                    "price": 1250,
+                    "price": 1300,
                     "total_seats": 12,
-                    "available_seats": 4,
-                    "status": "filling_fast",
-                    "status_raw": "Filling Fast",
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -7812,18 +7620,17 @@
               "source_show_id": "26537",
               "tags": [
                 "recliner",
-                "after_10_pm",
-                "price_1000_1500",
-                "price_900_1000",
-                "7_pm_to_12_am",
                 "after_9_pm",
                 "after_8_pm",
-                "price_800_900",
                 "after_5_pm",
+                "after_10_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
                 "after_7_pm",
-                "price_700_800"
+                "price_700_800",
+                "price_1000_1500",
+                "price_900_1000",
+                "7_pm_to_12_am"
               ],
               "notes": [],
               "platforms": [
@@ -7831,27 +7638,23 @@
               ]
             }
           ],
-          "show_count": 5,
+          "show_count": 4,
           "formats": [
             {
               "key": "infinity_vision_3d",
               "label": "Infinity Vision 3D",
               "is_3d": true,
               "is_premium": true,
-              "show_count": 5
+              "show_count": 4
             }
           ],
           "booking_status": "bookable",
-          "seats_available": 1000,
+          "seats_available": 535,
           "price_min": 750,
-          "price_max": 1250,
-          "first_show": "02:50",
+          "price_max": 1300,
+          "first_show": "06:15",
           "last_show": "16:30",
           "booking_links": [
-            {
-              "platform": "district",
-              "url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26533-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735"
-            },
             {
               "platform": "district",
               "url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26534-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735"
@@ -7886,110 +7689,6 @@
       },
       "shows": [
         {
-          "id": "district|gt-world-mall|2026-12-17|02:50|SCREEN 5|infinity_vision_3d|26533",
-          "platform": "district",
-          "theatre_id": "gt-world-mall",
-          "date": "2026-12-17",
-          "start": "02:50",
-          "start_iso": "2026-12-17T02:50:00+05:30",
-          "screen": "SCREEN 5",
-          "format": {
-            "key": "infinity_vision_3d",
-            "label": "Infinity Vision 3D",
-            "family": "premium",
-            "is_3d": true,
-            "is_premium": true,
-            "is_large_format": true,
-            "confidence": "explicit",
-            "raw": "MS INFINITY VISION 3D"
-          },
-          "languages": [],
-          "price": {
-            "currency": "INR",
-            "min": 750,
-            "max": 1250
-          },
-          "availability": {
-            "status": "bookable",
-            "total_seats": 270,
-            "available_seats": 173,
-            "status_raw": "Available",
-            "areas": [
-              {
-                "label": "CLASSIC ROWS",
-                "code": "CR",
-                "price": 750,
-                "total_seats": 30,
-                "available_seats": 30,
-                "status": "bookable",
-                "status_raw": "Available",
-                "bookable": true,
-                "seat_classes": []
-              },
-              {
-                "label": "CLASSIC PLUS ROWS",
-                "code": "PC",
-                "price": 770,
-                "total_seats": 90,
-                "available_seats": 66,
-                "status": "bookable",
-                "status_raw": "Available",
-                "bookable": true,
-                "seat_classes": []
-              },
-              {
-                "label": "PRIME ROWS",
-                "code": "QR",
-                "price": 800,
-                "total_seats": 108,
-                "available_seats": 62,
-                "status": "bookable",
-                "status_raw": "Available",
-                "bookable": true,
-                "seat_classes": []
-              },
-              {
-                "label": "PICTURE PERFECT",
-                "code": "PI",
-                "price": 970,
-                "total_seats": 30,
-                "available_seats": 11,
-                "status": "filling_fast",
-                "status_raw": "Filling Fast",
-                "bookable": true,
-                "seat_classes": []
-              },
-              {
-                "label": "RECLINER ROWS",
-                "code": "BR",
-                "price": 1250,
-                "total_seats": 12,
-                "available_seats": 4,
-                "status": "filling_fast",
-                "status_raw": "Filling Fast",
-                "bookable": true,
-                "seat_classes": []
-              }
-            ],
-            "source_exposes_seat_count": true
-          },
-          "booking_url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26533-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
-          "source_show_id": "26533",
-          "tags": [
-            "recliner",
-            "price_800_900",
-            "8_am_to_12_pm",
-            "ms_infinity_vision_3d",
-            "price_700_800",
-            "price_1000_1500",
-            "price_900_1000"
-          ],
-          "notes": [],
-          "platforms": [
-            "district"
-          ]
-        },
-        {
           "id": "district|gt-world-mall|2026-12-17|06:15|SCREEN 5|infinity_vision_3d|26534",
           "platform": "district",
           "theatre_id": "gt-world-mall",
@@ -8007,16 +7706,18 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 750,
-            "max": 1100
+            "max": 1250
           },
           "availability": {
             "status": "bookable",
             "total_seats": 270,
-            "available_seats": 215,
+            "available_seats": 146,
             "status_raw": "Available",
             "areas": [
               {
@@ -8035,7 +7736,7 @@
                 "code": "PC",
                 "price": 770,
                 "total_seats": 90,
-                "available_seats": 78,
+                "available_seats": 59,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8044,9 +7745,9 @@
               {
                 "label": "PRIME ROWS",
                 "code": "QR",
-                "price": 800,
+                "price": 900,
                 "total_seats": 108,
-                "available_seats": 83,
+                "available_seats": 46,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8055,20 +7756,20 @@
               {
                 "label": "PICTURE PERFECT",
                 "code": "PI",
-                "price": 920,
+                "price": 970,
                 "total_seats": 30,
-                "available_seats": 20,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 9,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
               {
                 "label": "RECLINER ROWS",
                 "code": "BR",
-                "price": 1100,
+                "price": 1250,
                 "total_seats": 12,
-                "available_seats": 4,
+                "available_seats": 2,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -8081,7 +7782,6 @@
           "source_show_id": "26534",
           "tags": [
             "recliner",
-            "price_800_900",
             "8_am_to_12_pm",
             "ms_infinity_vision_3d",
             "price_700_800",
@@ -8111,16 +7811,18 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 750,
-            "max": 1100
+            "max": 1250
           },
           "availability": {
             "status": "bookable",
             "total_seats": 270,
-            "available_seats": 254,
+            "available_seats": 136,
             "status_raw": "Available",
             "areas": [
               {
@@ -8128,7 +7830,7 @@
                 "code": "CR",
                 "price": 750,
                 "total_seats": 30,
-                "available_seats": 30,
+                "available_seats": 27,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8139,7 +7841,7 @@
                 "code": "PC",
                 "price": 770,
                 "total_seats": 90,
-                "available_seats": 90,
+                "available_seats": 59,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8148,31 +7850,31 @@
               {
                 "label": "PRIME ROWS",
                 "code": "QR",
-                "price": 800,
+                "price": 900,
                 "total_seats": 108,
-                "available_seats": 95,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 40,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
               {
                 "label": "PICTURE PERFECT",
                 "code": "PI",
-                "price": 820,
+                "price": 970,
                 "total_seats": 30,
-                "available_seats": 30,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 5,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
               {
                 "label": "RECLINER ROWS",
                 "code": "BR",
-                "price": 1100,
+                "price": 1250,
                 "total_seats": 12,
-                "available_seats": 9,
+                "available_seats": 5,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8186,10 +7888,10 @@
           "tags": [
             "recliner",
             "12_pm_to_4_pm",
-            "price_800_900",
             "ms_infinity_vision_3d",
             "price_700_800",
-            "price_1000_1500"
+            "price_1000_1500",
+            "price_900_1000"
           ],
           "notes": [],
           "platforms": [
@@ -8214,16 +7916,18 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 750,
-            "max": 1250
+            "max": 1300
           },
           "availability": {
             "status": "bookable",
             "total_seats": 270,
-            "available_seats": 157,
+            "available_seats": 111,
             "status_raw": "Available",
             "areas": [
               {
@@ -8240,9 +7944,9 @@
               {
                 "label": "CLASSIC PLUS ROWS",
                 "code": "PC",
-                "price": 770,
+                "price": 870,
                 "total_seats": 90,
-                "available_seats": 72,
+                "available_seats": 51,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8251,11 +7955,11 @@
               {
                 "label": "PRIME ROWS",
                 "code": "QR",
-                "price": 900,
+                "price": 950,
                 "total_seats": 108,
-                "available_seats": 44,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 28,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -8264,20 +7968,20 @@
                 "code": "PI",
                 "price": 970,
                 "total_seats": 30,
-                "available_seats": 7,
-                "status": "filling_fast",
-                "status_raw": "Filling Fast",
+                "available_seats": 1,
+                "status": "few_left",
+                "status_raw": "Almost Full",
                 "bookable": true,
                 "seat_classes": []
               },
               {
                 "label": "RECLINER ROWS",
                 "code": "BR",
-                "price": 1250,
+                "price": 1300,
                 "total_seats": 12,
-                "available_seats": 4,
-                "status": "filling_fast",
-                "status_raw": "Filling Fast",
+                "available_seats": 1,
+                "status": "few_left",
+                "status_raw": "Almost Full",
                 "bookable": true,
                 "seat_classes": []
               }
@@ -8288,6 +7992,7 @@
           "source_show_id": "26536",
           "tags": [
             "recliner",
+            "price_800_900",
             "4_pm_to_7_pm",
             "after_5_pm",
             "ms_infinity_vision_3d",
@@ -8319,16 +8024,18 @@
             "confidence": "explicit",
             "raw": "MS INFINITY VISION 3D"
           },
-          "languages": [],
+          "languages": [
+            "English"
+          ],
           "price": {
             "currency": "INR",
             "min": 750,
-            "max": 1250
+            "max": 1300
           },
           "availability": {
             "status": "bookable",
             "total_seats": 270,
-            "available_seats": 201,
+            "available_seats": 142,
             "status_raw": "Available",
             "areas": [
               {
@@ -8347,7 +8054,7 @@
                 "code": "PC",
                 "price": 770,
                 "total_seats": 90,
-                "available_seats": 79,
+                "available_seats": 65,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8356,11 +8063,11 @@
               {
                 "label": "PRIME ROWS",
                 "code": "QR",
-                "price": 800,
+                "price": 900,
                 "total_seats": 108,
-                "available_seats": 76,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 42,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -8369,20 +8076,20 @@
                 "code": "PI",
                 "price": 970,
                 "total_seats": 30,
-                "available_seats": 12,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 4,
+                "status": "few_left",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
               {
                 "label": "RECLINER ROWS",
                 "code": "BR",
-                "price": 1250,
+                "price": 1300,
                 "total_seats": 12,
-                "available_seats": 4,
-                "status": "filling_fast",
-                "status_raw": "Filling Fast",
+                "available_seats": 1,
+                "status": "few_left",
+                "status_raw": "Almost Full",
                 "bookable": true,
                 "seat_classes": []
               }
@@ -8393,18 +8100,17 @@
           "source_show_id": "26537",
           "tags": [
             "recliner",
-            "after_10_pm",
-            "price_1000_1500",
-            "price_900_1000",
-            "7_pm_to_12_am",
             "after_9_pm",
             "after_8_pm",
-            "price_800_900",
             "after_5_pm",
+            "after_10_pm",
             "ms_infinity_vision_3d",
             "after_6_pm",
             "after_7_pm",
-            "price_700_800"
+            "price_700_800",
+            "price_1000_1500",
+            "price_900_1000",
+            "7_pm_to_12_am"
           ],
           "notes": [],
           "platforms": [
@@ -8418,7 +8124,7 @@
           "label": "Infinity Vision 3D",
           "is_3d": true,
           "is_premium": true,
-          "count": 5
+          "count": 4
         }
       ],
       "format_keys": [
@@ -8426,11 +8132,11 @@
       ],
       "listed": true,
       "booking": {
-        "url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26533-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
+        "url": "https://www.district.in/movies/seat-layout/mm5dpqtqjz?encsessionid=1022303-26534-obeovx-1022303&freeseating=false&fromsessions=true&type=MOVIES&contentid=176735",
         "source_urls": [
           {
             "platform": "district",
-            "url": "https://www.district.in/movies/pvr-gt-world-mall-magadi-road-bengaluru-CD1022303"
+            "url": "https://www.district.in/movies/pvr-gt-world-mall-magadi-road-bengaluru-c/1022303"
           }
         ],
         "status": "bookable",
@@ -8442,20 +8148,12 @@
         "mode": "heuristic",
         "label": "Zone recommendation (heuristic, no seat map published)",
         "theatre_id": "gt-world-mall",
-        "show_id": "district|gt-world-mall|2026-12-17|02:50|SCREEN 5|infinity_vision_3d|26533",
-        "show_start": "02:50",
+        "show_id": "district|gt-world-mall|2026-12-17|06:15|SCREEN 5|infinity_vision_3d|26534",
+        "show_start": "06:15",
         "show_date": "2026-12-17",
         "screen": "SCREEN 5",
         "format": "Infinity Vision 3D",
         "best": [
-          {
-            "area": "RECLINER ROWS",
-            "price": 1250,
-            "available_seats": 4,
-            "total_seats": 12,
-            "fill_percent": 33,
-            "status": "filling_fast"
-          },
           {
             "area": "CLASSIC ROWS",
             "price": 750,
@@ -8463,23 +8161,31 @@
             "total_seats": 30,
             "fill_percent": 100,
             "status": "bookable"
+          },
+          {
+            "area": "RECLINER ROWS",
+            "price": 1250,
+            "available_seats": 2,
+            "total_seats": 12,
+            "fill_percent": 17,
+            "status": "filling_fast"
           }
         ],
         "second_best": [
           {
             "area": "CLASSIC PLUS ROWS",
             "price": 770,
-            "available_seats": 66,
+            "available_seats": 59,
             "total_seats": 90,
-            "fill_percent": 73,
+            "fill_percent": 66,
             "status": "bookable"
           },
           {
             "area": "PRIME ROWS",
-            "price": 800,
-            "available_seats": 62,
+            "price": 900,
+            "available_seats": 46,
             "total_seats": 108,
-            "fill_percent": 57,
+            "fill_percent": 43,
             "status": "bookable"
           }
         ],
@@ -8515,12 +8221,12 @@
         }
       },
       "health": {
-        "status": "stale",
-        "age_minutes": 12,
-        "platforms_live": [],
-        "platforms_stale": [
+        "status": "live",
+        "age_minutes": 0,
+        "platforms_live": [
           "district"
-        ]
+        ],
+        "platforms_stale": []
       },
       "other_dates_seen": []
     },
@@ -8537,14 +8243,22 @@
         "district": {
           "platform": "district",
           "theatre_id": "miraj-sunkadakatte",
-          "status": "error",
-          "listed": null,
-          "venue": {},
+          "status": "not_listed",
+          "listed": false,
+          "venue": {
+            "id": "52080",
+            "name": "Miraj Cinemas, Sunkadakatte",
+            "url": null,
+            "verified_name": false
+          },
           "shows": [],
           "dates": {},
-          "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
-          "notes": []
+          "error": null,
+          "checked_at": "2026-11-17T23:17:45+05:30",
+          "notes": [
+            "Cinema not present in District's session list for this movie."
+          ],
+          "last_success_at": "2026-11-17T23:17:45+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -8554,8 +8268,8 @@
           "venue": {},
           "shows": [],
           "dates": {},
-          "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
+          "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+          "checked_at": "2026-11-17T23:17:45+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -8601,11 +8315,22 @@
         "platforms": []
       },
       "best_seats": null,
-      "verification": {},
+      "verification": {
+        "district": {
+          "status": "verified",
+          "source_name": "Miraj Cinemas, Sunkadakatte",
+          "source_id": "52080",
+          "configured_id": "52080",
+          "matched_alias": "miraj cinemas sunkadakatte",
+          "note": "Cinema ID and name both confirmed on the platform's public Bengaluru directory."
+        }
+      },
       "health": {
-        "status": "unavailable",
+        "status": "live",
         "age_minutes": 0,
-        "platforms_live": [],
+        "platforms_live": [
+          "district"
+        ],
         "platforms_stale": []
       },
       "other_dates_seen": []
@@ -8623,14 +8348,22 @@
         "district": {
           "platform": "district",
           "theatre_id": "global-mall-mysore-road",
-          "status": "error",
-          "listed": null,
-          "venue": {},
+          "status": "not_listed",
+          "listed": false,
+          "venue": {
+            "id": "1022307",
+            "name": "Global Mall, Mysore Road",
+            "url": null,
+            "verified_name": false
+          },
           "shows": [],
           "dates": {},
-          "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
-          "notes": []
+          "error": null,
+          "checked_at": "2026-11-17T23:17:45+05:30",
+          "notes": [
+            "Cinema not present in District's session list for this movie."
+          ],
+          "last_success_at": "2026-11-17T23:17:45+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -8640,8 +8373,8 @@
           "venue": {},
           "shows": [],
           "dates": {},
-          "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T21:04:20+05:30",
+          "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+          "checked_at": "2026-11-17T23:17:45+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -8687,11 +8420,22 @@
         "platforms": []
       },
       "best_seats": null,
-      "verification": {},
+      "verification": {
+        "district": {
+          "status": "verified",
+          "source_name": "Global Mall, Mysore Road",
+          "source_id": "1022307",
+          "configured_id": "1022307",
+          "matched_alias": "global mall mysore road",
+          "note": "Cinema ID and name both confirmed on the platform's public Bengaluru directory."
+        }
+      },
       "health": {
-        "status": "unavailable",
+        "status": "live",
         "age_minutes": 0,
-        "platforms_live": [],
+        "platforms_live": [
+          "district"
+        ],
         "platforms_stale": []
       },
       "other_dates_seen": []
@@ -8700,36 +8444,56 @@
   "sources": [
     {
       "source": "district",
-      "status": "blocked",
-      "message": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed.",
-      "checked_at": "2026-11-17T21:04:20+05:30",
+      "status": "ok",
+      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres.",
+      "checked_at": "2026-11-17T17:45:00Z",
       "evidence": {
-        "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
-        "status": "blocked",
-        "http_status": 403,
-        "latency_ms": 83,
-        "attempts": 1,
-        "error": "HTTP 403",
-        "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed."
+        "transport": "nas_inbox",
+        "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "session_groups": 3,
+        "matches_configured_cinemas": 3,
+        "dates_with_sessions": [
+          "2026-12-17"
+        ],
+        "collector": {
+          "name": "openwrt-ucode",
+          "version": "1.0.0",
+          "host": "openwrt",
+          "egress": "IN",
+          "parser": "district-next-data"
+        }
       },
-      "movie": {},
-      "notes": [],
-      "last_success_at": "2026-11-17T20:51:53+05:30"
+      "movie": {
+        "content_id": "176735",
+        "title": "Avengers: Doomsday",
+        "release_date": "2026-12-17",
+        "duration_minutes": 165,
+        "primary_language": "English",
+        "languages": [
+          "English"
+        ],
+        "poster": "https://b.zmtcdn.com/data/edition_assets/17948391026094715.jpg",
+        "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "show_dates": [
+          "2026-12-17"
+        ]
+      },
+      "notes": [
+        "Collected by the Indian-egress NAS collector and ingested without a network fetch.",
+        "Area-wise seat counts are published by District; individual seat numbers are not invented. Missing data stays missing."
+      ],
+      "last_success_at": "2026-11-17T17:45:00Z"
     },
     {
       "source": "bookmyshow",
       "status": "blocked",
-      "message": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-      "checked_at": "2026-11-17T21:04:20+05:30",
+      "message": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
+      "checked_at": "2026-11-17T23:17:45+05:30",
       "evidence": {
-        "url": "https://in.bookmyshow.com/explore/movies-bengaluru",
-        "status": "blocked",
+        "transport": "nas_inbox",
+        "bypassed": false,
         "http_status": 403,
-        "latency_ms": 29,
-        "attempts": 1,
-        "error": "HTTP 403",
-        "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'challenge-platform'). Not bypassed.",
-        "explore_url": "https://in.bookmyshow.com/explore/movies-bengaluru"
+        "checked_at": "2026-11-17T17:45:00Z"
       },
       "movie": {},
       "notes": [],
@@ -8753,13 +8517,315 @@
       "reason": "Premium wing of the same mall, tracked separately only if enabled. Main wing is 56450."
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "id": "ace4193cce70cf88",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "lulu-global-mall",
+      "theatre_name": "Lulu Global Mall, Rajajinagar",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "07:05",
+      "screen": "MACRO XE",
+      "message": "Lulu Global Mall, Rajajinagar: available seats for 07:05 on 2026-12-17 fell from 91 to 78 (availability, not confirmed sales)",
+      "data": {
+        "before": 91,
+        "after": 78
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "c59f9a22bd6c5b72",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "lulu-global-mall",
+      "theatre_name": "Lulu Global Mall, Rajajinagar",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "13:40",
+      "screen": "MACRO XE",
+      "message": "Lulu Global Mall, Rajajinagar: available seats for 13:40 on 2026-12-17 fell from 56 to 49 (availability, not confirmed sales)",
+      "data": {
+        "before": 56,
+        "after": 49
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "667345bb88c71e75",
+      "type": "price_changed",
+      "severity": "low",
+      "theatre_id": "lulu-global-mall",
+      "theatre_name": "Lulu Global Mall, Rajajinagar",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "13:40",
+      "screen": "MACRO XE",
+      "message": "Lulu Global Mall, Rajajinagar: 13:40 on 2026-12-17 price changed ₹840 → ₹890",
+      "data": {
+        "before": 840,
+        "after": 890
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "fd147c9af5b4357e",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "02:50",
+      "screen": "AUDI 11",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 02:50 on 2026-12-17 fell from 62 to 54 (availability, not confirmed sales)",
+      "data": {
+        "before": 62,
+        "after": 54
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "281d5e382681a7eb",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "06:15",
+      "screen": "AUDI 11",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 06:15 on 2026-12-17 fell from 72 to 68 (availability, not confirmed sales)",
+      "data": {
+        "before": 72,
+        "after": 68
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "7cf5edabbc95b9c4",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "06:45",
+      "screen": "AUDI 03 4DX",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 06:45 on 2026-12-17 fell from 26 to 20 (availability, not confirmed sales)",
+      "data": {
+        "before": 26,
+        "after": 20
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "7283e5fd68aa5282",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "09:40",
+      "screen": "AUDI 11",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 09:40 on 2026-12-17 fell from 74 to 60 (availability, not confirmed sales)",
+      "data": {
+        "before": 74,
+        "after": 60
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "8bb75691f5988d6d",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "13:05",
+      "screen": "AUDI 11",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 13:05 on 2026-12-17 fell from 62 to 51 (availability, not confirmed sales)",
+      "data": {
+        "before": 62,
+        "after": 51
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "1ec206e33793f72b",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "13:35",
+      "screen": "AUDI 03 4DX",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 13:35 on 2026-12-17 fell from 25 to 15 (availability, not confirmed sales)",
+      "data": {
+        "before": 25,
+        "after": 15
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "7e0ae46bf084d6eb",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "16:30",
+      "screen": "AUDI 11",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 16:30 on 2026-12-17 fell from 79 to 70 (availability, not confirmed sales)",
+      "data": {
+        "before": 79,
+        "after": 70
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "90428636b3878501",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "17:00",
+      "screen": "AUDI 03 4DX",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 17:00 on 2026-12-17 fell from 34 to 27 (availability, not confirmed sales)",
+      "data": {
+        "before": 34,
+        "after": 27
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "26209dec1554d35b",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "gt-world-mall",
+      "theatre_name": "GT World Mall, Magadi Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "06:15",
+      "screen": "SCREEN 5",
+      "message": "GT World Mall, Magadi Road: available seats for 06:15 on 2026-12-17 fell from 215 to 146 (availability, not confirmed sales)",
+      "data": {
+        "before": 215,
+        "after": 146
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "7e6092da5bcd3478",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "gt-world-mall",
+      "theatre_name": "GT World Mall, Magadi Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "09:40",
+      "screen": "SCREEN 5",
+      "message": "GT World Mall, Magadi Road: available seats for 09:40 on 2026-12-17 fell from 254 to 136 (availability, not confirmed sales)",
+      "data": {
+        "before": 254,
+        "after": 136
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "a6fcb61afe4b76dc",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "gt-world-mall",
+      "theatre_name": "GT World Mall, Magadi Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "13:05",
+      "screen": "SCREEN 5",
+      "message": "GT World Mall, Magadi Road: available seats for 13:05 on 2026-12-17 fell from 157 to 111 (availability, not confirmed sales)",
+      "data": {
+        "before": 157,
+        "after": 111
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "e2b97cc2d0eef38c",
+      "type": "seats_dropped",
+      "severity": "low",
+      "theatre_id": "gt-world-mall",
+      "theatre_name": "GT World Mall, Magadi Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "16:30",
+      "screen": "SCREEN 5",
+      "message": "GT World Mall, Magadi Road: available seats for 16:30 on 2026-12-17 fell from 201 to 142 (availability, not confirmed sales)",
+      "data": {
+        "before": 201,
+        "after": 142
+      },
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "0e5287f767358696",
+      "type": "show_removed",
+      "severity": "medium",
+      "theatre_id": "gt-world-mall",
+      "theatre_name": "GT World Mall, Magadi Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "02:50",
+      "screen": "SCREEN 5",
+      "message": "GT World Mall, Magadi Road: show 02:50 on 2026-12-17 is no longer listed on district",
+      "data": {},
+      "created_at": "2026-11-17T23:17:45+05:30"
+    },
+    {
+      "id": "60908d42a5e17bc6",
+      "type": "source_recovered",
+      "severity": "medium",
+      "theatre_id": "-",
+      "theatre_name": "District",
+      "platform": "district",
+      "date": null,
+      "start": null,
+      "screen": null,
+      "message": "district: access recovered, monitoring resumed",
+      "data": {},
+      "created_at": "2026-11-17T23:17:45+05:30"
+    }
+  ],
+  "provenance": {
+    "collector": {
+      "name": "openwrt-ucode",
+      "version": "1.0.0",
+      "host": "openwrt",
+      "egress": "IN",
+      "parser": "district-next-data"
+    },
+    "transport": "nas_inbox",
+    "collected_at": "2026-11-17T17:45:00Z",
+    "ingested_at": "2026-11-17T23:17:45+05:30",
+    "content_sha256": "748b87ec579607c5a300d9f2150dc9046324139fb6e89faadb27f75a31d32224",
+    "payload_schema_version": 1
+  },
   "notifications": {
-    "checked_at": "2026-11-17T21:04:20+05:30",
+    "checked_at": "2026-11-17T23:17:45+05:30",
     "channels": [],
-    "candidates": 0,
+    "candidates": 1,
     "sent": [],
-    "skipped": [],
+    "skipped": [
+      {
+        "reason": "no notification credentials configured"
+      }
+    ],
     "errors": []
   }
 }
