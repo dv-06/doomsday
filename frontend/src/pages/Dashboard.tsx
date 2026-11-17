@@ -39,6 +39,8 @@ function Hero() {
   if (!snapshot) return null;
   const targetDates = snapshot.movie.target_dates;
   const sourceRows = snapshot.sources;
+  const lastSuccess = meta?.last_success_at ?? snapshot.checked_at;
+  const attemptedLater = new Date(snapshot.checked_at).getTime() > new Date(lastSuccess).getTime();
 
   return (
     <section className="panel-warm grain relative overflow-hidden">
@@ -102,11 +104,22 @@ function Hero() {
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-ash">Last successful check</dt>
-              <dd className="text-right font-medium text-white" title={formatDateTime(snapshot.checked_at)}>
-                {relativeTime(snapshot.checked_at)}
-                <span className="block text-[11px] font-normal text-ash">{formatDateTime(snapshot.checked_at)} IST</span>
+              <dd className="text-right font-medium text-white" title={formatDateTime(lastSuccess)}>
+                {relativeTime(lastSuccess)}
+                <span className="block text-[11px] font-normal text-ash">{formatDateTime(lastSuccess)} IST</span>
               </dd>
             </div>
+            {attemptedLater && (
+              <div className="flex items-baseline justify-between gap-3">
+                <dt className="text-ash">Latest attempt</dt>
+                <dd className="text-right font-medium text-white" title={formatDateTime(snapshot.checked_at)}>
+                  {relativeTime(snapshot.checked_at)}
+                  <span className="block text-[11px] font-normal text-ash">
+                    {formatDateTime(snapshot.checked_at)} IST · {snapshot.status === "degraded" ? "all sources blocked" : "incomplete"}
+                  </span>
+                </dd>
+              </div>
+            )}
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-ash">Next scheduled check</dt>
               <dd className="text-right font-medium text-white">
