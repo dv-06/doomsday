@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-18T00:37:17+05:30",
+  "checked_at": "2026-11-18T00:58:31+05:30",
   "sources": {
     "district": {
       "source": "district",
@@ -48,7 +48,7 @@
       "source": "bookmyshow",
       "status": "blocked",
       "message": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-      "checked_at": "2026-11-18T00:37:17+05:30",
+      "checked_at": "2026-11-18T00:58:31+05:30",
       "evidence": {
         "transport": "nas_inbox",
         "bypassed": false,
