@@ -75,6 +75,9 @@ jobs:
           DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
         run: |
           set -o pipefail
+          # Actions invokes bash with -e; we need to inspect non-zero exit codes
+          # (3 = every source externally blocked) instead of aborting immediately.
+          set +e
 
           # Global options (--config/--data) come before the subcommand;
           # --dry-run/--github-summary belong to `run`.
