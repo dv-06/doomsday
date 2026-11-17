@@ -190,59 +190,21 @@ def _valid_session(session: dict[str, Any]) -> bool:
     return isinstance(show_time, str) and len(show_time) >= 16 and "T" in show_time
 
 
-def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) -> SourceResult:
-    base_url = config.sources.get("district", {}).get("base_url", "https://www.district.in")
-    url = _movie_page_url(config)
-    result = client.get(url)
+def _observations_from_groups(
+    config: AppConfig,
+    groups: list[dict[str, Any]],
+    movie: dict[str, Any],
+    content_id: str,
+    base_url: str,
+    registry: dict[str, Any],
+) -> tuple[dict[str, TheatreObservation], set[str]]:
+    """Map District cinema/session groups onto the configured theatres.
 
-    if result.status == "robots_disallowed":
-        return SourceResult(
-            source="district", status="blocked",
-            message="District robots.txt disallows this path for our client; monitoring skipped.",
-            evidence=result.evidence(),
-        )
-    if result.status == "blocked":
-        return SourceResult(
-            source="district", status="blocked",
-            message=result.blocked_reason or "District refused automated access.",
-            evidence=result.evidence(),
-        )
-    if not result.ok:
-        if result.http_status in (404, 410):
-            discovered = discover_movie_url(client, config)
-            if discovered:
-                url = discovered
-                result = client.get(url)
-        if not result.ok:
-            raise SourceUnavailable(
-                f"District movie page unavailable ({result.error or result.status}) at {url}"
-            )
-
-    data = _next_data(result.text)
-    page_props = ((data.get("props") or {}).get("pageProps") or {})
-    state = page_props.get("initialState") or {}
-    content_id = str(page_props.get("data", {}).get("contentId") or config.district_content_id)
-    movie = _movie_meta(state, content_id)
-    if not movie.get("title"):
-        raise SourceError("District page parsed but no movie metadata was found")
-
-    groups = _find_session_groups(state)
-    if not groups:
-        groups = _find_session_groups(page_props)
-
-    # Public cinema directory: used for name verification and to spot cinemas
-    # that exist but have no sessions yet.
-    registry, fetched_at = load_registry(cache_dir)
-    ttl = float(config.sources.get("district", {}).get("registry_cache_hours", 24)) * 3600
-    if not registry or datetime.now().timestamp() - fetched_at > ttl:
-        fresh = fetch_registry(
-            client, base_url,
-            config.sources.get("district", {}).get("cinema_registry_path", "/movies/cinemas-in-bengaluru"),
-        )
-        if fresh:
-            registry = fresh
-            save_registry(cache_dir, fresh)
-
+    Shared by the live HTTP adapter and the NAS inbox importer so both paths
+    cannot drift apart. Groups may carry an optional ``available_dates`` list
+    (the NAS collector filters target-date sessions but still reports the dates
+    District listed), which keeps ``listed`` accurate without inventing shows.
+    """
     observations: dict[str, TheatreObservation] = {}
     observed_dates: set[str] = set()
 
@@ -304,6 +266,14 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) 
                 tags=[str(t) for t in (session.get("tags") or [])],
             ))
 
+        # The collector filters sessions to the target dates but keeps the
+        # complete date list so a cinema with only future/other-date sessions
+        # is not misreported as absent.
+        for raw_date in group.get("available_dates") or []:
+            parsed_date = _parse_date(str(raw_date))
+            if parsed_date:
+                session_dates.add(parsed_date)
+
         observed_dates.update(session_dates)
         observations[theatre.id] = TheatreObservation(
             platform="district",
@@ -328,6 +298,65 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) 
             ],
         )
 
+    return observations, observed_dates
+
+
+def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) -> SourceResult:
+    base_url = config.sources.get("district", {}).get("base_url", "https://www.district.in")
+    url = _movie_page_url(config)
+    result = client.get(url)
+
+    if result.status == "robots_disallowed":
+        return SourceResult(
+            source="district", status="blocked",
+            message="District robots.txt disallows this path for our client; monitoring skipped.",
+            evidence=result.evidence(),
+        )
+    if result.status == "blocked":
+        return SourceResult(
+            source="district", status="blocked",
+            message=result.blocked_reason or "District refused automated access.",
+            evidence=result.evidence(),
+        )
+    if not result.ok:
+        if result.http_status in (404, 410):
+            discovered = discover_movie_url(client, config)
+            if discovered:
+                url = discovered
+                result = client.get(url)
+        if not result.ok:
+            raise SourceUnavailable(
+                f"District movie page unavailable ({result.error or result.status}) at {url}"
+            )
+
+    data = _next_data(result.text)
+    page_props = ((data.get("props") or {}).get("pageProps") or {})
+    state = page_props.get("initialState") or {}
+    content_id = str(page_props.get("data", {}).get("contentId") or config.district_content_id)
+    movie = _movie_meta(state, content_id)
+    if not movie.get("title"):
+        raise SourceError("District page parsed but no movie metadata was found")
+
+    groups = _find_session_groups(state)
+    if not groups:
+        groups = _find_session_groups(page_props)
+
+    # Public cinema directory: used for name verification and to spot cinemas
+    # that exist but have no sessions yet.
+    registry, fetched_at = load_registry(cache_dir)
+    ttl = float(config.sources.get("district", {}).get("registry_cache_hours", 24)) * 3600
+    if not registry or datetime.now().timestamp() - fetched_at > ttl:
+        fresh = fetch_registry(
+            client, base_url,
+            config.sources.get("district", {}).get("cinema_registry_path", "/movies/cinemas-in-bengaluru"),
+        )
+        if fresh:
+            registry = fresh
+            save_registry(cache_dir, fresh)
+
+    observations, observed_dates = _observations_from_groups(
+        config, groups, movie, content_id, base_url, registry,
+    )
     all_dates = set(observed_dates)
     message = (
         f"{len(groups)} Bengaluru cinemas listed for this movie; "
@@ -354,5 +383,125 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) 
         notes=[
             "Area-wise seat counts are published by District; individual seat numbers are not, "
             "so seat suggestions are marked as heuristics unless a public layout is supplied.",
+        ],
+    )
+
+
+def result_from_payload(
+    config: AppConfig,
+    payload: dict[str, Any],
+    *,
+    source_url: str | None = None,
+) -> SourceResult:
+    """Build a District result from the NAS collector's compact inbox payload.
+
+    This path performs no network access. The payload is validated strictly
+    before any snapshot is written: a malformed or incomplete message must
+    never replace the last good snapshot.
+    """
+    if not isinstance(payload, dict):
+        raise SourceError("District inbox payload is not a JSON object")
+    if str(payload.get("source") or "") != "district":
+        raise SourceError("District inbox payload has an unexpected source")
+    content_id = str(payload.get("content_id") or "")
+    if not content_id:
+        raise SourceError("District inbox payload is missing content_id")
+    if config.district_content_id and content_id != config.district_content_id:
+        raise SourceError(
+            f"District inbox content_id {content_id!r} does not match configured "
+            f"{config.district_content_id!r}"
+        )
+
+    movie = payload.get("movie")
+    if not isinstance(movie, dict) or not movie.get("title"):
+        raise SourceError("District inbox payload has no movie metadata")
+    if config.title and str(movie["title"]).strip() != config.title:
+        raise SourceError(
+            f"District inbox movie title {movie['title']!r} does not match configured {config.title!r}"
+        )
+
+    collected_at = payload.get("collected_at")
+    if not isinstance(collected_at, str):
+        raise SourceError("District inbox payload is missing collected_at")
+    try:
+        datetime.fromisoformat(collected_at.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise SourceError(f"District inbox collected_at is invalid: {exc}") from exc
+
+    groups = payload.get("groups")
+    if not isinstance(groups, list) or not groups:
+        raise SourceError("District inbox payload has no cinema groups")
+    groups = [g for g in groups if isinstance(g, dict)]
+    if not groups:
+        raise SourceError("District inbox payload has no usable cinema groups")
+
+    valid_ids = {t.district_id for t in config.theatres if t.district_id}
+    seen_ids: set[str] = set()
+    for group in groups:
+        data_blob = group.get("data") or {}
+        group_id = str(data_blob.get("id") or "")
+        if group_id in seen_ids:
+            raise SourceError(f"District inbox payload repeats cinema {group_id!r}")
+        seen_ids.add(group_id)
+        sessions = group.get("sessions") or []
+        if not isinstance(sessions, list):
+            raise SourceError(f"District inbox cinema {group_id!r} has non-list sessions")
+        for session in sessions:
+            if not isinstance(session, dict) or not _valid_session(session):
+                raise SourceError(f"District inbox cinema {group_id!r} has an invalid session")
+            day = _parse_date(session["showTime"])
+            if day not in config.target_dates:
+                raise SourceError(
+                    f"District inbox cinema {group_id!r} contains a non-target session date {day!r}"
+                )
+        for raw_date in group.get("available_dates") or []:
+            if not _parse_date(str(raw_date)):
+                raise SourceError(f"District inbox cinema {group_id!r} has an invalid available_date")
+
+    # Unknown cinemas are not mapped into configured theatres, but flag an
+    # entirely mismatched payload instead of silently reporting everything absent.
+    matched = {
+        str((g.get("data") or {}).get("id") or "")
+        for g in groups
+        if str((g.get("data") or {}).get("id") or "") in valid_ids
+    }
+    if valid_ids and not matched:
+        raise SourceError("District inbox payload contains none of the configured cinema IDs")
+
+    base_url = config.sources.get("district", {}).get("base_url", "https://www.district.in")
+    observations, observed_dates = _observations_from_groups(
+        config, groups, movie, content_id, base_url, {},
+    )
+    collector = payload.get("collector") if isinstance(payload.get("collector"), dict) else {}
+    movie_url = source_url or payload.get("movie_url") or (
+        f"{base_url}/movies/{config.district_slug}" if config.district_slug else None
+    )
+    return SourceResult(
+        source="district",
+        status="ok",
+        message=(
+            f"{len(groups)} cinema group(s) supplied by the NAS collector; target-date shows "
+            f"found at {sum(1 for o in observations.values() if o.shows)} of "
+            f"{len(config.theatres)} monitored theatres."
+        ),
+        checked_at=collected_at,
+        evidence={
+            "transport": "nas_inbox",
+            "movie_url": movie_url,
+            "session_groups": len(groups),
+            "matches_configured_cinemas": len(matched),
+            "dates_with_sessions": sorted(observed_dates),
+            "collector": collector,
+        },
+        movie={
+            **movie,
+            "url": movie_url,
+            "show_dates": sorted(observed_dates),
+        },
+        observations=observations,
+        notes=[
+            "Collected by the Indian-egress NAS collector and ingested without a network fetch.",
+            "Area-wise seat counts are published by District; individual seat numbers are not "
+            "invented. Missing data stays missing.",
         ],
     )

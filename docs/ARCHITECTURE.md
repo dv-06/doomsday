@@ -62,6 +62,23 @@ the static site reads the committed JSON.
 - `components/TheatreCard.tsx` — per-date show rows, format badges, seat guide,
   platform observations, booking links.
 
+## Two collection paths
+
+**Normal path (Indian egress):** the OpenWrt router runs
+`/opt/doomsday-watch/collect.sh` hourly. It fetches one District page, extracts
+`__NEXT_DATA__` with `ucode`, filters the six cinema IDs and two target dates,
+validates the compact payload, and uploads `data/inbox/district.json` with the
+Contents API only when its SHA-256 changes. BookMyShow is never fetched there.
+
+**Ingestion path:** `.github/workflows/ingest.yml` runs on that push, calls
+`doomsday_watch ingest`, and reuses the existing `district` mapping plus the
+normal diff/history/store/notify pipeline. No network source is contacted.
+`pages.yml` deploys after ingestion completes via `workflow_run`.
+
+**Fallback path:** `monitor.yml` has no schedule. A manual run makes the live
+fetch, but exits early if `data/meta.json` has NAS provenance unless `force=true`
+is explicitly selected.
+
 ## One monitoring run
 
 1. Load and validate `config/monitor.json`.
@@ -95,6 +112,11 @@ the static site reads the committed JSON.
 | All sources fail/block | Run is `degraded`, previous shows preserved with age, a degraded snapshot is stored, CLI exits `3` (workflow warns but commits/deploys). |
 | Notification channel fails | Logged, other channels still attempted; run data is still saved. |
 | Push conflict in Actions | `pull --rebase --autostash` and retry up to 3 times. |
+| Router memory below 80 MB | Collector exits before fetching; current snapshot untouched. |
+| Router parse/validation failure | No upload; state and the last GitHub snapshot are preserved. |
+| NAS payload stale/malformed | Ingest exits 2 before writing; last good snapshot remains. |
+| Duplicate NAS payload | Canonical hash matches provenance; no data or history is appended. |
+| GitHub API 409 | Collector refreshes the file SHA and retries once. |
 | Pages deploy fails | Data commit already exists; next successful run redeploys. |
 
 ## Key decisions
@@ -107,8 +129,13 @@ the static site reads the committed JSON.
 - **No anti-bot circumvention.** Blocked means blocked. The UI exposes it.
 - **HashRouter.** GitHub Pages cannot rewrite paths; hashes avoid 404s for deep links.
 - **Availability ≠ sales.** Diff wording and UI copy enforce this distinction.
-- **One deployer at a time.** The hourly monitor and the human-push Pages workflow
-  share a concurrency group; Pages deploys are queued, never raced.
+- **One deployer at a time.** NAS ingest, the manual monitor and the Pages
+  workflow share a concurrency group; deploys are queued, never raced.
+- **Indian collection, cloud processing.** The router does only the geo-blocked
+  fetch and compact extraction; GitHub keeps ownership of normalisation, diff,
+  history and alerts, avoiding a second data model.
+- **Manual cloud fallback is fenced.** The US monitor cannot overwrite NAS data
+  without an explicit `force=true`.
 - **Overall status is conservative.** `ok` means every enabled source was fully
   healthy; one partial/blocked source makes the whole run `partial`.
 - **IST everywhere.** Dates are stored as IST calendar dates so a 00:30 show on
@@ -123,7 +150,7 @@ the static site reads the committed JSON.
 - Add a date: append to `target_dates`.
 - Add a source: implement the adapter interface in `sources/`, register it in
   `monitor.ADAPTERS`, then enable it in config.
-- Change cadence: edit the cron in `.github/workflows/monitor.yml` and
+- Change cadence: edit the root cron on the router and
   `monitoring.interval_minutes` (display only).
 - Real seat maps: feed a layout into `seats.recommend_from_layout()` and surface the
   returned seat labels in `TheatreCard`.

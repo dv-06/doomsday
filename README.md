@@ -159,16 +159,22 @@ PYTHONPATH=backend python -m doomsday_watch --data data run --dry-run
    Actions** → `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `NTFY_TOPIC`,
    `NOTIFY_WEBHOOK_URL`. Optionally add a repository **variable**
    `DASHBOARD_URL=https://dv-06.github.io/doomsday/` so alerts link to the site.
-5. Run **Actions → Hourly ticket watch → Run workflow** once to verify, then let
-   the `5 * * * *` cron take over.
+5. Install the OpenWrt collector from [`router/`](router/README.md) on an
+   Indian-egress router, add its fine-grained PAT and enable the hourly cron.
 6. Your dashboard is at `https://<user>.github.io/<repo>/`.
 
-The hourly workflow commits the snapshot, builds the site and deploys Pages in the
-same run. A second workflow (`Deploy dashboard`) handles human code/style/config
-pushes. Both share the `doomsday-watch-pages` concurrency group, so they queue
+Normal collection is done by the Indian-egress OpenWrt collector
+(`router/collect.sh`), which uploads only `data/inbox/district.json`. The
+`Ingest NAS snapshot` workflow validates it and runs the existing Python
+normalisation/diff/history pipeline without fetching the network. `Deploy
+dashboard` then builds and publishes Pages. The old `Hourly ticket watch`
+workflow has **no schedule**; it remains only as a manual fallback and refuses
+to overwrite a NAS snapshot unless `force=true` is set.
+
+All workflows share the `doomsday-watch-pages` concurrency group, so they queue
 instead of deploying competing builds. See
-[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for scheduler caveats, custom domains
-and troubleshooting.
+[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for PAT setup, scheduler caveats,
+custom domains and troubleshooting.
 
 > A push made with the default `GITHUB_TOKEN` does **not** trigger other workflows.
 > That is why the monitor deploys Pages itself instead of relying on the push to
@@ -292,9 +298,11 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-34 tests cover CLI parsing, dry-run isolation, normal and partial runs, format normalisation (including Infinity Vision ≠ IMAX), District
-parsing against a trimmed real fixture, seat heuristics, diff/notification rules,
-snapshot retention, and the end-to-end pipeline with blocked sources.
+40 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
+ingestion, duplicate/stale payload protection, format normalisation (including
+Infinity Vision ≠ IMAX), District parsing against a trimmed real fixture, seat
+heuristics, diff/notification rules, snapshot retention, and the end-to-end
+pipeline with blocked sources.
 
 Frontend checks:
 
@@ -308,8 +316,9 @@ npm run build
 
 ## Known limitations
 
-1. **BookMyShow showtimes are blocked** from GitHub's runners (Cloudflare). Coverage
-   is District-only until that changes; the UI says so instead of pretending.
+1. **BookMyShow showtimes are blocked** from both GitHub's runners and the router
+   (Cloudflare). Coverage is District-only; the UI keeps BookMyShow visibly blocked
+   instead of pretending it was checked.
 2. **18 Dec 2026 has no shows yet.** The tracker shows zero rather than guessing.
 3. **GitHub cron is best-effort.** Runs can be delayed by minutes during peak load;
    scheduled workflows pause after 60 days of repository inactivity (this project's
@@ -323,8 +332,8 @@ npm run build
    partial, even if another source returned full data — incomplete coverage is
    never presented as complete. `ok` requires every source to be fully healthy.
 8. **GitHub-hosted runners cannot reach District** (geo/datacenter 403) or
-   BookMyShow showtimes (Cloudflare). Cloud runs are therefore degraded by default;
-   fresh collection needs an Indian egress path (see deployment docs).
+   BookMyShow showtimes (Cloudflare). The scheduled US collector is therefore
+   disabled; fresh District data comes from the Indian-egress OpenWrt collector.
 
 ---
 
@@ -336,7 +345,8 @@ backend/tests/              pytest suite + trimmed District fixture
 config/monitor.json         movie, dates, theatres, sources, retention
 data/                       committed snapshots, history, derived files
 frontend/                   React + Vite dashboard (syncs data/ before build)
-.github/workflows/          hourly monitor + Pages deploy, site deploy
+router/                     OpenWrt ucode collector, install/uninstall, docs
+.github/workflows/          NAS ingest + Pages deploy, manual monitor fallback
 docs/                       architecture, data schema, deployment
 .env.example                every supported environment variable
 ```

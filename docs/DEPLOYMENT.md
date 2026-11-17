@@ -8,9 +8,9 @@ or hosting. Total cost ₹0 for a public repository.
 ```bash
 git add .
 git commit -m "Doomsday Watch"
-git branch -M main
-git remote add origin https://github.com/<you>/doomsday-watch.git
-git push -u origin main
+git branch -M master
+git remote add origin https://github.com/<you>/doomsday.git
+git push -u origin master
 ```
 
 The repository must be **public** for free Pages (private repos need a paid plan).
@@ -45,9 +45,26 @@ Without this, the hourly job can scrape but cannot commit `data/`.
 messages link to the live site. Missing credentials simply disable that channel;
 the run still succeeds and the dashboard still updates.
 
-## 5. First run
+## 5. Install the Indian-egress collector (normal data source)
 
-**Actions → Hourly ticket watch → Run workflow** (leave `dry_run` unchecked).
+The scheduled US monitor is disabled because District blocks GitHub's runners.
+Follow [`router/README.md`](../router/README.md), which covers:
+
+- copying the collector to `/opt/doomsday-watch`;
+- a fine-grained PAT for `dv-06/doomsday` with **Contents: Read and write** only,
+  stored at `/etc/doomsday-watch/token` mode `600`;
+- one root cron entry at minute 7;
+- logs under `/mnt/seagate/doomsday/logs` with 14-day retention.
+
+The collector uploads only `data/inbox/district.json`. `Ingest NAS snapshot`
+validates it and reuses the existing Python pipeline; `Deploy dashboard`
+publishes Pages after a successful ingest. The collector skips uploads whose
+SHA-256 is unchanged.
+
+## 6. First manual cloud run (fallback only)
+
+**Actions → Hourly ticket watch → Run workflow**. After NAS provenance exists,
+this workflow refuses to overwrite it unless the `force` input is checked.
 
 Expected log lines:
 
@@ -69,12 +86,13 @@ https://<user>.github.io/<repo>/
 The schedule (`5 * * * *`, UTC) takes over from the next hour. Test alerts locally
 with `python -m doomsday_watch notify-test`.
 
-## 6. Verify
+## 7. Verify
 
-- `data/latest.json` has a fresh `checked_at` in IST.
-- `data/history/runs.jsonl` gains one line per hour.
-- The dashboard footer shows the same check time.
-- Actions → Pages shows a successful deployment for the same commit.
+- `data/latest.json` has a fresh `checked_at` in IST after a NAS ingest.
+- `data/provenance.transport` is `nas_inbox` and `sources[district].status` is `ok`.
+- `data/history/runs.jsonl` gains one line per changed payload.
+- The dashboard keeps BookMyShow visibly blocked.
+- Actions → Pages shows a successful deployment for the ingest commit.
 
 ## Cloud source access (important)
 
@@ -86,10 +104,11 @@ BookMyShow blocks showtimes with Cloudflare. Consequently:
   age, and **exits 3**; the workflow converts that to a warning and still commits
   and deploys, so the dashboard stays current about the attempt.
 - The CLI exits `2` only for genuine monitor failures.
-- No proxy, CAPTCHA solving or IP rotation is used. If you need fresh cloud data,
-  run the monitor on an Indian egress you control (for example a self-hosted runner)
-  and keep this project's rules intact. Local runs from Bengaluru already work:
-  `python -m doomsday_watch run`.
+- No proxy, CAPTCHA solving or IP rotation is used. Fresh District data comes
+  from the Indian-egress OpenWrt collector in `router/`. The US workflow is a
+  manual fallback only and is fenced by NAS provenance.
+- BookMyShow remains blocked from both locations; the Sources page reports it
+  honestly.
 
 ## Scheduler reality check
 
@@ -102,14 +121,17 @@ GitHub's cron is **best-effort**, not a guarantee:
 - GitHub Actions free minutes are unlimited for public repositories on standard
   runners; a run here takes roughly 1–2 minutes, well within any limit.
 - Concurrency is serialised through the shared `doomsday-watch-pages` group, so
-  monitoring and Pages deploys never run or deploy at the same time.
+  NAS ingest, manual monitoring and Pages deploys never race.
+- Router cron is independent of GitHub's scheduler; if the router is offline the
+  dashboard keeps the last valid snapshot and shows its age.
 
 ## Why the monitor deploys Pages itself
 
-Pushes made with the default `GITHUB_TOKEN` do **not** trigger other workflows, so a
-separate "deploy on push" workflow would never see the hourly data commit. Instead,
-`monitor.yml` commits, builds and deploys in one job. `pages.yml` covers code and
-documentation pushes made by a human.
+Pushes made with the default `GITHUB_TOKEN` do **not** trigger other workflows.
+The NAS ingest workflow commits derived data with `GITHUB_TOKEN`, so `pages.yml`
+listens for `Ingest NAS snapshot` completing via `workflow_run`. The inbox push
+itself is excluded from the Pages path filter; normal human code/config/data
+pushes still deploy directly.
 
 ## Custom domain (optional, free)
 

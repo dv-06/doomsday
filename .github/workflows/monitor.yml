@@ -1,15 +1,18 @@
 name: Hourly ticket watch
 
 on:
-  schedule:
-    # GitHub Actions cron is UTC and best-effort. 05:00 UTC = 10:30 IST, then
-    # hourly at :35 past each IST hour (IST is UTC+05:30). Runs may start late
-    # during peak load.
-    - cron: "5 * * * *"
+  # The hourly schedule was intentionally removed: GitHub's US runners are
+  # blocked by District (HTTP 403), so they must not overwrite fresh snapshots
+  # collected by the Indian-egress OpenWrt NAS. This workflow remains as a
+  # manual fallback only.
   workflow_dispatch:
     inputs:
       dry_run:
         description: "Check sources without writing snapshots or sending alerts"
+        type: boolean
+        default: false
+      force:
+        description: "Run even if a fresh NAS snapshot exists (may overwrite it with degraded data)"
         type: boolean
         default: false
 
@@ -60,6 +63,50 @@ jobs:
       - name: Install monitor dependencies
         run: pip install -r requirements.txt
 
+      - name: Check for a fresh NAS snapshot
+        id: freshness
+        env:
+          FORCE: ${{ inputs.force }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set +e
+          if [ "$FORCE" = "true" ] || [ "$DRY_RUN" = "true" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if python - <<'PY'
+          import json, sys
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          meta_path = Path("data/meta.json")
+          try:
+              meta = json.loads(meta_path.read_text(encoding="utf-8"))
+          except (OSError, ValueError):
+              sys.exit(1)
+          collector = meta.get("collector") or {}
+          if collector.get("transport") != "nas_inbox":
+              sys.exit(1)
+          stamp = meta.get("last_success_at") or collector.get("collected_at")
+          try:
+              when = datetime.fromisoformat(str(stamp).replace("Z", "+00:00"))
+              if when.tzinfo is None:
+                  when = when.replace(tzinfo=timezone.utc)
+              age = (datetime.now(timezone.utc) - when.astimezone(timezone.utc)).total_seconds() / 60
+              print(f"NAS snapshot age: {age:.1f} minutes")
+          except (TypeError, ValueError):
+              print("NAS provenance present; snapshot age unknown")
+          # Any NAS provenance wins: a manual cloud run must use force=true,
+          # otherwise its US egress can only produce degraded data.
+          sys.exit(0)
+          PY
+          then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::NAS snapshot provenance is present. Skipping the manual cloud collector to avoid overwriting it. Re-run with force=true to override."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Validate configuration
         run: python -m doomsday_watch --config config/monitor.json --data data validate
         env:
@@ -67,6 +114,7 @@ jobs:
 
       - name: Run hourly snapshot
         id: run
+        if: ${{ steps.freshness.outputs.skip != 'true' }}
         env:
           PYTHONPATH: ${{ github.workspace }}/backend
           DRY_RUN: ${{ inputs.dry_run }}
@@ -117,7 +165,7 @@ jobs:
           exit "$rc"
 
       - name: Upload run log
-        if: always()
+        if: ${{ always() && steps.freshness.outputs.skip != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: monitor-log-${{ github.run_id }}
@@ -126,7 +174,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit snapshots, history and derived data
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.freshness.outputs.skip != 'true' }}
         run: |
           set -euo pipefail
           git config user.name "doomsday-watch[bot]"
@@ -167,23 +215,23 @@ jobs:
 
       # Dry runs stop here: nothing is written, built or deployed.
       - name: Build dashboard
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.freshness.outputs.skip != 'true' }}
         working-directory: frontend
         run: |
           npm ci
           npm run build
 
       - name: Configure Pages
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.freshness.outputs.skip != 'true' }}
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.freshness.outputs.skip != 'true' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: frontend/dist
 
       - name: Deploy to GitHub Pages
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.freshness.outputs.skip != 'true' }}
         id: deployment
         uses: actions/deploy-pages@v4

@@ -122,6 +122,7 @@ def build_snapshot(
     duration_ms: int,
     run_id: str,
     layout_dir: Path | None = None,
+    provenance: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any], list[dict[str, Any]]]:
     prev_by_theatre: dict[str, Any] = {}
     for theatre in previous.get("theatres", []) or []:
@@ -322,6 +323,8 @@ def build_snapshot(
         "excluded_lookalikes": list(config.excluded_lookalikes),
         "events": [],
     }
+    if provenance:
+        snapshot["provenance"] = provenance
     return snapshot, previous, []
 
 
@@ -364,6 +367,8 @@ def run_monitor(
     dry_run: bool = False,
     skip_notifications: bool = False,
     trigger: str = "manual",
+    prefetched_results: list[SourceResult] | None = None,
+    provenance: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     config = load_config(config_path)
     store = Store(data_dir)
@@ -380,37 +385,43 @@ def run_monitor(
     run_id = datetime.fromisoformat(started_at).strftime("%Y%m%dT%H%M%S") + "-" + uuid4().hex[:6]
 
     source_results: list[SourceResult] = []
-    with HttpClient(
-        user_agent=config.monitoring.user_agent,
-        timeout_seconds=config.monitoring.request_timeout_seconds,
-        max_retries=config.monitoring.max_retries,
-        backoff_seconds=config.monitoring.retry_backoff_seconds,
-        cache_dir=cache_dir,
-    ) as client:
-        for name, adapter in ADAPTERS.items():
-            if not config.sources.get(name, {}).get("enabled", False):
-                continue
-            try:
-                source_results.append(adapter(config, client, cache_dir))
-            except Exception as exc:  # noqa: BLE001 - isolate source failures
-                source_results.append(SourceResult(
-                    source=name,
-                    status="error",
-                    message=f"{type(exc).__name__}: {exc}",
-                    evidence={"traceback_tail": traceback.format_exc(limit=2)},
-                    observations={
-                        t.id: TheatreObservation(
-                            platform=name, theatre_id=t.id, status="error", listed=None,
-                            error=f"{type(exc).__name__}: {exc}",
-                        )
-                        for t in config.theatres
-                    },
-                ))
+    if prefetched_results is not None:
+        # Ingest path: the NAS already fetched District. No network request is
+        # made here, so an import can never bypass a source block or duplicate
+        # a fetch.
+        source_results = list(prefetched_results)
+    else:
+        with HttpClient(
+            user_agent=config.monitoring.user_agent,
+            timeout_seconds=config.monitoring.request_timeout_seconds,
+            max_retries=config.monitoring.max_retries,
+            backoff_seconds=config.monitoring.retry_backoff_seconds,
+            cache_dir=cache_dir,
+        ) as client:
+            for name, adapter in ADAPTERS.items():
+                if not config.sources.get(name, {}).get("enabled", False):
+                    continue
+                try:
+                    source_results.append(adapter(config, client, cache_dir))
+                except Exception as exc:  # noqa: BLE001 - isolate source failures
+                    source_results.append(SourceResult(
+                        source=name,
+                        status="error",
+                        message=f"{type(exc).__name__}: {exc}",
+                        evidence={"traceback_tail": traceback.format_exc(limit=2)},
+                        observations={
+                            t.id: TheatreObservation(
+                                platform=name, theatre_id=t.id, status="error", listed=None,
+                                error=f"{type(exc).__name__}: {exc}",
+                            )
+                            for t in config.theatres
+                        },
+                    ))
 
     duration_ms = int((time.time() - started) * 1000)
     snapshot, _, _ = build_snapshot(
         config, source_results, previous, started_at, duration_ms, run_id,
-        layout_dir=store.root / "seatmaps",
+        layout_dir=store.root / "seatmaps", provenance=provenance,
     )
 
     events, new_state = diff_snapshot(previous_state, snapshot["theatres"], config, snapshot["sources"])
@@ -436,7 +447,12 @@ def run_monitor(
             "interval_minutes": config.monitoring.interval_minutes,
             "timezone": config.monitoring.timezone,
             "next_check_at": next_check.isoformat(timespec="seconds"),
-            "schedule_note": "Hourly GitHub Actions cron; GitHub may delay scheduled runs by a few minutes.",
+            "schedule_note": (
+                "Hourly collection by the Indian-egress OpenWrt NAS collector; "
+                "GitHub Actions validates, ingests and deploys the snapshot."
+                if provenance else
+                "Manual GitHub Actions run; the hourly NAS collector is the normal data source."
+            ),
         },
         "last_success_at": snapshot["checked_at"] if snapshot["status"] in {"ok", "partial"} else previous.get("checked_at"),
         "counts": snapshot["totals"],
@@ -461,6 +477,9 @@ def run_monitor(
         },
         "config_digest": config.raw.get("schema_version"),
     }
+    if provenance:
+        meta["collector"] = provenance
+
     state = {**new_state, "last_run": {
         "run_id": run_id, "checked_at": snapshot["checked_at"], "status": snapshot["status"],
     }}

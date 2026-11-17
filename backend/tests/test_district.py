@@ -103,3 +103,71 @@ def test_id_mismatch_is_reported_not_guessed(config, fixture_html, tmp_path, mon
     assert obs.status == "not_listed"
     assert obs.listed is False
     assert obs.shows == []
+
+
+def _payload_from_fixture(fixture_html: str, collected_at: str = "2026-11-17T17:40:00Z"):
+    data = district._next_data(fixture_html)
+    page_props = data["props"]["pageProps"]
+    state = page_props["initialState"]
+    content_id = str(page_props["data"]["contentId"])
+    movie = district._movie_meta(state, content_id)
+    groups = district._find_session_groups(state)
+    wanted = {"56450", "1022299", "1020725", "1022303", "52080", "1022307"}
+    compact = []
+    for group in groups:
+        blob = group.get("data") or {}
+        if str(blob.get("id")) not in wanted:
+            continue
+        target_sessions = [
+            s for s in (group.get("sessions") or [])
+            if isinstance(s, dict) and str(s.get("showTime", ""))[:10] in {"2026-12-17", "2026-12-18"}
+        ]
+        compact.append({
+            "data": blob,
+            "entityUrl": group.get("entityUrl"),
+            "sessions": target_sessions,
+            "available_dates": sorted({str(s.get("showTime", ""))[:10] for s in group.get("sessions") or []}),
+        })
+    return {
+        "schema_version": 1,
+        "source": "district",
+        "collected_at": collected_at,
+        "collector": {"name": "openwrt-ucode", "version": "1.0.0", "egress": "IN"},
+        "content_id": content_id,
+        "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "movie": movie,
+        "groups": compact,
+    }
+
+
+def test_payload_import_matches_live_mapping(config, fixture_html):
+    source = district.result_from_payload(config, _payload_from_fixture(fixture_html))
+    assert source.status == "ok"
+    assert source.evidence["transport"] == "nas_inbox"
+    lulu = source.observations["lulu-global-mall"]
+    assert lulu.status == "ok" and lulu.listed
+    assert lulu.shows[0]["format"]["key"] == "infinity_vision_3d"
+    assert all(show["date"] != "2026-12-18" for show in lulu.shows)
+    assert source.observations["mantri-square-mall"].status == "not_listed"
+
+
+def test_payload_rejects_missing_movie_or_wrong_date(config, fixture_html):
+    import copy
+    import pytest
+
+    payload = _payload_from_fixture(fixture_html)
+    broken = copy.deepcopy(payload)
+    broken.pop("movie")
+    with pytest.raises(district.SourceError):
+        district.result_from_payload(config, broken)
+
+    broken = copy.deepcopy(payload)
+    broken["groups"][0]["sessions"][0] = dict(broken["groups"][0]["sessions"][0])
+    broken["groups"][0]["sessions"][0]["showTime"] = "2026-12-19T10:00:00+05:30"
+    with pytest.raises(district.SourceError):
+        district.result_from_payload(config, broken)
+
+    broken = copy.deepcopy(payload)
+    broken["content_id"] = "999999"
+    with pytest.raises(district.SourceError):
+        district.result_from_payload(config, broken)

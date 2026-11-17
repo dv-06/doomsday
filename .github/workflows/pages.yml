@@ -1,10 +1,13 @@
 name: Deploy dashboard
 
 # Deployment strategy:
-#   * monitor.yml owns hourly data + deployment (its data commit uses GITHUB_TOKEN,
-#     which does not trigger this workflow).
-#   * this workflow handles human pushes that change the site or its config.
-# Both share one concurrency group so they never deploy competing builds.
+#   * ingest.yml validates the NAS inbox, updates data with GITHUB_TOKEN, and
+#     completes. GITHUB_TOKEN pushes do not trigger other workflows, so this
+#     workflow also listens for that ingest completing.
+#   * monitor.yml is a manual fallback that still deploys itself.
+#   * human pushes that change the site or its config also deploy here.
+# The inbox push itself is ignored; the generated data commit is what matters.
+# All workflows share one concurrency group so Pages is never deployed twice.
 on:
   push:
     branches: [master]
@@ -12,7 +15,12 @@ on:
       - "frontend/**"
       - "config/**"
       - "data/**"
+      - "!data/inbox/**"
       - ".github/workflows/pages.yml"
+  workflow_run:
+    workflows: ["Ingest NAS snapshot"]
+    types: [completed]
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -26,6 +34,7 @@ concurrency:
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -49,6 +58,7 @@ jobs:
 
   deploy:
     needs: build
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

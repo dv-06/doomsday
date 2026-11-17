@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+  "content_id": "176735",
+  "target_dates": [
+    "2026-12-17",
+    "2026-12-18"
+  ],
+  "cinemas": [
+    {"id": "lulu-global-mall", "district_id": "56450", "name": "Lulu Global Mall"},
+    {"id": "orion-mall", "district_id": "1022299", "name": "Orion Mall"},
+    {"id": "mantri-square-mall", "district_id": "1020725", "name": "Mantri Square Mall"},
+    {"id": "gt-world-mall", "district_id": "1022303", "name": "GT World Mall"},
+    {"id": "miraj-sunkadakatte", "district_id": "52080", "name": "Miraj Sunkadakatte"},
+    {"id": "global-mall-mysore-road", "district_id": "1022307", "name": "Global Mall Mysore Road"}
+  ],
+  "repository": "dv-06/doomsday",
+  "branch": "master",
+  "inbox_path": "data/inbox/district.json",
+  "limits": {
+    "min_available_mb": 80,
+    "max_html_bytes": 3000000,
+    "fetch_timeout_seconds": 30,
+    "max_sessions": 500
+  },
+  "user_agent": "DoomsdayWatch-NAS/1.0 (+personal ticket-availability tracker; 1 request/hour; contact via repository issues)"
+}

@@ -11,15 +11,18 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
 
-from .config import ConfigError, iso_ist, load_config
+from .config import ConfigError, iso_ist, load_config, now_ist, parse_iso
 from .http import HttpClient
 from .monitor import ADAPTERS, run_monitor
 from .notify import Notifier
+from .sources import bookmyshow, district
 from .store import Store
 
 
@@ -78,6 +81,127 @@ def _write_step_summary(result: dict) -> None:
         lines += [f"- **{e['type']}** — {e['message']}" for e in result["events"][:25]]
     else:
         lines.append("- No changes detected.")
+    Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _payload_digest(payload: dict) -> str:
+    """Stable hash of the source data, excluding collection timestamps."""
+    canonical = {
+        "content_id": payload.get("content_id"),
+        "movie": payload.get("movie"),
+        "groups": payload.get("groups"),
+    }
+    raw = json.dumps(canonical, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def cmd_ingest(args: argparse.Namespace) -> int:
+    """Ingest the NAS collector's District inbox without making network calls."""
+    try:
+        config = load_config(args.config)
+        path = Path(args.file)
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("payload is not a JSON object")
+        if int(payload.get("schema_version", 0)) != 1:
+            raise ValueError(f"unsupported payload schema_version {payload.get('schema_version')!r}")
+
+        collected = parse_iso(str(payload.get("collected_at") or ""))
+        now = now_ist()
+        if collected - now > timedelta(minutes=10):
+            raise ValueError("payload collection timestamp is in the future")
+        if now - collected > timedelta(hours=3):
+            raise ValueError("payload is more than 3 hours old; refusing to overwrite newer data")
+
+        source = district.result_from_payload(
+            config, payload, source_url=payload.get("movie_url"),
+        )
+        digest = _payload_digest(payload)
+
+        store = Store(args.data)
+        latest = store.load_latest()
+        previous_prov = latest.get("provenance") or {}
+        previous_collected = previous_prov.get("collected_at")
+        if previous_collected:
+            try:
+                previous_dt = parse_iso(str(previous_collected))
+            except ValueError:
+                previous_dt = None
+            if previous_dt is not None and collected < previous_dt:
+                raise ValueError(
+                    f"payload is older than the current snapshot ({previous_collected})"
+                )
+        if previous_prov.get("content_sha256") == digest:
+            print(f"District inbox unchanged (sha256={digest[:12]}…); no data written.")
+            if args.github_summary:
+                _write_ingest_summary(None, digest, unchanged=True)
+            return 0
+
+        bms = bookmyshow.blocked_result(
+            config,
+            "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). "
+            "The Indian-egress collector covers District only; no block was bypassed.",
+            evidence={
+                "transport": "nas_inbox",
+                "bypassed": False,
+                "http_status": 403,
+                "checked_at": payload.get("collected_at"),
+            },
+        )
+        provenance = {
+            "collector": payload.get("collector") or {},
+            "transport": "nas_inbox",
+            "collected_at": payload.get("collected_at"),
+            "ingested_at": iso_ist(),
+            "content_sha256": digest,
+            "payload_schema_version": payload.get("schema_version"),
+        }
+        result = run_monitor(
+            args.config,
+            args.data,
+            dry_run=args.dry_run,
+            skip_notifications=args.skip_notifications,
+            trigger=args.trigger,
+            prefetched_results=[source, bms],
+            provenance=provenance,
+        )
+        print(_summarise(result))
+        for event in result["events"]:
+            print(f"  [{event['severity']}] {event['type']}: {event['message']}")
+        if args.github_summary:
+            _write_ingest_summary(result, digest, unchanged=False)
+        return 0
+    except Exception as exc:  # noqa: BLE001 - validation failures must exit non-zero
+        print(f"ingest failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 2
+
+
+def _write_ingest_summary(result: dict | None, digest: str, *, unchanged: bool) -> None:
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    if unchanged or result is None:
+        lines = [
+            "## Doomsday Watch — NAS ingest",
+            "",
+            f"- District payload SHA-256: `{digest}`",
+            "- Content unchanged; no data files were written.",
+        ]
+    else:
+        totals = result["totals"]
+        lines = [
+            f"## Doomsday Watch — NAS ingest ({result['status']})",
+            "",
+            f"- District payload SHA-256: `{digest}`",
+            f"- Theatres with listings: **{totals['theatres_with_listings']}/{totals['theatres_monitored']}**",
+            f"- Shows: **{totals['shows_total']}** (3D: {totals['shows_3d']}, Infinity Vision 3D: {totals['shows_infinity_vision_3d']})",
+            f"- Events: **{len(result['events'])}**",
+            f"- Sources: `{json.dumps(result['sources'])}`",
+        ]
+        if result["events"]:
+            lines += ["", "### Changes"] + [f"- **{e['type']}** — {e['message']}" for e in result["events"][:25]]
+        else:
+            lines += ["", "No change events detected."]
     Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -188,6 +312,14 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--trigger", default="manual")
     run.add_argument("--github-summary", action="store_true")
     run.set_defaults(func=cmd_run)
+
+    ingest = sub.add_parser("ingest", help="ingest the NAS collector's District inbox (no network)")
+    ingest.add_argument("--file", default="data/inbox/district.json", help="inbox JSON path")
+    ingest.add_argument("--dry-run", action="store_true", help="validate and diff without writing data or sending alerts")
+    ingest.add_argument("--skip-notifications", action="store_true")
+    ingest.add_argument("--trigger", default="nas")
+    ingest.add_argument("--github-summary", action="store_true")
+    ingest.set_defaults(func=cmd_ingest)
 
     probe = sub.add_parser("probe", help="probe booking platforms and print a report")
     probe.add_argument("--write", action="store_true", help="write data/sources-probe.json")

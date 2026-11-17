@@ -282,3 +282,11 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Any = None) -> Sourc
         observations=observations,
         notes=["BookMyShow does not expose seat counts without login; availability is status-only."],
     )
+
+def blocked_result(config: AppConfig, message: str, evidence: dict[str, Any] | None = None) -> SourceResult:
+    """A BookMyShow result for ingestion paths that deliberately do not fetch.
+
+    The NAS collector only handles District. BookMyShow remains an explicitly
+    blocked source so the UI never implies it was checked successfully.
+    """
+    return _blocked(config, message, evidence or {})

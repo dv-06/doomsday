@@ -1,0 +1,98 @@
+name: Ingest NAS snapshot
+
+# The OpenWrt collector commits data/inbox/district.json with a fine-grained
+# PAT. A PAT push does trigger workflows (unlike GITHUB_TOKEN), so this workflow
+# consumes only that inbox file. It never fetches District or BookMyShow itself.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "data/inbox/district.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: doomsday-watch-pages
+  cancel-in-progress: false
+
+env:
+  TARGET_BRANCH: master
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements*.txt
+
+      - name: Install monitor dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate configuration
+        run: python -m doomsday_watch --config config/monitor.json --data data validate
+        env:
+          PYTHONPATH: ${{ github.workspace }}/backend
+
+      - name: Ingest District inbox
+        env:
+          PYTHONPATH: ${{ github.workspace }}/backend
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
+        run: |
+          python -m doomsday_watch \
+            --config config/monitor.json --data data \
+            ingest --file data/inbox/district.json --trigger nas --github-summary
+
+      - name: Commit derived data
+        run: |
+          set -euo pipefail
+          git config user.name "doomsday-watch[bot]"
+          git config user.email "doomsday-watch[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes from this NAS payload."
+            exit 0
+          fi
+
+          STATUS=$(python - <<'PY'
+          import json, pathlib
+          data = json.loads(pathlib.Path("data/latest.json").read_text(encoding="utf-8"))
+          totals = data.get("totals", {})
+          print(f"{data.get('status', 'unknown')}; {totals.get('shows_total', 0)} shows; "
+                f"{totals.get('theatres_with_listings', 0)} theatres")
+          PY
+          )
+          git commit -m "data: NAS ingest -- ${STATUS}"
+
+          for attempt in 1 2 3; do
+            git fetch origin "$TARGET_BRANCH"
+            if ! git rebase --autostash "origin/$TARGET_BRANCH"; then
+              git rebase --abort || true
+              echo "::error::Could not rebase onto origin/${TARGET_BRANCH}."
+              exit 1
+            fi
+            if git push origin "HEAD:${TARGET_BRANCH}"; then
+              echo "Pushed ingested data on attempt ${attempt}."
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "::error::Could not push ingested data after 3 attempts."
+          exit 1

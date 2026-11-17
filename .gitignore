@@ -28,3 +28,6 @@ Thumbs.db
 
 # Build-time data copy
 frontend/public/data/
+
+# OpenWrt collector runtime state (lives on the router)
+router/state.json

@@ -7,6 +7,7 @@ no database server and no hidden API: `data/` is the database.
 
 ```
 data/
+├── inbox/district.json         # compact District payload uploaded by the router
 ├── latest.json                 # newest full snapshot (what the site renders)
 ├── meta.json                   # run counter, schedule, last success/failure
 ├── state.json                  # notification dedupe + last observed state
@@ -117,9 +118,56 @@ before each build, so the static site always ships the committed snapshot.
   ],
   "excluded_lookalikes": [
     { "name": "Cinepolis Orion Avenue Mall Banaswadi", "district_id": "925", "reason": "Different mall..." }
+  ],
+  "provenance": {                              // optional; set for NAS ingestion
+    "transport": "nas_inbox",
+    "collected_at": "2026-11-17T23:00:00+05:30",
+    "ingested_at": "2026-11-17T23:01:12+05:30",
+    "content_sha256": "...",
+    "collector": { "name": "openwrt-ucode", "host": "openwrt", "egress": "IN" }
+  }
+}
+```
+
+The District source's `checked_at` and `last_success_at` use the collector's
+`collected_at`, not the later ingestion time. `snapshot.checked_at` remains the
+ingestion run time. The optional `provenance` object is additive; older readers
+ignore it.
+
+## `data/inbox/district.json` (NAS payload)
+
+This file is written only by the OpenWrt collector and consumed by the `ingest`
+CLI:
+
+```jsonc
+{
+  "schema_version": 1,
+  "source": "district",
+  "collected_at": "2026-11-17T23:00:00+05:30",
+  "collector": { "name": "openwrt-ucode", "host": "openwrt", "egress": "IN" },
+  "content_id": "176735",
+  "movie_url": "https://www.district.in/movies/...",
+  "movie": { "title": "Avengers: Doomsday", "release_date": "..." },
+  "groups": [
+    {
+      "data": { "id": "56450", "name": "Cinepolis Lulu Global Mall..." },
+      "sessions": [
+        { "sid": "...", "showTime": "2026-12-17T13:40:00+05:30",
+          "audi": "MACRO XE", "scrnFmt": "MS INFINITY VISION 3D",
+          "total": 277, "avail": 41, "seatStatus": "Filling Fast",
+          "areas": [{ "label": "NORMAL", "price": 890, "sTotal": 19, "sAvail": 19 }] }
+      ],
+      "available_dates": ["2026-12-17"]
+    }
   ]
 }
 ```
+
+Ingestion rejects a payload with a wrong content ID/title, no movie metadata, no
+configured cinemas, malformed sessions, non-target session dates, a timestamp
+more than 3 hours old or in the future, or a timestamp older than the current
+snapshot. A payload whose canonical data hash equals the previous snapshot is
+ignored without writing data.
 
 ### Normalised format enum
 
@@ -200,3 +248,5 @@ pruned; they are the long-term audit trail.
 3. A blocked source produces no destructive diff; stale data is labelled stale.
 4. All timestamps are stored in IST (`+05:30`) and rendered in IST.
 5. `schema_version` gates future migrations; bump it when fields change.
+6. The router never uploads inferred sales; only source-reported seat counts. An
+   unchanged payload hash is skipped, so the collector cannot churn the repo.
