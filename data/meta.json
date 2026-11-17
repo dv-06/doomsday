@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-18T00:58:31+05:30",
-  "run_id": "20261118T005831-0eb5ba",
+  "generated_at": "2026-11-18T01:13:16+05:30",
+  "run_id": "20261118T011316-0414a0",
   "run_status": "partial",
   "trigger": "nas",
   "monitoring": {
     "interval_minutes": 60,
     "timezone": "Asia/Kolkata",
-    "next_check_at": "2026-11-18T01:58:31+05:30",
+    "next_check_at": "2026-11-18T02:13:16+05:30",
     "schedule_note": "Hourly collection by the Indian-egress OpenWrt NAS collector; GitHub Actions validates, ingests and deploys the snapshot."
   },
-  "last_success_at": "2026-11-18T00:58:31+05:30",
+  "last_success_at": "2026-11-18T01:13:16+05:30",
   "counts": {
     "theatres_monitored": 6,
     "theatres_with_listings": 3,
@@ -20,7 +20,7 @@
     "shows_imax_3d": 0,
     "shows_4dx": 4,
     "bookable_shows": 5,
-    "seats_available_total": 1253,
+    "seats_available_total": 1258,
     "dates": {
       "2026-12-17": {
         "shows": 19,
@@ -37,19 +37,21 @@
     },
     "theatre_errors": []
   },
-  "events_last_run": 0,
-  "event_types_last_run": [],
+  "events_last_run": 1,
+  "event_types_last_run": [
+    "seats_dropped"
+  ],
   "sources": {
     "district": {
       "status": "ok",
       "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres.",
-      "checked_at": "2026-11-18T00:37:01+05:30",
-      "last_success_at": "2026-11-18T00:37:01+05:30"
+      "checked_at": "2026-11-18T01:12:52+05:30",
+      "last_success_at": "2026-11-18T01:12:52+05:30"
     },
     "bookmyshow": {
       "status": "blocked",
       "message": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-      "checked_at": "2026-11-18T00:58:31+05:30",
+      "checked_at": "2026-11-18T01:13:16+05:30",
       "last_success_at": "2026-11-17T19:48:12+05:30"
     }
   },
@@ -59,7 +61,7 @@
     "errors": []
   },
   "host": {
-    "github_run_id": "44158824565",
+    "github_run_id": "44161547864",
     "repository": "dv-06/doomsday",
     "server_url": "https://github.com"
   },
@@ -73,9 +75,9 @@
       "parser": "district-next-data"
     },
     "transport": "nas_inbox",
-    "collected_at": "2026-11-18T00:37:01+05:30",
-    "ingested_at": "2026-11-18T00:58:31+05:30",
-    "content_sha256": "af2e3aa0ad486ba621bfacff847c9bc14d4d2307c85d1897235bf513a9024d37",
+    "collected_at": "2026-11-18T01:12:52+05:30",
+    "ingested_at": "2026-11-18T01:13:16+05:30",
+    "content_sha256": "da0fc8f42a0d6f599607b2a9d47007c1e00b8a2edcada50b7f56a720d4615078",
     "payload_schema_version": 1,
     "normalizer_version": 2
   }
