@@ -16,6 +16,7 @@ import {
   eventLabels,
   formatDate,
   formatDateTime,
+  legacyEventClock,
   loadEvents,
   loadRuns,
   relativeTime,
@@ -100,6 +101,14 @@ undefined          </defs>
 }
 
 function TimelineEvent({ event }: { event: HistoryEvent }) {
+  const legacy = event.time_basis ? null : legacyEventClock(event.date, event.start);
+  const shownDate = legacy?.date ?? event.date;
+  const shownStart = legacy?.start ?? event.start;
+  const shownMessage = legacy && event.message
+    ? event.message
+        .split(event.start ?? "").join(legacy.start)
+        .split(event.date ?? "").join(legacy.date)
+    : event.message;
   return (
     <li className="relative flex gap-3 pb-4 last:pb-0">
       <span className="absolute left-[15px] top-7 h-full w-px bg-white/[0.07] last:hidden" aria-hidden="true" />
@@ -111,15 +120,15 @@ function TimelineEvent({ event }: { event: HistoryEvent }) {
           <span className="text-[12px] font-semibold text-sand">{eventLabels[event.type] ?? event.type}</span>
           <span className="text-[11px] text-ash">{event.theatre_name}</span>
           {event.platform && <Chip tone="muted" className="!px-1.5 !py-0 !text-[9px]">{event.platform === "bookmyshow" ? "BookMyShow" : event.platform}</Chip>}
-          {event.date && (
+          {shownDate && (
             <span className="text-[10px] text-ash/80">
-              {formatDate(event.date, { year: undefined })}
-              {event.start ? ` · ${event.start}` : ""}
+              {formatDate(shownDate, { year: undefined })}
+              {shownStart ? ` · ${shownStart}` : ""}
             </span>
           )}
           <span className="ml-auto shrink-0 text-[10px] text-ash/70" title={formatDateTime(event.created_at)}>{relativeTime(event.created_at)}</span>
         </div>
-        <p className="mt-1 text-[12px] leading-relaxed text-sand/90">{event.message}</p>
+        <p className="mt-1 text-[12px] leading-relaxed text-sand/90">{shownMessage}</p>
       </div>
     </li>
   );

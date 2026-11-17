@@ -60,6 +60,7 @@ def _make_event(
         "screen": screen,
         "message": message,
         "data": data or {},
+        "time_basis": "ist",
         "created_at": iso_ist(),
     }
 

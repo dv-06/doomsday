@@ -251,6 +251,7 @@ export interface HistoryEvent {
   screen: string | null;
   message: string;
   data: Record<string, unknown>;
+  time_basis?: "ist";
   created_at: string;
 }
 

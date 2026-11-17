@@ -47,6 +47,7 @@ def test_first_run_emits_discovery_events_once(config):
     snap = _snapshot(config, {}, [_source(config, [_show("10:00"), _show("14:00")])])
     events, state = diff_snapshot({}, snap["theatres"], config, snap["sources"])
     types = [e["type"] for e in events]
+    assert all(e["time_basis"] == "ist" for e in events)
     assert "theatre_listed" in types
     assert "format_added" in types
     assert types.count("theatre_listed") == 1, "only the first released show is a theatre listing"

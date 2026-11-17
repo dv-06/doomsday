@@ -128,6 +128,28 @@ export function formatClock(iso: string | null | undefined): string {
   }).format(parsed).toUpperCase();
 }
 
+/**
+ * Events written before the District UTC-clock fix stored the raw clock in
+ * `start` and had no `time_basis`. Convert those for display only; the stored
+ * audit line is never rewritten.
+ */
+export function legacyEventClock(
+  date: string | null,
+  start: string | null,
+): { date: string; start: string } | null {
+  if (!date || !start) return null;
+  const iso = `${date}T${start}:00Z`;
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) return null;
+  const localDate = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: IST,
+  }).format(parsed);
+  return { date: localDate, start: formatClock(iso) };
+}
+
 export function formatDateTime(iso: string | null | undefined): string {
   if (!iso) return "—";
   const parsed = new Date(iso);
