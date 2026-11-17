@@ -64,6 +64,7 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}/backend
 
       - name: Run hourly snapshot
+        id: run
         env:
           PYTHONPATH: ${{ github.workspace }}/backend
           DRY_RUN: ${{ inputs.dry_run }}
@@ -89,7 +90,7 @@ jobs:
             python -m doomsday_watch "${ARGS[@]}" 2>&1 | tee -a run.log
             rc=${PIPESTATUS[0]}
             echo "::endgroup::"
-            if [ "$rc" -eq 0 ]; then
+            if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then
               break
             fi
             if [ "$attempt" -lt 2 ]; then
@@ -99,8 +100,15 @@ jobs:
           done
 
           echo "Run finished at $(date -u +%FT%TZ) with exit code ${rc}."
-          # 0 = ok/partial coverage (partial is expected while BMS blocks);
-          # 2 = all sources failed. Fail the step so missing coverage is visible.
+          # Exit codes: 0 = ok/partial coverage, 3 = every source externally
+          # blocked (data preserved, degraded snapshot recorded), anything else
+          # = monitor failure. Blocks are not caused by this repository, so keep
+          # the hourly commit + deploy alive while surfacing a loud warning.
+          if [ "$rc" -eq 3 ]; then
+            echo "::warning::All sources were blocked this run. Previous listings are preserved; the dashboard is marked degraded with stale-data age."
+            echo "degraded=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           exit "$rc"
 
       - name: Upload run log

@@ -25,6 +25,16 @@ Hourly ticket-availability tracker for **Avengers: Doomsday** in **Bengaluru**, 
 - Degrades honestly: if BookMyShow blocks the runner, the run is marked `partial`,
   the last BookMyShow snapshot is preserved and labelled, and District keeps working.
 
+### Cloud access reality (verified 2026-11-17)
+
+District serves Bengaluru pages from India but answers GitHub-hosted runners
+(Azure/US IP `40.86.12.32`) with Akamai **HTTP 403 "Access Denied"**, even with
+browser headers. BookMyShow's showtimes remain Cloudflare-blocked. The monitor
+therefore records an honest **degraded** run from the cloud, preserves the last
+successful listings (with their age), and keeps the hourly snapshot/deploy loop
+running. It does **not** proxy around the block. Local runs from an Indian
+connection still collect fresh data. See `docs/DEPLOYMENT.md` for options.
+
 ### Current live state (last committed run)
 
 | | |
@@ -282,7 +292,7 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-33 tests cover CLI parsing, dry-run isolation, normal and partial runs, format normalisation (including Infinity Vision ≠ IMAX), District
+34 tests cover CLI parsing, dry-run isolation, normal and partial runs, format normalisation (including Infinity Vision ≠ IMAX), District
 parsing against a trimmed real fixture, seat heuristics, diff/notification rules,
 snapshot retention, and the end-to-end pipeline with blocked sources.
 
@@ -312,6 +322,9 @@ npm run build
 7. Overall run status is `partial` whenever any enabled source is blocked or
    partial, even if another source returned full data — incomplete coverage is
    never presented as complete. `ok` requires every source to be fully healthy.
+8. **GitHub-hosted runners cannot reach District** (geo/datacenter 403) or
+   BookMyShow showtimes (Cloudflare). Cloud runs are therefore degraded by default;
+   fresh collection needs an Indian egress path (see deployment docs).
 
 ---
 

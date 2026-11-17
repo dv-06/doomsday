@@ -194,3 +194,20 @@ def test_partial_source_is_reported_as_partial_coverage(config, tmp_path, monkey
     result = monitor.run_monitor(config_path=repo_config(config), data_dir=tmp_path / "data")
     assert result["status"] == "partial"
     assert result["sources"] == {"district": "ok", "bookmyshow": "partial"}
+
+
+def test_degraded_run_returns_exit_code_3(monkeypatch, capsys, repo_root):
+    def fake_run_monitor(*args, **kwargs):
+        return {
+            "run_id": "blocked", "status": "degraded", "snapshot_path": "data/snapshots/x.json",
+            "totals": {"shows_total": 0, "shows_3d": 0, "shows_infinity_vision_3d": 0,
+                       "theatres_with_listings": 0, "theatres_monitored": 6},
+            "events": [], "notifications": {"sent": []},
+            "sources": {"district": "blocked", "bookmyshow": "blocked"},
+        }
+
+    monkeypatch.setattr("doomsday_watch.cli.run_monitor", fake_run_monitor)
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    code = main(["--config", str(repo_root / "config/monitor.json"), "--data", "data", "run"])
+    assert code == 3
+    assert "degraded" in capsys.readouterr().err

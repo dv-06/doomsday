@@ -79,8 +79,8 @@ the static site reads the committed JSON.
 7. Notify configured channels for allowed event types; dedupe by event id.
 8. Write `latest.json`, `sources.json`, `meta.json`, a snapshot, and append to
    `events.jsonl` / `runs.jsonl`; prune old snapshots.
-9. Exit non-zero only when the run itself is unusable (all sources failed), so
-   Actions surfaces real outages.
+9. Exit `3` when every source is externally blocked (Actions warns, preserves data
+   and continues), and `2` only for a genuine monitor failure.
 10. Dry run performs steps 1–7 with a throwaway cache and an empty in-memory diff,
     then returns before step 8: no snapshot, history, state, meta or cache file is
     written, and no notification is sent.
@@ -92,7 +92,7 @@ the static site reads the committed JSON.
 | Timeout / connection reset | Up to `max_retries` with exponential backoff; source marked `partial`/`error`. |
 | Cloudflare challenge | Detected by status/body markers → `blocked`; no parsing of the challenge page. |
 | One theatre missing from source | That theatre keeps its previous shows, labelled stale; run stays `partial`. |
-| All sources fail | Run is `degraded`, previous snapshot preserved, CLI exits `2`. |
+| All sources fail/block | Run is `degraded`, previous shows preserved with age, a degraded snapshot is stored, CLI exits `3` (workflow warns but commits/deploys). |
 | Notification channel fails | Logged, other channels still attempted; run data is still saved. |
 | Push conflict in Actions | `pull --rebase --autostash` and retry up to 3 times. |
 | Pages deploy fails | Data commit already exists; next successful run redeploys. |

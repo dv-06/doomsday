@@ -47,8 +47,14 @@ def cmd_run(args: argparse.Namespace) -> int:
     if args.github_summary:
         _write_step_summary(result)
     if result["status"] == "degraded":
-        print("WARNING: every source failed; last known snapshot preserved.", file=sys.stderr)
-        return 2
+        # Exit 3 tells the workflow "external block, not a code failure": preserve
+        # the previous shows, record a degraded snapshot, and keep deploying.
+        print(
+            "WARNING: every source was blocked or failed; previous listings preserved "
+            "and this run is stored as degraded.",
+            file=sys.stderr,
+        )
+        return 3
     return 0
 
 

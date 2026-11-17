@@ -76,6 +76,21 @@ with `python -m doomsday_watch notify-test`.
 - The dashboard footer shows the same check time.
 - Actions → Pages shows a successful deployment for the same commit.
 
+## Cloud source access (important)
+
+GitHub-hosted runners are in Azure regions outside India. District answers them
+with Akamai `403 Access Denied` (verified with plain, tracker and browser UAs), and
+BookMyShow blocks showtimes with Cloudflare. Consequently:
+
+- A scheduled run is stored as `degraded`, preserves the last good shows with their
+  age, and **exits 3**; the workflow converts that to a warning and still commits
+  and deploys, so the dashboard stays current about the attempt.
+- The CLI exits `2` only for genuine monitor failures.
+- No proxy, CAPTCHA solving or IP rotation is used. If you need fresh cloud data,
+  run the monitor on an Indian egress you control (for example a self-hosted runner)
+  and keep this project's rules intact. Local runs from Bengaluru already work:
+  `python -m doomsday_watch run`.
+
 ## Scheduler reality check
 
 GitHub's cron is **best-effort**, not a guarantee:
@@ -126,6 +141,7 @@ Pages cannot run it; do not expose it publicly without auth and rate limiting.
 | BookMyShow `blocked` | Expected. Cloudflare protects showtimes; the UI labels it and keeps the last snapshot. |
 | Status `degraded` | Both sources failed. Check the run artifact log; data is preserved. The next run usually recovers. |
 | No Telegram alerts | Run `notify-test` locally; check secret names and that you messaged the bot first. |
+| District `403 Access Denied` in Actions | Expected from GitHub's US/Azure IPs (geo-block). The run is degraded and preserves data; use an Indian egress for fresh values. |
 | Chart empty | `data/history/runs.jsonl` has no rows yet; run the monitor once. |
 | Wrong cinema matched | Check the Sources page verification table; correct the ID in `config/monitor.json`. |
 | Workflow disabled | Re-enable it in Actions; commit or manually run at least once every 60 days. |
