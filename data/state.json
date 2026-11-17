@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-17T20:51:54+05:30",
+  "updated_at": "2026-11-17T20:59:29+05:30",
   "theatres": {
     "lulu-global-mall": {
       "id": "lulu-global-mall",
@@ -12,7 +12,7 @@
           "available_dates": [
             "2026-12-17"
           ],
-          "status": "ok",
+          "status": "stale",
           "venue_name": "Cinepolis Lulu Global Mall, Bengaluru, Bengaluru",
           "venue_id": "56450",
           "last_success_at": "2026-11-17T20:51:54+05:30",
@@ -20,7 +20,7 @@
           "shows": {
             "district|lulu-global-mall|2026-12-17|01:00|MACRO XE|infinity_vision_3d|13232": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "01:00",
               "screen": "MACRO XE",
@@ -34,7 +34,7 @@
             },
             "district|lulu-global-mall|2026-12-17|03:50|MACRO XE|infinity_vision_3d|13233": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "03:50",
               "screen": "MACRO XE",
@@ -48,7 +48,7 @@
             },
             "district|lulu-global-mall|2026-12-17|07:05|MACRO XE|infinity_vision_3d|13234": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "07:05",
               "screen": "MACRO XE",
@@ -62,7 +62,7 @@
             },
             "district|lulu-global-mall|2026-12-17|10:20|MACRO XE|infinity_vision_3d|13235": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "10:20",
               "screen": "MACRO XE",
@@ -76,7 +76,7 @@
             },
             "district|lulu-global-mall|2026-12-17|13:40|MACRO XE|infinity_vision_3d|13236": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "13:40",
               "screen": "MACRO XE",
@@ -90,7 +90,7 @@
             },
             "district|lulu-global-mall|2026-12-17|17:00|MACRO XE|infinity_vision_3d|13237": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "17:00",
               "screen": "MACRO XE",
@@ -130,7 +130,7 @@
           "available_dates": [
             "2026-12-17"
           ],
-          "status": "ok",
+          "status": "stale",
           "venue_name": "PVR Orion Mall, Dr Rajkumar Road, Bengaluru",
           "venue_id": "1022299",
           "last_success_at": "2026-11-17T20:51:54+05:30",
@@ -138,7 +138,7 @@
           "shows": {
             "district|orion-mall|2026-12-17|02:50|AUDI 11|infinity_vision_3d|58521": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "02:50",
               "screen": "AUDI 11",
@@ -152,7 +152,7 @@
             },
             "district|orion-mall|2026-12-17|06:15|AUDI 11|infinity_vision_3d|58522": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "06:15",
               "screen": "AUDI 11",
@@ -166,7 +166,7 @@
             },
             "district|orion-mall|2026-12-17|06:45|AUDI 03 4DX|infinity_vision_4dx_3d|58527": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "06:45",
               "screen": "AUDI 03 4DX",
@@ -180,7 +180,7 @@
             },
             "district|orion-mall|2026-12-17|09:40|AUDI 11|infinity_vision_3d|58523": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "09:40",
               "screen": "AUDI 11",
@@ -194,7 +194,7 @@
             },
             "district|orion-mall|2026-12-17|10:10|AUDI 03 4DX|infinity_vision_4dx_3d|58528": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "10:10",
               "screen": "AUDI 03 4DX",
@@ -208,7 +208,7 @@
             },
             "district|orion-mall|2026-12-17|13:05|AUDI 11|infinity_vision_3d|58524": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "13:05",
               "screen": "AUDI 11",
@@ -222,7 +222,7 @@
             },
             "district|orion-mall|2026-12-17|13:35|AUDI 03 4DX|infinity_vision_4dx_3d|58529": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "13:35",
               "screen": "AUDI 03 4DX",
@@ -236,7 +236,7 @@
             },
             "district|orion-mall|2026-12-17|16:30|AUDI 11|infinity_vision_3d|58525": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "16:30",
               "screen": "AUDI 11",
@@ -250,7 +250,7 @@
             },
             "district|orion-mall|2026-12-17|17:00|AUDI 03 4DX|infinity_vision_4dx_3d|58530": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "17:00",
               "screen": "AUDI 03 4DX",
@@ -286,11 +286,11 @@
       "first_seen_at": null,
       "platforms": {
         "district": {
-          "listed": false,
+          "listed": null,
           "available_dates": [],
-          "status": "not_listed",
-          "venue_name": "INOX Mantri Square, Malleshwaram, Bengaluru",
-          "venue_id": "1020725",
+          "status": "error",
+          "venue_name": null,
+          "venue_id": null,
           "last_success_at": "2026-11-17T20:51:54+05:30",
           "first_seen_at": null,
           "shows": {},
@@ -319,7 +319,7 @@
           "available_dates": [
             "2026-12-17"
           ],
-          "status": "ok",
+          "status": "stale",
           "venue_name": "PVR GT World Mall, Magadi Road, Bengaluru",
           "venue_id": "1022303",
           "last_success_at": "2026-11-17T20:51:54+05:30",
@@ -327,7 +327,7 @@
           "shows": {
             "district|gt-world-mall|2026-12-17|02:50|SCREEN 5|infinity_vision_3d|26533": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "02:50",
               "screen": "SCREEN 5",
@@ -341,7 +341,7 @@
             },
             "district|gt-world-mall|2026-12-17|06:15|SCREEN 5|infinity_vision_3d|26534": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "06:15",
               "screen": "SCREEN 5",
@@ -355,7 +355,7 @@
             },
             "district|gt-world-mall|2026-12-17|09:40|SCREEN 5|infinity_vision_3d|26535": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "09:40",
               "screen": "SCREEN 5",
@@ -369,7 +369,7 @@
             },
             "district|gt-world-mall|2026-12-17|13:05|SCREEN 5|infinity_vision_3d|26536": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "13:05",
               "screen": "SCREEN 5",
@@ -383,7 +383,7 @@
             },
             "district|gt-world-mall|2026-12-17|16:30|SCREEN 5|infinity_vision_3d|26537": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-17T20:51:54+05:30",
+              "last_seen_at": "2026-11-17T20:59:29+05:30",
               "date": "2026-12-17",
               "start": "16:30",
               "screen": "SCREEN 5",
@@ -419,11 +419,11 @@
       "first_seen_at": null,
       "platforms": {
         "district": {
-          "listed": false,
+          "listed": null,
           "available_dates": [],
-          "status": "not_listed",
-          "venue_name": "Miraj Cinemas: TGN Lotus Elite, Sunkadakatte",
-          "venue_id": "52080",
+          "status": "error",
+          "venue_name": null,
+          "venue_id": null,
           "last_success_at": "2026-11-17T20:51:54+05:30",
           "first_seen_at": null,
           "shows": {},
@@ -448,11 +448,11 @@
       "first_seen_at": null,
       "platforms": {
         "district": {
-          "listed": false,
+          "listed": null,
           "available_dates": [],
-          "status": "not_listed",
-          "venue_name": "PVR Global Mall, Mysore Road, Bengaluru",
-          "venue_id": "1022307",
+          "status": "error",
+          "venue_name": null,
+          "venue_id": null,
           "last_success_at": "2026-11-17T20:51:54+05:30",
           "first_seen_at": null,
           "shows": {},
@@ -474,12 +474,12 @@
   },
   "sources": {
     "district": {
-      "status": "ok",
-      "checked_at": "2026-11-17T20:51:53+05:30"
+      "status": "blocked",
+      "checked_at": "2026-11-17T20:59:28+05:30"
     },
     "bookmyshow": {
       "status": "blocked",
-      "checked_at": "2026-11-17T20:51:54+05:30"
+      "checked_at": "2026-11-17T20:59:29+05:30"
     }
   },
   "notified": {},
@@ -487,8 +487,8 @@
     "2026-12-17"
   ],
   "last_run": {
-    "run_id": "20261117T205151-e6cd2e",
-    "checked_at": "2026-11-17T20:51:54+05:30",
-    "status": "partial"
+    "run_id": "20261117T205928-45782f",
+    "checked_at": "2026-11-17T20:59:29+05:30",
+    "status": "degraded"
   }
 }
