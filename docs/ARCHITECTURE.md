@@ -1,0 +1,122 @@
+# Architecture
+
+## Goals and constraints
+
+- ₹0 running cost, no servers to keep alive.
+- Real data only; no fabricated shows, prices, seat numbers or seat maps.
+- Hourly history with change detection kept in version control.
+- Honest degradation when a platform blocks automation.
+- Works with the owner's PC off.
+
+The design follows from one constraint: **a static site cannot scrape.** Scraping
+happens in scheduled GitHub Actions jobs, the results are committed to the repo, and
+the static site reads the committed JSON.
+
+## Components
+
+```
+┌──────────────────────────── GitHub repository ────────────────────────────┐
+│                                                                           │
+│  config/monitor.json ──► Python monitor ──► data/latest.json              │
+│                              │              data/snapshots/**             │
+│                              │              data/history/*.jsonl         │
+│                              ▼                                            │
+│                        Telegram / ntfy / webhook                          │
+│                                                                           │
+│  frontend/ (React) ◄── frontend/public/data (copied at build)             │
+│        │                                                                  │
+└────────┼──────────────────────────────────────────────────────────────────┘
+         ▼
+   GitHub Pages (static, HashRouter)
+```
+
+### Backend modules (`backend/doomsday_watch/`)
+
+| Module | Responsibility |
+|---|---|
+| `config.py` | Load/validate JSON config, IST helpers, dataclasses. |
+| `http.py` | Shared `httpx` client: timeouts, bounded retries with jitter, robots.txt cache, challenge detection. |
+| `formats.py` | Ordered regex normalisation → format enum; Infinity Vision 3D kept separate from IMAX 3D; comfort/depth guidance per format. |
+| `models.py` | `make_show()`, `TheatreObservation`, `SourceResult`, totals summarisation. |
+| `sources/district.py` | Parse `__NEXT_DATA__` sessions, map cinemas by exact ID, build show records, venue verification. |
+| `sources/bookmyshow.py` | Probe movie list/movie page; parse screening JSON-LD if served; report blocked showtimes honestly. |
+| `seats.py` | Layout-based scoring (unused today) and block-level heuristic recommendations. |
+| `diff.py` | Typed events between two snapshots; refuses destructive diffs for unhealthy sources. |
+| `notify.py` | Telegram, ntfy, webhook senders; dedupe via `state.notified`; batching. |
+| `store.py` | Load/write snapshots, history, meta, sources; retention pruning. |
+| `monitor.py` | Orchestration: run adapters, merge observations, build snapshot, diff, notify, persist. |
+| `api.py` | Optional FastAPI read API + token-protected `POST /run`. Not used by Pages. |
+| `cli.py` | `run`, `probe`, `notify-test`, `validate`, `serve`. |
+
+### Frontend (`frontend/src/`)
+
+- `App.tsx` — hash-router shell, header status, toasts, 5-minute polling, settings
+  context.
+- `pages/Dashboard.tsx` — hero, stat cards, latest changes, filters, theatre grid.
+- `pages/History.tsx` — Recharts trend + grouped change timeline with filters.
+- `pages/Sources.tsx` — per-source evidence, venue verification table, exclusions,
+  access rules.
+- `pages/Settings.tsx` — local display/alert preferences, schedule docs, repo-config
+  export.
+- `lib/data.ts` — fetch/cache JSON, IST formatters, tone/event label maps.
+- `components/TheatreCard.tsx` — per-date show rows, format badges, seat guide,
+  platform observations, booking links.
+
+## One monitoring run
+
+1. Load and validate `config/monitor.json`.
+2. Load the previous snapshot from `data/latest.json`.
+3. For each enabled source (isolated try/except):
+   - check robots.txt (cached 24h);
+   - fetch one or two public pages with timeout + retry/backoff;
+   - detect challenge pages and classify `blocked` instead of parsing garbage;
+   - parse shows, formats, prices, availability and booking links;
+   - verify venue identity by platform ID.
+4. Merge observations. If a source is unhealthy, carry forward its previous shows
+   and mark them stale with an age (the diff never deletes them).
+5. Build sorted shows and totals; `bookable_shows` = shows with availability + link.
+6. Diff against the previous snapshot → typed events.
+7. Notify configured channels for allowed event types; dedupe by event id.
+8. Write `latest.json`, `sources.json`, `meta.json`, a snapshot, and append to
+   `events.jsonl` / `runs.jsonl`; prune old snapshots.
+9. Exit non-zero only when the run itself is unusable (all sources failed), so
+   Actions surfaces real outages.
+
+## Failure handling
+
+| Failure | Behaviour |
+|---|---|
+| Timeout / connection reset | Up to `max_retries` with exponential backoff; source marked `partial`/`error`. |
+| Cloudflare challenge | Detected by status/body markers → `blocked`; no parsing of the challenge page. |
+| One theatre missing from source | That theatre keeps its previous shows, labelled stale; run stays `partial`. |
+| All sources fail | Run is `degraded`, previous snapshot preserved, CLI exits `2`. |
+| Notification channel fails | Logged, other channels still attempted; run data is still saved. |
+| Push conflict in Actions | `pull --rebase --autostash` and retry up to 3 times. |
+| Pages deploy fails | Data commit already exists; next successful run redeploys. |
+
+## Key decisions
+
+- **Repo as database.** No free-tier database limits, no credentials, and every
+  snapshot is auditable in git history. Cost: repository growth (bounded by
+  retention; history JSONL is small text).
+- **Server-rendered District page instead of its API.** One request per run, public,
+  and covered by robots.txt.
+- **No anti-bot circumvention.** Blocked means blocked. The UI exposes it.
+- **HashRouter.** GitHub Pages cannot rewrite paths; hashes avoid 404s for deep links.
+- **Availability ≠ sales.** Diff wording and UI copy enforce this distinction.
+- **IST everywhere.** Dates are stored as IST calendar dates so a 00:30 show on
+  18 Dec does not drift to 17 Dec in UTC.
+- **Seat heuristics, not invented seats.** The platform has no public seat map, so
+  the product returns a zone/depth recommendation and says it is heuristic.
+
+## Extension points
+
+- Add a theatre: add its exact `platform_ids.district` ID to config, verify the name
+  in the Sources page, no code change.
+- Add a date: append to `target_dates`.
+- Add a source: implement the adapter interface in `sources/`, register it in
+  `monitor.ADAPTERS`, then enable it in config.
+- Change cadence: edit the cron in `.github/workflows/monitor.yml` and
+  `monitoring.interval_minutes` (display only).
+- Real seat maps: feed a layout into `seats.recommend_from_layout()` and surface the
+  returned seat labels in `TheatreCard`.

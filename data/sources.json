@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-17T20:16:32+05:30",
+  "sources": {
+    "district": {
+      "source": "district",
+      "status": "ok",
+      "message": "13 Bengaluru cinemas listed for this movie; target-date shows found at 3 of 6 monitored theatres.",
+      "checked_at": "2026-11-17T20:16:32+05:30",
+      "evidence": {
+        "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "status": "ok",
+        "http_status": 200,
+        "latency_ms": 421,
+        "attempts": 1,
+        "error": null,
+        "blocked_reason": null,
+        "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "session_groups": 13,
+        "registry_size": 56,
+        "dates_with_sessions": [
+          "2026-12-17"
+        ]
+      },
+      "movie": {
+        "content_id": "176735",
+        "title": "Avengers: Doomsday",
+        "release_date": "2026-12-17",
+        "duration_minutes": 165,
+        "censor": "UA16+",
+        "languages": [
+          "English"
+        ],
+        "poster": "https://b.zmtcdn.com/data/edition_assets/17948391026094715.jpg",
+        "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+        "show_dates": [
+          "2026-12-17"
+        ]
+      },
+      "notes": [
+        "Area-wise seat counts are published by District; individual seat numbers are not, so seat suggestions are marked as heuristics unless a public layout is supplied."
+      ],
+      "last_success_at": "2026-11-17T20:16:32+05:30"
+    },
+    "bookmyshow": {
+      "source": "bookmyshow",
+      "status": "blocked",
+      "message": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
+      "checked_at": "2026-11-17T20:16:32+05:30",
+      "evidence": {
+        "url": "https://in.bookmyshow.com/explore/movies-bengaluru",
+        "status": "blocked",
+        "http_status": 403,
+        "latency_ms": 72,
+        "attempts": 1,
+        "error": "HTTP 403",
+        "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'just a moment'). Not bypassed.",
+        "explore_url": "https://in.bookmyshow.com/explore/movies-bengaluru"
+      },
+      "movie": {},
+      "notes": [],
+      "last_success_at": "2026-11-17T19:48:12+05:30"
+    }
+  }
+}

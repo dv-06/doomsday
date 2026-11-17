@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "movie": {
+    "title": "Avengers: Doomsday",
+    "release_date": "2026-12-17",
+    "language": "English",
+    "district": {
+      "city": "bengaluru",
+      "content_id": "176735",
+      "slug": "avengers-doomsday-movie-tickets-in-bengaluru-MV176735"
+    },
+    "bookmyshow": {
+      "movie_code": null,
+      "event_code_note": "Leave movie_code null: the adapter discovers the event code from BookMyShow's public Bengaluru movie list each run."
+    }
+  },
+  "target_dates": [
+    "2026-12-17",
+    "2026-12-18"
+  ],
+  "monitoring": {
+    "interval_minutes": 60,
+    "timezone": "Asia/Kolkata",
+    "request_timeout_seconds": 25,
+    "max_retries": 3,
+    "retry_backoff_seconds": 2.5,
+    "user_agent": "DoomsdayWatch/1.0 (+personal ticket-availability tracker; 1 request/hour; contact via repository issues)"
+  },
+  "theatres": [
+    {
+      "id": "lulu-global-mall",
+      "name": "Lulu Global Mall, Rajajinagar",
+      "area": "Rajajinagar / Magadi Road",
+      "platform_ids": {
+        "district": "56450"
+      },
+      "aliases": [
+        "Cinepolis Lulu Global Mall",
+        "Cinepolis VIP Lulu Global Mall",
+        "Lulu Mall Bengaluru"
+      ],
+      "notes": "Cinepolis operates both the main and VIP wings at Lulu Global Mall. The main wing (District cinema 56450) is monitored by default; add 56451 as a separate theatre entry if you want the VIP screens too."
+    },
+    {
+      "id": "orion-mall",
+      "name": "Orion Mall, Dr Rajkumar Road",
+      "area": "Rajajinagar / Yeshwanthpur",
+      "platform_ids": {
+        "district": "1022299"
+      },
+      "aliases": [
+        "PVR Orion Mall",
+        "Orion Mall Rajajinagar"
+      ],
+      "notes": "This is PVR at Orion Mall, Dr Rajkumar Road. Do not confuse it with Cinepolis Orion Avenue Mall, Banaswadi (District cinema 925), which is a different property and is deliberately excluded."
+    },
+    {
+      "id": "mantri-square-mall",
+      "name": "Mantri Square Mall, Malleshwaram",
+      "area": "Malleshwaram",
+      "platform_ids": {
+        "district": "1020725"
+      },
+      "aliases": [
+        "INOX Mantri Square",
+        "Mantri Square Sampige Road"
+      ],
+      "notes": "INOX Mantri Square, Malleshwaram. Not INOX Central Mantri Junction, JP Nagar (a different property)."
+    },
+    {
+      "id": "gt-world-mall",
+      "name": "GT World Mall, Magadi Road",
+      "area": "Magadi Road",
+      "platform_ids": {
+        "district": "1022303"
+      },
+      "aliases": [
+        "PVR GT World Mall",
+        "GT World Mall Bengaluru"
+      ],
+      "notes": "PVR GT World Mall, Magadi Road (near Prasanna Theatre)."
+    },
+    {
+      "id": "miraj-sunkadakatte",
+      "name": "Miraj Cinemas, Sunkadakatte",
+      "area": "Sunkadakatte / Magadi Road",
+      "platform_ids": {
+        "district": "52080"
+      },
+      "aliases": [
+        "Miraj Cinemas TGN Lotus Elite",
+        "Miraj Cinemas Sunkadakatte"
+      ],
+      "notes": "Listed by District as \"Miraj Cinemas: TGN Lotus Elite, Sunkadakatte\". Single monitored property; not the Miraj screens elsewhere in Bengaluru."
+    },
+    {
+      "id": "global-mall-mysore-road",
+      "name": "Global Mall, Mysore Road",
+      "area": "Rajarajeshwari Nagar / Mysore Road",
+      "platform_ids": {
+        "district": "1022307"
+      },
+      "aliases": [
+        "PVR Global Mall",
+        "Global Mall Rajarajeshwari Nagar"
+      ],
+      "notes": "PVR Global Mall, Mysore Road, Bengaluru. Not Lulu Global Mall."
+    }
+  ],
+  "excluded_lookalikes": [
+    {
+      "name": "Cinepolis Orion Avenue Mall, Banaswadi",
+      "district_id": "925",
+      "reason": "Different mall with a similar Orion name; not the requested Orion Mall on Dr Rajkumar Road."
+    },
+    {
+      "name": "INOX Central Mantri Junction, JP Nagar",
+      "district_id": "1020726",
+      "reason": "Different property; the requested venue is INOX Mantri Square, Malleshwaram."
+    },
+    {
+      "name": "Cinepolis VIP Lulu Global Mall, Rajajinagar",
+      "district_id": "56451",
+      "reason": "Premium wing of the same mall, tracked separately only if enabled. Main wing is 56450."
+    }
+  ],
+  "notifications": {
+    "telegram": {
+      "enabled": true,
+      "secret_env": {
+        "bot_token": "TELEGRAM_BOT_TOKEN",
+        "chat_id": "TELEGRAM_CHAT_ID"
+      }
+    },
+    "ntfy": {
+      "enabled": true,
+      "topic_env": "NTFY_TOPIC",
+      "server": "https://ntfy.sh"
+    },
+    "webhook": {
+      "enabled": true,
+      "url_env": "NOTIFY_WEBHOOK_URL"
+    },
+    "notify_on": [
+      "theatre_listed",
+      "first_show",
+      "show_added",
+      "format_added",
+      "booking_opened",
+      "sold_out",
+      "source_blocked",
+      "source_recovered"
+    ],
+    "max_events_per_message": 8
+  },
+  "retention": {
+    "hourly_snapshots": 72,
+    "daily_snapshots": 90
+  },
+  "sources": {
+    "district": {
+      "enabled": true,
+      "base_url": "https://www.district.in",
+      "cinema_registry_path": "/movies/cinemas-in-bengaluru",
+      "registry_cache_hours": 24
+    },
+    "bookmyshow": {
+      "enabled": true,
+      "base_url": "https://in.bookmyshow.com",
+      "probe_path": "/explore/movies-bengaluru"
+    }
+  }
+}

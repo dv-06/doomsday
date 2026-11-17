@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Local env & secrets
+.env
+.env.local
+
+# Local scratch / captured pages
+.screens/
+.probe/
+*.log
+data/cache/
+!data/cache/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build-time data copy
+frontend/public/data/
