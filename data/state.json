@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-18T01:13:16+05:30",
+  "updated_at": "2026-11-18T02:37:12+05:30",
   "theatres": {
     "lulu-global-mall": {
       "id": "lulu-global-mall",
@@ -15,12 +15,12 @@
           "status": "ok",
           "venue_name": "Cinepolis Lulu Global Mall, Bengaluru, Bengaluru",
           "venue_id": "56450",
-          "last_success_at": "2026-11-18T01:13:16+05:30",
+          "last_success_at": "2026-11-18T02:37:12+05:30",
           "first_seen_at": "2026-11-17T19:45:21+05:30",
           "shows": {
             "district|lulu-global-mall|2026-12-17|06:30|MACRO XE|infinity_vision_3d|13232": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "06:30",
               "start_iso": "2026-12-17T06:30:00+05:30",
@@ -37,7 +37,7 @@
             },
             "district|lulu-global-mall|2026-12-17|09:20|MACRO XE|infinity_vision_3d|13233": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "09:20",
               "start_iso": "2026-12-17T09:20:00+05:30",
@@ -54,7 +54,7 @@
             },
             "district|lulu-global-mall|2026-12-17|12:35|MACRO XE|infinity_vision_3d|13234": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "12:35",
               "start_iso": "2026-12-17T12:35:00+05:30",
@@ -71,7 +71,7 @@
             },
             "district|lulu-global-mall|2026-12-17|15:50|MACRO XE|infinity_vision_3d|13235": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "15:50",
               "start_iso": "2026-12-17T15:50:00+05:30",
@@ -88,7 +88,7 @@
             },
             "district|lulu-global-mall|2026-12-17|19:10|MACRO XE|infinity_vision_3d|13236": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "19:10",
               "start_iso": "2026-12-17T19:10:00+05:30",
@@ -105,7 +105,7 @@
             },
             "district|lulu-global-mall|2026-12-17|22:30|MACRO XE|infinity_vision_3d|13237": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "22:30",
               "start_iso": "2026-12-17T22:30:00+05:30",
@@ -151,12 +151,12 @@
           "status": "ok",
           "venue_name": "PVR Orion Mall, Dr Rajkumar Road, Bengaluru",
           "venue_id": "1022299",
-          "last_success_at": "2026-11-18T01:13:16+05:30",
+          "last_success_at": "2026-11-18T02:37:12+05:30",
           "first_seen_at": "2026-11-17T19:45:21+05:30",
           "shows": {
             "district|orion-mall|2026-12-17|08:20|AUDI 11|infinity_vision_3d|58521": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "08:20",
               "start_iso": "2026-12-17T08:20:00+05:30",
@@ -173,7 +173,7 @@
             },
             "district|orion-mall|2026-12-17|11:45|AUDI 11|infinity_vision_3d|58522": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "11:45",
               "start_iso": "2026-12-17T11:45:00+05:30",
@@ -190,7 +190,7 @@
             },
             "district|orion-mall|2026-12-17|12:15|AUDI 03 4DX|infinity_vision_4dx_3d|58527": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "12:15",
               "start_iso": "2026-12-17T12:15:00+05:30",
@@ -207,7 +207,7 @@
             },
             "district|orion-mall|2026-12-17|15:10|AUDI 11|infinity_vision_3d|58523": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "15:10",
               "start_iso": "2026-12-17T15:10:00+05:30",
@@ -217,14 +217,14 @@
               "format_key": "infinity_vision_3d",
               "format_label": "Infinity Vision 3D",
               "status": "filling_fast",
-              "available_seats": 60,
+              "available_seats": 57,
               "total_seats": 245,
               "price_min": 750,
               "price_max": 1460
             },
             "district|orion-mall|2026-12-17|15:40|AUDI 03 4DX|infinity_vision_4dx_3d|58528": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "15:40",
               "start_iso": "2026-12-17T15:40:00+05:30",
@@ -241,7 +241,7 @@
             },
             "district|orion-mall|2026-12-17|18:35|AUDI 11|infinity_vision_3d|58524": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "18:35",
               "start_iso": "2026-12-17T18:35:00+05:30",
@@ -258,7 +258,7 @@
             },
             "district|orion-mall|2026-12-17|19:05|AUDI 03 4DX|infinity_vision_4dx_3d|58529": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "19:05",
               "start_iso": "2026-12-17T19:05:00+05:30",
@@ -275,7 +275,7 @@
             },
             "district|orion-mall|2026-12-17|22:00|AUDI 11|infinity_vision_3d|58525": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "22:00",
               "start_iso": "2026-12-17T22:00:00+05:30",
@@ -292,7 +292,7 @@
             },
             "district|orion-mall|2026-12-17|22:30|AUDI 03 4DX|infinity_vision_4dx_3d|58530": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "22:30",
               "start_iso": "2026-12-17T22:30:00+05:30",
@@ -302,7 +302,7 @@
               "format_key": "infinity_vision_4dx_3d",
               "format_label": "Infinity Vision 4DX 3D",
               "status": "filling_fast",
-              "available_seats": 24,
+              "available_seats": 23,
               "total_seats": 96,
               "price_min": 1420,
               "price_max": 1720
@@ -336,7 +336,7 @@
           "status": "not_listed",
           "venue_name": "Mantri Square Mall, Malleshwaram",
           "venue_id": "1020725",
-          "last_success_at": "2026-11-18T01:13:16+05:30",
+          "last_success_at": "2026-11-18T02:37:12+05:30",
           "first_seen_at": null,
           "shows": {},
           "dates": []
@@ -367,12 +367,12 @@
           "status": "ok",
           "venue_name": "PVR GT World Mall, Magadi Road, Bengaluru",
           "venue_id": "1022303",
-          "last_success_at": "2026-11-18T01:13:16+05:30",
+          "last_success_at": "2026-11-18T02:37:12+05:30",
           "first_seen_at": "2026-11-17T19:45:21+05:30",
           "shows": {
             "district|gt-world-mall|2026-12-17|11:45|SCREEN 5|infinity_vision_3d|26534": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "11:45",
               "start_iso": "2026-12-17T11:45:00+05:30",
@@ -382,14 +382,14 @@
               "format_key": "infinity_vision_3d",
               "format_label": "Infinity Vision 3D",
               "status": "bookable",
-              "available_seats": 148,
+              "available_seats": 145,
               "total_seats": 270,
               "price_min": 750,
-              "price_max": 1250
+              "price_max": 1300
             },
             "district|gt-world-mall|2026-12-17|15:10|SCREEN 5|infinity_vision_3d|26535": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "15:10",
               "start_iso": "2026-12-17T15:10:00+05:30",
@@ -399,14 +399,14 @@
               "format_key": "infinity_vision_3d",
               "format_label": "Infinity Vision 3D",
               "status": "bookable",
-              "available_seats": 142,
+              "available_seats": 134,
               "total_seats": 270,
               "price_min": 750,
               "price_max": 1250
             },
             "district|gt-world-mall|2026-12-17|18:35|SCREEN 5|infinity_vision_3d|26536": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "18:35",
               "start_iso": "2026-12-17T18:35:00+05:30",
@@ -423,7 +423,7 @@
             },
             "district|gt-world-mall|2026-12-17|22:00|SCREEN 5|infinity_vision_3d|26537": {
               "first_seen_at": "2026-11-17T19:45:21+05:30",
-              "last_seen_at": "2026-11-18T01:13:16+05:30",
+              "last_seen_at": "2026-11-18T02:37:12+05:30",
               "date": "2026-12-17",
               "start": "22:00",
               "start_iso": "2026-12-17T22:00:00+05:30",
@@ -467,7 +467,7 @@
           "status": "not_listed",
           "venue_name": "Miraj Cinemas, Sunkadakatte",
           "venue_id": "52080",
-          "last_success_at": "2026-11-18T01:13:16+05:30",
+          "last_success_at": "2026-11-18T02:37:12+05:30",
           "first_seen_at": null,
           "shows": {},
           "dates": []
@@ -496,7 +496,7 @@
           "status": "not_listed",
           "venue_name": "Global Mall, Mysore Road",
           "venue_id": "1022307",
-          "last_success_at": "2026-11-18T01:13:16+05:30",
+          "last_success_at": "2026-11-18T02:37:12+05:30",
           "first_seen_at": null,
           "shows": {},
           "dates": []
@@ -518,11 +518,11 @@
   "sources": {
     "district": {
       "status": "ok",
-      "checked_at": "2026-11-18T01:12:52+05:30"
+      "checked_at": "2026-11-18T02:37:00+05:30"
     },
     "bookmyshow": {
       "status": "blocked",
-      "checked_at": "2026-11-18T01:13:16+05:30"
+      "checked_at": "2026-11-18T02:37:12+05:30"
     }
   },
   "notified": {},
@@ -530,8 +530,8 @@
     "2026-12-17"
   ],
   "last_run": {
-    "run_id": "20261118T011316-0414a0",
-    "checked_at": "2026-11-18T01:13:16+05:30",
+    "run_id": "20261118T023712-0c465e",
+    "checked_at": "2026-11-18T02:37:12+05:30",
     "status": "partial"
   }
 }
