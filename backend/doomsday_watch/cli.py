@@ -1,6 +1,7 @@
 """Command line entry points.
 
     python -m doomsday_watch run            # one monitoring pass (used by Actions)
+    python -m doomsday_watch run --dry-run  # fetch + diff only; writes nothing
     python -m doomsday_watch probe          # source accessibility report only
     python -m doomsday_watch notify-test    # send a test alert to configured channels
     python -m doomsday_watch validate       # validate config + data files
@@ -176,7 +177,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
 
     run = sub.add_parser("run", help="run one monitoring pass")
-    run.add_argument("--dry-run", action="store_true", help="skip sending notifications")
+    run.add_argument("--dry-run", action="store_true", help="check sources and report changes without writing data or sending alerts")
     run.add_argument("--skip-notifications", action="store_true")
     run.add_argument("--trigger", default="manual")
     run.add_argument("--github-summary", action="store_true")

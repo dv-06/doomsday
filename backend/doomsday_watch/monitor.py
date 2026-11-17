@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import tempfile
 import time
 import traceback
 from datetime import datetime, timedelta
@@ -287,7 +288,9 @@ def build_snapshot(
         sources_payload.append(entry)
 
     statuses = [r.status for r in source_results]
-    if all(s in {"ok", "partial"} for s in statuses):
+    # Only full coverage is "ok". A partial/blocked source means the snapshot is
+    # incomplete even when another source succeeded, so say so explicitly.
+    if statuses and all(s == "ok" for s in statuses):
         run_status = "ok"
     elif any(s in {"ok", "partial"} for s in statuses):
         run_status = "partial"
@@ -364,7 +367,12 @@ def run_monitor(
 ) -> dict[str, Any]:
     config = load_config(config_path)
     store = Store(data_dir)
-    store.ensure()
+    # A dry run must not touch the repository: no data dir creation, no cache
+    # files. Use a throwaway cache so robots.txt/session discovery still work.
+    temp_cache = tempfile.TemporaryDirectory(prefix="doomsday-dry-") if dry_run else None
+    cache_dir = Path(temp_cache.name) if temp_cache else store.cache
+    if not dry_run:
+        store.ensure()
     previous = store.load_latest()
     previous_state = store.load_state()
     started = time.time()
@@ -377,13 +385,13 @@ def run_monitor(
         timeout_seconds=config.monitoring.request_timeout_seconds,
         max_retries=config.monitoring.max_retries,
         backoff_seconds=config.monitoring.retry_backoff_seconds,
-        cache_dir=store.cache,
+        cache_dir=cache_dir,
     ) as client:
         for name, adapter in ADAPTERS.items():
             if not config.sources.get(name, {}).get("enabled", False):
                 continue
             try:
-                source_results.append(adapter(config, client, store.cache))
+                source_results.append(adapter(config, client, cache_dir))
             except Exception as exc:  # noqa: BLE001 - isolate source failures
                 source_results.append(SourceResult(
                     source=name,
@@ -456,6 +464,19 @@ def run_monitor(
     state = {**new_state, "last_run": {
         "run_id": run_id, "checked_at": snapshot["checked_at"], "status": snapshot["status"],
     }}
+    if dry_run:
+        if temp_cache:
+            temp_cache.cleanup()
+        return {
+            "run_id": run_id,
+            "status": snapshot["status"],
+            "snapshot_path": None,
+            "dry_run": True,
+            "totals": snapshot["totals"],
+            "events": events,
+            "notifications": notifications,
+            "sources": {s["source"]: s["status"] for s in snapshot["sources"]},
+        }
     snapshot_path = store.write_run(
         snapshot=snapshot,
         state=state,
@@ -466,6 +487,8 @@ def run_monitor(
         }},
         retention=(config.retention.hourly_snapshots, config.retention.daily_snapshots),
     )
+    if temp_cache:
+        temp_cache.cleanup()
     return {
         "run_id": run_id,
         "status": snapshot["status"],

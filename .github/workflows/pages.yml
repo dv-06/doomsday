@@ -1,8 +1,10 @@
 name: Deploy dashboard
 
-# The hourly monitor deploys Pages itself after committing a snapshot (a push made
-# with GITHUB_TOKEN would not trigger this workflow). This workflow covers code,
-# styling and documentation changes.
+# Deployment strategy:
+#   * monitor.yml owns hourly data + deployment (its data commit uses GITHUB_TOKEN,
+#     which does not trigger this workflow).
+#   * this workflow handles human pushes that change the site or its config.
+# Both share one concurrency group so they never deploy competing builds.
 on:
   push:
     branches: [master]
@@ -19,14 +21,17 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: doomsday-watch-pages
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: master
       - uses: actions/setup-node@v4
         with:
           node-version: 20

@@ -28,7 +28,7 @@ before each build, so the static site always ships the committed snapshot.
   "schema_version": 1,
   "generated_at": "2026-11-17T20:00:00+05:30",
   "checked_at": "2026-11-17T20:00:00+05:30",   // IST ISO-8601
-  "status": "ok | partial | degraded",
+  "status": "ok | partial | degraded",          // ok = every source fully healthy; partial = at least one blocked/partial
   "movie": {
     "title": "Avengers: Doomsday",
     "release_date": "2026-12-17",
@@ -180,6 +180,12 @@ Used by the history chart (last 168 runs, about one week).
 
 Run counter, `last_success_at`, `last_failure_at`, `monitoring.interval_minutes`,
 `monitoring.next_check_at` and a human note about GitHub's best-effort scheduler.
+
+## Dry-run guarantee
+
+`run --dry-run` executes the fetch/parse/diff path with a temporary cache directory
+and returns before any write. It creates no `data/` directory or files, does not
+touch `state.json` (so notification dedupe is unchanged), and never sends an alert.
 
 ## Retention
 

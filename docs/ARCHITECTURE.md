@@ -81,6 +81,9 @@ the static site reads the committed JSON.
    `events.jsonl` / `runs.jsonl`; prune old snapshots.
 9. Exit non-zero only when the run itself is unusable (all sources failed), so
    Actions surfaces real outages.
+10. Dry run performs steps 1–7 with a throwaway cache and an empty in-memory diff,
+    then returns before step 8: no snapshot, history, state, meta or cache file is
+    written, and no notification is sent.
 
 ## Failure handling
 
@@ -104,6 +107,10 @@ the static site reads the committed JSON.
 - **No anti-bot circumvention.** Blocked means blocked. The UI exposes it.
 - **HashRouter.** GitHub Pages cannot rewrite paths; hashes avoid 404s for deep links.
 - **Availability ≠ sales.** Diff wording and UI copy enforce this distinction.
+- **One deployer at a time.** The hourly monitor and the human-push Pages workflow
+  share a concurrency group; Pages deploys are queued, never raced.
+- **Overall status is conservative.** `ok` means every enabled source was fully
+  healthy; one partial/blocked source makes the whole run `partial`.
 - **IST everywhere.** Dates are stored as IST calendar dates so a 00:30 show on
   18 Dec does not drift to 17 Dec in UTC.
 - **Seat heuristics, not invented seats.** The platform has no public seat map, so

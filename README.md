@@ -88,8 +88,11 @@ python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-# One real monitoring pass (writes data/, sends no alerts with --dry-run)
+# Safe check: fetch + diff only, writes nothing
 PYTHONPATH=backend python -m doomsday_watch --config config/monitor.json --data data run --dry-run
+
+# Real monitoring pass (writes data/latest.json, history and a snapshot)
+PYTHONPATH=backend python -m doomsday_watch --config config/monitor.json --data data run
 
 # Tests
 pip install -r requirements-dev.txt
@@ -124,8 +127,14 @@ pip install -r requirements-api.txt
 PYTHONPATH=backend python -m doomsday_watch serve --port 8000
 ```
 
-Useful `run` flags: `--dry-run` (no alert sending), `--skip-notifications`,
-`--github-summary` (writes to `$GITHUB_STEP_SUMMARY`).
+Useful `run` flags: `--dry-run` (fetch, diff and report **without writing any
+snapshot/history/cache file or sending alerts**), `--skip-notifications`, and
+`--github-summary` (writes to `$GITHUB_STEP_SUMMARY`). Global options `--config`
+and `--data` must come **before** the subcommand:
+
+```bash
+PYTHONPATH=backend python -m doomsday_watch --data data run --dry-run
+```
 
 ---
 
@@ -138,15 +147,18 @@ Useful `run` flags: `--dry-run` (no alert sending), `--skip-notifications`,
    (the hourly job commits `data/`).
 4. Add notification secrets (optional): **Settings → Secrets and variables →
    Actions** → `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `NTFY_TOPIC`,
-   `NOTIFY_WEBHOOK_URL`.
+   `NOTIFY_WEBHOOK_URL`. Optionally add a repository **variable**
+   `DASHBOARD_URL=https://dv-06.github.io/doomsday/` so alerts link to the site.
 5. Run **Actions → Hourly ticket watch → Run workflow** once to verify, then let
    the `5 * * * *` cron take over.
 6. Your dashboard is at `https://<user>.github.io/<repo>/`.
 
 The hourly workflow commits the snapshot, builds the site and deploys Pages in the
-same run. A second workflow (`Deploy dashboard`) handles code/style/documentation
-pushes. See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for scheduler caveats,
-custom domains and troubleshooting.
+same run. A second workflow (`Deploy dashboard`) handles human code/style/config
+pushes. Both share the `doomsday-watch-pages` concurrency group, so they queue
+instead of deploying competing builds. See
+[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for scheduler caveats, custom domains
+and troubleshooting.
 
 > A push made with the default `GITHUB_TOKEN` does **not** trigger other workflows.
 > That is why the monitor deploys Pages itself instead of relying on the push to
@@ -270,7 +282,7 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-26 tests cover format normalisation (including Infinity Vision ≠ IMAX), District
+33 tests cover CLI parsing, dry-run isolation, normal and partial runs, format normalisation (including Infinity Vision ≠ IMAX), District
 parsing against a trimmed real fixture, seat heuristics, diff/notification rules,
 snapshot retention, and the end-to-end pipeline with blocked sources.
 
@@ -297,6 +309,9 @@ npm run build
    catalogue the verification panel will show a mismatch rather than silently
    mapping to the wrong cinema.
 6. GitHub Pages is static; the optional FastAPI service is for local use only.
+7. Overall run status is `partial` whenever any enabled source is blocked or
+   partial, even if another source returned full data — incomplete coverage is
+   never presented as complete. `ok` requires every source to be fully healthy.
 
 ---
 

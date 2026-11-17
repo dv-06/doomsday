@@ -42,7 +42,8 @@ Without this, the hourly job can scrape but cannot commit `data/`.
 | `NOTIFY_WEBHOOK_URL` | Your webhook endpoint (optional) |
 
 `DASHBOARD_URL` can be added as a repository **variable** (not secret) so alert
-messages link to the live site.
+messages link to the live site. Missing credentials simply disable that channel;
+the run still succeeds and the dashboard still updates.
 
 ## 5. First run
 
@@ -54,6 +55,9 @@ Expected log lines:
 config ok: 6 theatres, dates=('2026-12-17', '2026-12-18'), interval=60m
 status=partial shows=20 3D=20 InfinityVision3D=20 theatres_with_listings=3/6 ...
 ```
+
+Use **Run workflow → dry_run: true** for a safe check: it fetches and diffs but
+writes no snapshot/history/cache file and skips build/deploy entirely.
 
 Then the job commits `data/`, builds `frontend/`, uploads the Pages artifact and
 deploys. The site appears at:
@@ -82,8 +86,8 @@ GitHub's cron is **best-effort**, not a guarantee:
 - A manual run does not reset the schedule.
 - GitHub Actions free minutes are unlimited for public repositories on standard
   runners; a run here takes roughly 1–2 minutes, well within any limit.
-- Concurrency is serialised (`concurrency: doomsday-watch`) so two runs never write
-  the repo at once.
+- Concurrency is serialised through the shared `doomsday-watch-pages` group, so
+  monitoring and Pages deploys never run or deploy at the same time.
 
 ## Why the monitor deploys Pages itself
 

@@ -1,26 +1,31 @@
 name: Hourly ticket watch
-# Workflow registration refresh
 
 on:
   schedule:
-    # GitHub Actions cron is UTC and best-effort. It can fire several minutes late.
+    # GitHub Actions cron is UTC and best-effort. 05:00 UTC = 10:30 IST; the
+    # workflow then runs once per hour at :05 UTC (5 minutes past every IST hour,
+    # since IST is UTC+05:30). Runs may start late during peak load.
     - cron: "5 * * * *"
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Check sources but do not write snapshots or notify"
+        description: "Check sources without writing snapshots or sending alerts"
         type: boolean
         default: false
 
-# Never let two runs write the repository at the same time.
+# One shared group with pages.yml: monitoring writes data and deploys Pages, so
+# two runs must never build/deploy at the same time. Queued, never cancelled.
 concurrency:
-  group: doomsday-watch
+  group: doomsday-watch-pages
   cancel-in-progress: false
 
 permissions:
   contents: write
   pages: write
   id-token: write
+
+env:
+  TARGET_BRANCH: master
 
 jobs:
   monitor:
@@ -30,10 +35,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     timeout-minutes: 20
     steps:
-      - name: Check out repository
+      - name: Check out master
         uses: actions/checkout@v4
         with:
-          # Full history is not needed; a shallow checkout keeps the run small.
+          ref: master
           fetch-depth: 1
 
       - name: Set up Python
@@ -43,39 +48,67 @@ jobs:
           cache: pip
           cache-dependency-path: requirements*.txt
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
       - name: Install monitor dependencies
         run: pip install -r requirements.txt
 
       - name: Validate configuration
-        working-directory: backend
-        run: python -m doomsday_watch --config ../config/monitor.json --data ../data validate
-
-      - name: Run hourly snapshot
-        id: run
-        working-directory: backend
+        run: python -m doomsday_watch --config config/monitor.json --data data validate
         env:
           PYTHONPATH: ${{ github.workspace }}/backend
+
+      - name: Run hourly snapshot
+        env:
+          PYTHONPATH: ${{ github.workspace }}/backend
+          DRY_RUN: ${{ inputs.dry_run }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
         run: |
           set -o pipefail
-          ARGS="--config ../config/monitor.json --data ../data"
-          if [ "${{ inputs.dry_run }}" = "true" ]; then
-            ARGS="$ARGS --dry-run"
+
+          # Global options (--config/--data) come before the subcommand;
+          # --dry-run/--github-summary belong to `run`.
+          ARGS=(--config config/monitor.json --data data run)
+          if [ "$DRY_RUN" = "true" ]; then
+            ARGS+=(--dry-run)
           fi
-          python -m doomsday_watch $ARGS run --github-summary 2>&1 | tee run.log
-          # The CLI exits 0 for partial coverage. A non-zero code means the run
-          # itself failed, so keep the log for inspection.
-          echo "Run finished at $(date -u +%FT%TZ)"
+          ARGS+=(--github-summary)
+
+          rc=1
+          for attempt in 1 2; do
+            echo "::group::Monitor attempt ${attempt}"
+            python -m doomsday_watch "${ARGS[@]}" 2>&1 | tee -a run.log
+            rc=${PIPESTATUS[0]}
+            echo "::endgroup::"
+            if [ "$rc" -eq 0 ]; then
+              break
+            fi
+            if [ "$attempt" -lt 2 ]; then
+              echo "::warning::Monitor exited ${rc}; retrying once in 20 seconds."
+              sleep 20
+            fi
+          done
+
+          echo "Run finished at $(date -u +%FT%TZ) with exit code ${rc}."
+          # 0 = ok/partial coverage (partial is expected while BMS blocks);
+          # 2 = all sources failed. Fail the step so missing coverage is visible.
+          exit "$rc"
 
       - name: Upload run log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: monitor-log-${{ github.run_id }}
-          path: backend/run.log
+          path: run.log
           retention-days: 7
           if-no-files-found: ignore
 
@@ -87,9 +120,10 @@ jobs:
           git config user.email "doomsday-watch[bot]@users.noreply.github.com"
           git add data
           if git diff --cached --quiet; then
-            echo "No data changes this hour."
+            echo "No data changes this hour; no commit created."
             exit 0
           fi
+
           STATUS=$(python - <<'PY'
           import json, pathlib
           data = json.loads(pathlib.Path("data/latest.json").read_text(encoding="utf-8"))
@@ -100,18 +134,25 @@ jobs:
           print(f"{status}; {shows} shows; {theatres} theatres")
           PY
           )
-          git commit -m "data: hourly snapshot â€” ${STATUS}"
+          git commit -m "data: hourly snapshot -- ${STATUS}"
+
           for attempt in 1 2 3; do
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+            git fetch origin "$TARGET_BRANCH"
+            if ! git rebase --autostash "origin/$TARGET_BRANCH"; then
+              git rebase --abort || true
+              echo "::error::Could not rebase onto origin/${TARGET_BRANCH}."
+              exit 1
+            fi
+            if git push origin "HEAD:${TARGET_BRANCH}"; then
               echo "Pushed snapshot on attempt ${attempt}."
               exit 0
             fi
             sleep $((attempt * 5))
           done
-          echo "Could not push the snapshot after 3 attempts." >&2
+          echo "::error::Could not push the snapshot after 3 attempts."
           exit 1
 
+      # Dry runs stop here: nothing is written, built or deployed.
       - name: Build dashboard
         if: ${{ inputs.dry_run != true }}
         working-directory: frontend
