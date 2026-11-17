@@ -82,7 +82,7 @@ on:
           <SectionHeading
             eyebrow="Schedule"
             title="Hourly monitoring"
-            description="GitHub Actions runs the monitor and commits a snapshot. This cannot be changed from the browser, because a static site has no write access to the repository."
+            description="The Indian-egress OpenWrt collector pushes District data hourly; GitHub Actions validates, ingests and commits it. The schedule is managed on the router, not in this browser."
           />
           <dl className="space-y-2.5 text-sm">
             <div className="flex items-center justify-between gap-3">
@@ -274,7 +274,7 @@ on:
           <div className="mt-4 rounded-xl border border-white/[0.06] bg-black/30 p-3 text-[11px] leading-relaxed text-ash">
             <p className="label mb-1">How the pieces fit</p>
             <p>
-              Static React dashboard on GitHub Pages · Python monitor in GitHub Actions · JSON + SQLite-compatible
+              Static React dashboard on GitHub Pages · OpenWrt collector → GitHub ingestion → Pages · JSON + SQLite-compatible
               snapshot store committed to git. No paid API, database or host is involved.
             </p>
           </div>

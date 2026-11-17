@@ -50,7 +50,7 @@ export function rememberEventIds(ids: string[]): void {
   localStorage.setItem(SEEN_KEY, JSON.stringify(merged));
 }
 
-/** The JSON to paste into config/monitor.json so GitHub Actions picks it up. */
+/** The JSON to paste into config/monitor.json so the collector pipeline picks it up. */
 export function exportMonitorConfig(settings: Settings, snapshot: Snapshot, meta: Meta | null, allTheatreIds: string[]): string {
   const enabled = settings.enabledTheatres ?? allTheatreIds;
   return JSON.stringify(

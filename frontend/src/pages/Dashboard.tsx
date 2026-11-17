@@ -125,7 +125,7 @@ function Hero() {
               <dd className="text-right font-medium text-white">
                 {timeUntil(meta?.monitoring.next_check_at)}
                 <span className="block text-[11px] font-normal text-ash">
-                  every {meta?.monitoring.interval_minutes ?? 60} min via GitHub Actions
+                  every {meta?.monitoring.interval_minutes ?? 60} min via the Indian-egress NAS collector
                 </span>
               </dd>
             </div>
@@ -361,8 +361,8 @@ export default function Dashboard() {
       <div className="panel p-10 text-center">
         <h1 className="font-display text-4xl tracking-wide text-white">NO SNAPSHOT YET</h1>
         <p className="mx-auto mt-2 max-w-lg text-sm text-ash">
-          The dashboard reads <code className="text-flame">data/latest.json</code>. Run the monitor once
-          (<code className="text-flame">python -m doomsday_watch run</code>) or trigger the GitHub Actions workflow.
+          The dashboard reads <code className="text-flame">data/latest.json</code>. Run the OpenWrt collector
+          once or trigger the GitHub Actions ingest workflow.
         </p>
         {error && <p className="mt-3 text-xs text-red-300">{error}</p>}
         <button type="button" className="btn-ember mt-5" onClick={() => void refresh(true)}>Try again</button>
