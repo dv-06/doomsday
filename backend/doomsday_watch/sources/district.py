@@ -13,12 +13,12 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import quote, urlencode
 
-from ..config import AppConfig, TheatreConfig, iso_ist
+from ..config import IST, AppConfig, TheatreConfig, iso_ist
 from ..http import FetchResult, HttpClient
 from ..models import SourceResult, TheatreObservation, make_show
 from .base import SourceError, SourceUnavailable
@@ -190,6 +190,19 @@ def _valid_session(session: dict[str, Any]) -> bool:
     return isinstance(show_time, str) and len(show_time) >= 16 and "T" in show_time
 
 
+def display_datetime(value: str) -> datetime:
+    """District sends naive UTC clocks (``06:15`` for a 11:45 IST show).
+
+    Its own time-of-day tags confirm the semantics: a 06:15 raw session is
+    tagged ``8_am_to_12_pm``. Convert exactly once here; explicit offsets are
+    honoured rather than shifted twice. The raw string is retained separately.
+    """
+    dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(IST)
+
+
 def _observations_from_groups(
     config: AppConfig,
     groups: list[dict[str, Any]],
@@ -241,13 +254,16 @@ def _observations_from_groups(
         for session in group.get("sessions") or []:
             if not _valid_session(session):
                 continue
-            day = _parse_date(session["showTime"])
-            if not day:
+            raw_time = str(session["showTime"])
+            try:
+                local = display_datetime(raw_time)
+            except ValueError:
                 continue
+            day = local.strftime("%Y-%m-%d")
+            start = local.strftime("%H:%M")
             session_dates.add(day)
             if day not in config.target_dates:
                 continue
-            start = session["showTime"][11:16]
             areas = _session_areas(session)
             shows.append(make_show(
                 platform="district",
@@ -262,24 +278,17 @@ def _observations_from_groups(
                 raw_status=session.get("seatStatus"),
                 booking_url=_booking_url(base_url, session, content_id),
                 source_show_id=str(session.get("sid") or ""),
+                source_time=raw_time,
                 languages=[str(movie.get("primary_language") or "")] if movie.get("primary_language") else [],
                 tags=[str(t) for t in (session.get("tags") or [])],
             ))
-
-        # The collector filters sessions to the target dates but keeps the
-        # complete date list so a cinema with only future/other-date sessions
-        # is not misreported as absent.
-        for raw_date in group.get("available_dates") or []:
-            parsed_date = _parse_date(str(raw_date))
-            if parsed_date:
-                session_dates.add(parsed_date)
 
         observed_dates.update(session_dates)
         observations[theatre.id] = TheatreObservation(
             platform="district",
             theatre_id=theatre.id,
             status="ok",
-            listed=bool(session_dates),
+            listed=bool(shows),
             venue={
                 "id": str(data_blob.get("id") or theatre.district_id),
                 "name": venue_name,
@@ -449,11 +458,17 @@ def result_from_payload(
         for session in sessions:
             if not isinstance(session, dict) or not _valid_session(session):
                 raise SourceError(f"District inbox cinema {group_id!r} has an invalid session")
-            day = _parse_date(session["showTime"])
-            if day not in config.target_dates:
+            try:
+                local = display_datetime(str(session["showTime"]))
+            except ValueError as exc:
                 raise SourceError(
-                    f"District inbox cinema {group_id!r} contains a non-target session date {day!r}"
-                )
+                    f"District inbox cinema {group_id!r} has an invalid showTime"
+                ) from exc
+            day = local.strftime("%Y-%m-%d")
+            if day not in config.target_dates:
+                # The collector may include adjacent UTC dates so IST midnight
+                # sessions are not lost. Non-target local dates are filtered.
+                continue
         for raw_date in group.get("available_dates") or []:
             if not _parse_date(str(raw_date)):
                 raise SourceError(f"District inbox cinema {group_id!r} has an invalid available_date")

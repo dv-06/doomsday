@@ -80,7 +80,9 @@ before each build, so the static site always ships the committed snapshot.
           "theatre_id": "lulu-global-mall",
           "platform": "district",
           "date": "2026-12-17",           // IST calendar date
-          "start": "19:10",               // 24h IST, no timezone stored per show
+          "start": "19:10",               // 24h IST derived from the source clock
+          "start_iso": "2026-12-17T19:10:00+05:30",
+          "source_time": "2026-12-17T13:40",  // raw District clock (naive UTC)
           "format_raw": "INFINITY VISION 3D",
           "format": "infinity_vision_3d", // normalised enum, see below
           "format_label": "Infinity Vision 3D",
@@ -152,7 +154,7 @@ CLI:
     {
       "data": { "id": "56450", "name": "Cinepolis Lulu Global Mall..." },
       "sessions": [
-        { "sid": "...", "showTime": "2026-12-17T13:40:00+05:30",
+        { "sid": "...", "showTime": "2026-12-17T13:40",  // naive UTC in District payload
           "audi": "MACRO XE", "scrnFmt": "MS INFINITY VISION 3D",
           "total": 277, "avail": 41, "seatStatus": "Filling Fast",
           "areas": [{ "label": "NORMAL", "price": 890, "sTotal": 19, "sAvail": 19 }] }
@@ -164,7 +166,7 @@ CLI:
 ```
 
 Ingestion rejects a payload with a wrong content ID/title, no movie metadata, no
-configured cinemas, malformed sessions, non-target session dates, a timestamp
+configured cinemas, malformed sessions, non-target local dates after conversion, a timestamp
 more than 3 hours old or in the future, or a timestamp older than the current
 snapshot. A payload whose canonical data hash equals the previous snapshot is
 ignored without writing data.
@@ -234,6 +236,14 @@ Run counter, `last_success_at`, `last_failure_at`, `monitoring.interval_minutes`
 `run --dry-run` executes the fetch/parse/diff path with a temporary cache directory
 and returns before any write. It creates no `data/` directory or files, does not
 touch `state.json` (so notification dedupe is unchanged), and never sends an alert.
+
+## Time semantics (District)
+
+District's `showTime` is a naive UTC clock. For example, raw `06:15` with District's
+own `8_am_to_12_pm` tag is 11:45 IST and matches PVR's 11:45 listing. Ingest converts
+it exactly once to `Asia/Kolkata`; the raw value is retained as `source_time`.
+The collector sends all sessions for the six cinemas so sessions whose UTC date is
+the previous day are not lost before the IST date filter runs.
 
 ## Retention
 

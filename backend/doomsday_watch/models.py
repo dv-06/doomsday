@@ -63,6 +63,7 @@ def make_show(
     raw_status: str | None = None,
     booking_url: str | None = None,
     source_show_id: str | None = None,
+    source_time: str | None = None,
     languages: Iterable[str] = (),
     tags: Iterable[str] = (),
     notes: Iterable[str] = (),
@@ -110,6 +111,7 @@ def make_show(
         },
         "booking_url": booking_url,
         "source_show_id": source_show_id,
+        "source_time": source_time,
         "tags": list(tags),
         "notes": list(notes),
     }

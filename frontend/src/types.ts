@@ -55,6 +55,7 @@ export interface Show {
   price: { currency: string; min: number | null; max: number | null };
   availability: ShowAvailability;
   booking_url: string | null;
+  source_time?: string | null;
   tags: string[];
   notes: string[];
   platforms?: Platform[];

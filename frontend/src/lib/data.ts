@@ -125,7 +125,7 @@ export function formatClock(iso: string | null | undefined): string {
     minute: "2-digit",
     hour12: true,
     timeZone: IST,
-  }).format(parsed);
+  }).format(parsed).toUpperCase();
 }
 
 export function formatDateTime(iso: string | null | undefined): string {

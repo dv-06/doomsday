@@ -94,15 +94,50 @@ def diff_snapshot(
             shows = [s for s in (obs.get("shows") or []) if isinstance(s, dict)]
 
             current_shows: dict[str, Any] = {}
+            matched_prev_keys: set[str] = set()
+            prev_by_source = {
+                str(prev.get("source_show_id")): (key, prev)
+                for key, prev in prev_shows.items()
+                if isinstance(prev, dict) and prev.get("source_show_id")
+            }
             first_listing = not prev_p.get("listed") and obs.get("listed") and source_healthy
             for show in shows:
                 show_key = show["id"]
                 prev_show = prev_shows.get(show_key)
+                prev_key = show_key if prev_show else None
+                if not prev_show and show.get("source_show_id"):
+                    match = prev_by_source.get(str(show["source_show_id"]))
+                    if match:
+                        prev_key, prev_show = match
+
+                # One-time migration for snapshots written before District's
+                # raw UTC clock was converted to IST. The stable source id is
+                # preferred; the raw clock fallback keeps seat comparisons and
+                # first-seen timestamps continuous across the correction.
+                if not prev_show and show.get("source_time"):
+                    raw_time = str(show["source_time"])
+                    for key, candidate in prev_shows.items():
+                        if key in matched_prev_keys or not isinstance(candidate, dict):
+                            continue
+                        if (
+                            candidate.get("start") == raw_time[11:16]
+                            and candidate.get("date") == raw_time[:10]
+                            and candidate.get("screen") == show.get("screen")
+                            and candidate.get("format_key") == show["format"]["key"]
+                        ):
+                            prev_key, prev_show = key, candidate
+                            break
+                if prev_key:
+                    matched_prev_keys.add(prev_key)
+
                 current_shows[show_key] = {
                     "first_seen_at": (prev_show or {}).get("first_seen_at") or iso_ist(),
                     "last_seen_at": iso_ist(),
                     "date": show["date"],
                     "start": show["start"],
+                    "start_iso": show.get("start_iso"),
+                    "source_show_id": show.get("source_show_id"),
+                    "source_time": show.get("source_time"),
                     "screen": show.get("screen"),
                     "format_key": show["format"]["key"],
                     "format_label": show["format"]["label"],
@@ -199,7 +234,7 @@ def diff_snapshot(
 
             if source_healthy:
                 for show_key, prev_show in prev_shows.items():
-                    if show_key in current_shows or not isinstance(prev_show, dict):
+                    if show_key in current_shows or show_key in matched_prev_keys or not isinstance(prev_show, dict):
                         continue
                     events.append(_make_event(
                         "show_removed", theatre_id=tid, theatre_name=name, platform=platform,

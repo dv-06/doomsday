@@ -92,3 +92,31 @@ def test_payload_mapping_is_pure_and_does_not_fetch(config, fixture_html, monkey
     monkeypatch.setattr(district, "fetch", explode)
     result = district.result_from_payload(config, _payload_from_fixture(fixture_html))
     assert result.status == "ok"
+
+
+def test_legacy_provenance_is_reingested_once_without_duplicate_sessions(
+    config, fixture_html, tmp_path, repo_root
+):
+    payload = _payload_from_fixture(fixture_html, iso_ist())
+    inbox = _write_payload(tmp_path, payload)
+    data = tmp_path / "data"
+    args = [
+        "--config", str(repo_root / "config/monitor.json"),
+        "--data", str(data),
+        "ingest", "--file", str(inbox), "--skip-notifications",
+    ]
+    assert main(args) == 0
+    latest = json.loads((data / "latest.json").read_text(encoding="utf-8"))
+    latest["provenance"].pop("normalizer_version", None)
+    (data / "latest.json").write_text(json.dumps(latest), encoding="utf-8")
+    runs_before = len((data / "history/runs.jsonl").read_text(encoding="utf-8").splitlines())
+
+    assert main(args) == 0
+    repaired = json.loads((data / "latest.json").read_text(encoding="utf-8"))
+    assert repaired["provenance"]["normalizer_version"] == 2
+    assert len((data / "history/runs.jsonl").read_text(encoding="utf-8").splitlines()) == runs_before + 1
+    ids = [s["id"] for t in repaired["theatres"] for s in t["shows"]]
+    assert len(ids) == len(set(ids)), "re-ingestion must not duplicate sessions"
+
+    assert main(args) == 0
+    assert len((data / "history/runs.jsonl").read_text(encoding="utf-8").splitlines()) == runs_before + 1

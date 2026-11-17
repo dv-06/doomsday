@@ -25,6 +25,11 @@ from .notify import Notifier
 from .sources import bookmyshow, district
 from .store import Store
 
+# Bump when the meaning/shape of a normally-identical inbox payload changes.
+# Snapshot provenance records it so a one-time re-ingest can repair old data
+# without weakening duplicate protection for every future run.
+PAYLOAD_NORMALIZER_VERSION = 2
+
 
 def _summarise(result: dict) -> str:
     totals = result["totals"]
@@ -131,7 +136,11 @@ def cmd_ingest(args: argparse.Namespace) -> int:
                 raise ValueError(
                     f"payload is older than the current snapshot ({previous_collected})"
                 )
-        if previous_prov.get("content_sha256") == digest:
+        same_payload = (
+            previous_prov.get("content_sha256") == digest
+            and previous_prov.get("normalizer_version") == PAYLOAD_NORMALIZER_VERSION
+        )
+        if same_payload:
             print(f"District inbox unchanged (sha256={digest[:12]}…); no data written.")
             if args.github_summary:
                 _write_ingest_summary(None, digest, unchanged=True)
@@ -155,6 +164,7 @@ def cmd_ingest(args: argparse.Namespace) -> int:
             "ingested_at": iso_ist(),
             "content_sha256": digest,
             "payload_schema_version": payload.get("schema_version"),
+            "normalizer_version": PAYLOAD_NORMALIZER_VERSION,
         }
         result = run_monitor(
             args.config,

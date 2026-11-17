@@ -79,7 +79,7 @@ def test_shows_are_real_and_dated(config, fixture_html, tmp_path):
     assert shows, "expected sessions on the target date"
     first = shows[0]
     assert first["date"] in config.target_dates
-    assert first["start"] == "01:00"
+    assert first["start"] == "06:30"
     assert first["screen"] == "MACRO XE"
     assert first["format"]["key"] == "infinity_vision_3d"
     assert first["format"]["label"] == "Infinity Vision 3D"
@@ -163,7 +163,7 @@ def test_payload_rejects_missing_movie_or_wrong_date(config, fixture_html):
 
     broken = copy.deepcopy(payload)
     broken["groups"][0]["sessions"][0] = dict(broken["groups"][0]["sessions"][0])
-    broken["groups"][0]["sessions"][0]["showTime"] = "2026-12-19T10:00:00+05:30"
+    broken["groups"][0]["sessions"][0]["showTime"] = "not-a-datetime"
     with pytest.raises(district.SourceError):
         district.result_from_payload(config, broken)
 

@@ -3,6 +3,7 @@ import type { DateSummary, Platform, PlatformObservation, Show, Theatre } from "
 import {
   availabilityTone,
   formatBadgeClass,
+  formatClock,
   formatDate,
   inr,
   platformLabel,
@@ -60,15 +61,16 @@ function matches(show: Show, filters: Props["filters"]): boolean {
 
 function ShowChip({ show }: { show: Show }) {
   const tone = availabilityTone[show.availability.status] ?? "muted";
+  const displayTime = formatClock(show.start_iso) || show.start;
   const label = (
     <>
-      <span className="font-mono text-[12px] font-medium text-white">{show.start}</span>
+      <span className="font-mono text-[12px] font-medium text-white">{displayTime}</span>
       <span className="text-[10px] uppercase tracking-wide text-ash">{show.format.label}</span>
       {show.availability.status === "sold_out" && <span className="text-[10px] text-red-300">sold out</span>}
     </>
   );
   const title = [
-    `${show.date} ${show.start} · ${show.format.label}`,
+    `${show.date} ${displayTime} · ${show.format.label}`,
     show.screen ? `Screen: ${show.screen}` : null,
     show.availability.available_seats !== null ? `${show.availability.available_seats} seats reported available` : null,
     show.price.min ? `from ${inr(show.price.min)}` : null,
@@ -359,7 +361,7 @@ export default function TheatreCard({ theatre, targetDates, filters, platforms }
                   <div key={show.id} className="rounded-lg border border-white/[0.05] bg-white/[0.02] p-2.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[13px] font-semibold text-white">{show.start}</span>
+                        <span className="font-mono text-[13px] font-semibold text-white">{formatClock(show.start_iso) || show.start}</span>
                         <span className="text-[11px] text-ash">{formatDate(show.date, { year: undefined })}</span>
                         <Chip className={formatBadgeClass(show.format.key)}>{show.format.label}</Chip>
                         {show.screen && <Chip tone="muted">{show.screen}</Chip>}

@@ -72,11 +72,12 @@ function walk(node, depth) {
 walk(state, 0);
 if (length(groups) == 0) die('District page has no arrangedSessions');
 
-/* ---------- filter exactly the configured cinemas and target dates ---------- */
+/* ---------- filter configured cinemas; keep sessions for IST filtering ---------- */
+/* District returns naive UTC clocks. Sending all sessions for the six cinemas
+ * lets the Python ingest convert to Asia/Kolkata first and then apply the exact
+ * target dates, including sessions whose UTC date is the previous day.        */
 let wanted = {};
 for (let cinema in cfg.cinemas) wanted['' + cinema.district_id] = cinema;
-let target = {};
-for (let date in cfg.target_dates) target['' + date] = true;
 
 function compact_area(a) {
     if (type(a) != 'object') return null;
@@ -134,7 +135,6 @@ for (let group in groups) {
         if (length(show_time) < 16 || index(show_time, 'T') < 0) continue;
         let day = substr(show_time, 0, 10);
         available_dates[day] = true;
-        if (!target[day]) continue;
         push(sessions, compact_session(session));
         target_sessions++;
     }
@@ -159,7 +159,7 @@ if (length(out_groups) == 0)
 
 let max_sessions = ((cfg.limits || {}).max_sessions) || 500;
 if (target_sessions > max_sessions)
-    die('too many target sessions: ' + target_sessions + ' > ' + max_sessions);
+    die('too many sessions: ' + target_sessions + ' > ' + max_sessions);
 
 let content = {
     content_id: '' + cfg.content_id,
