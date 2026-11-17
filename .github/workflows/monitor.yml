@@ -1,4 +1,5 @@
 name: Hourly ticket watch
+# Workflow registration refresh
 
 on:
   schedule:
@@ -99,7 +100,7 @@ jobs:
           print(f"{status}; {shows} shows; {theatres} theatres")
           PY
           )
-          git commit -m "data: hourly snapshot — ${STATUS}"
+          git commit -m "data: hourly snapshot â€” ${STATUS}"
           for attempt in 1 2 3; do
             git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then
