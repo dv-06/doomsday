@@ -91,10 +91,12 @@ jobs:
           fi
           STATUS=$(python - <<'PY'
           import json, pathlib
-          p = pathlib.Path("data/latest.json")
-          data = json.loads(p.read_text(encoding="utf-8"))
+          data = json.loads(pathlib.Path("data/latest.json").read_text(encoding="utf-8"))
           totals = data.get("totals", {})
-          print(f"{data.get('status','unknown')}; {totals.get('shows_total',0)} shows; {totals.get('theatres_with_listings',0)} theatres")
+          status = data.get("status", "unknown")
+          shows = totals.get("shows_total", 0)
+          theatres = totals.get("theatres_with_listings", 0)
+          print(f"{status}; {shows} shows; {theatres} theatres")
           PY
           )
           git commit -m "data: hourly snapshot — ${STATUS}"
