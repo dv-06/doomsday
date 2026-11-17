@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "run_id": "20261117T231745-f110e4",
-  "checked_at": "2026-11-17T23:17:45+05:30",
-  "started_at": "2026-11-17T23:17:45+05:30",
+  "run_id": "20261118T002518-45654c",
+  "checked_at": "2026-11-18T00:25:18+05:30",
+  "started_at": "2026-11-18T00:25:18+05:30",
   "duration_ms": 0,
   "status": "partial",
   "movie": {
@@ -26,7 +26,7 @@
     "shows_imax_3d": 0,
     "shows_4dx": 4,
     "bookable_shows": 5,
-    "seats_available_total": 1295,
+    "seats_available_total": 1255,
     "dates": {
       "2026-12-17": {
         "shows": 19,
@@ -199,7 +199,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 277,
-                "available_seats": 74,
+                "available_seats": 70,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -229,7 +229,7 @@
                     "code": "0000000001",
                     "price": 940,
                     "total_seats": 129,
-                    "available_seats": 11,
+                    "available_seats": 8,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -240,7 +240,7 @@
                     "code": "0000000020",
                     "price": 960,
                     "total_seats": 46,
-                    "available_seats": 2,
+                    "available_seats": 1,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -819,7 +819,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 277,
-                    "available_seats": 74,
+                    "available_seats": 70,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -849,7 +849,7 @@
                         "code": "0000000001",
                         "price": 940,
                         "total_seats": 129,
-                        "available_seats": 11,
+                        "available_seats": 8,
                         "status": "few_left",
                         "status_raw": "Almost Full",
                         "bookable": true,
@@ -860,7 +860,7 @@
                         "code": "0000000020",
                         "price": 960,
                         "total_seats": 46,
-                        "available_seats": 2,
+                        "available_seats": 1,
                         "status": "few_left",
                         "status_raw": "Almost Full",
                         "bookable": true,
@@ -1308,9 +1308,9 @@
             }
           },
           "error": null,
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [],
-          "last_success_at": "2026-11-17T23:17:45+05:30"
+          "last_success_at": "2026-11-18T00:25:18+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -1321,7 +1321,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -1465,7 +1465,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 277,
-                "available_seats": 74,
+                "available_seats": 70,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -1495,7 +1495,7 @@
                     "code": "0000000001",
                     "price": 940,
                     "total_seats": 129,
-                    "available_seats": 11,
+                    "available_seats": 8,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -1506,7 +1506,7 @@
                     "code": "0000000020",
                     "price": 960,
                     "total_seats": 46,
-                    "available_seats": 2,
+                    "available_seats": 1,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -1977,7 +1977,7 @@
             }
           ],
           "booking_status": "filling_fast",
-          "seats_available": 371,
+          "seats_available": 367,
           "price_min": 840,
           "price_max": 1030,
           "first_show": "01:00",
@@ -2157,7 +2157,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 277,
-            "available_seats": 74,
+            "available_seats": 70,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -2187,7 +2187,7 @@
                 "code": "0000000001",
                 "price": 940,
                 "total_seats": 129,
-                "available_seats": 11,
+                "available_seats": 8,
                 "status": "few_left",
                 "status_raw": "Almost Full",
                 "bookable": true,
@@ -2198,7 +2198,7 @@
                 "code": "0000000020",
                 "price": 960,
                 "total_seats": 46,
-                "available_seats": 2,
+                "available_seats": 1,
                 "status": "few_left",
                 "status_raw": "Almost Full",
                 "bookable": true,
@@ -2817,7 +2817,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 54,
+                "available_seats": 59,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -2836,7 +2836,7 @@
                     "code": "PC",
                     "price": 1170,
                     "total_seats": 96,
-                    "available_seats": 25,
+                    "available_seats": 29,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -2847,10 +2847,10 @@
                     "code": "QR",
                     "price": 1200,
                     "total_seats": 80,
-                    "available_seats": 0,
-                    "status": "sold_out",
-                    "status_raw": "Sold Out",
-                    "bookable": false,
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
+                    "bookable": true,
                     "seat_classes": []
                   },
                   {
@@ -2917,7 +2917,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 68,
+                "available_seats": 64,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -2936,7 +2936,7 @@
                     "code": "PC",
                     "price": 920,
                     "total_seats": 96,
-                    "available_seats": 36,
+                    "available_seats": 32,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -3012,21 +3012,21 @@
               ],
               "price": {
                 "currency": "INR",
-                "min": 1170,
+                "min": 1270,
                 "max": 1420
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 20,
+                "available_seats": 15,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
                     "label": "CLASSIC ROWS",
                     "code": "CR",
-                    "price": 1170,
+                    "price": 1270,
                     "total_seats": 60,
-                    "available_seats": 20,
+                    "available_seats": 15,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -3187,7 +3187,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 24,
+                "available_seats": 21,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -3195,9 +3195,9 @@
                     "code": "CR",
                     "price": 1170,
                     "total_seats": 60,
-                    "available_seats": 24,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 21,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -3272,7 +3272,7 @@
                     "code": "PC",
                     "price": 920,
                     "total_seats": 96,
-                    "available_seats": 22,
+                    "available_seats": 23,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -3294,10 +3294,10 @@
                     "code": "OR",
                     "price": 1000,
                     "total_seats": 20,
-                    "available_seats": 1,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -3322,7 +3322,6 @@
                 "after_5_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
-                "price_1000_1500",
                 "price_900_1000",
                 "wheelchair_friendly"
               ],
@@ -3351,21 +3350,21 @@
               ],
               "price": {
                 "currency": "INR",
-                "min": 1370,
+                "min": 1470,
                 "max": 1620
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 15,
+                "available_seats": 16,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
                     "label": "CLASSIC ROWS",
                     "code": "CR",
-                    "price": 1370,
+                    "price": 1470,
                     "total_seats": 60,
-                    "available_seats": 15,
+                    "available_seats": 16,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -3533,7 +3532,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 27,
+                "available_seats": 24,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -3541,9 +3540,9 @@
                     "code": "CR",
                     "price": 1420,
                     "total_seats": 60,
-                    "available_seats": 24,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 23,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -3552,7 +3551,7 @@
                     "code": "QR",
                     "price": 1720,
                     "total_seats": 36,
-                    "available_seats": 3,
+                    "available_seats": 1,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -3611,7 +3610,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 245,
-                    "available_seats": 54,
+                    "available_seats": 59,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -3630,7 +3629,7 @@
                         "code": "PC",
                         "price": 1170,
                         "total_seats": 96,
-                        "available_seats": 25,
+                        "available_seats": 29,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -3641,10 +3640,10 @@
                         "code": "QR",
                         "price": 1200,
                         "total_seats": 80,
-                        "available_seats": 0,
-                        "status": "sold_out",
-                        "status_raw": "Sold Out",
-                        "bookable": false,
+                        "available_seats": 1,
+                        "status": "few_left",
+                        "status_raw": "Almost Full",
+                        "bookable": true,
                         "seat_classes": []
                       },
                       {
@@ -3711,7 +3710,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 245,
-                    "available_seats": 68,
+                    "available_seats": 64,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -3730,7 +3729,7 @@
                         "code": "PC",
                         "price": 920,
                         "total_seats": 96,
-                        "available_seats": 36,
+                        "available_seats": 32,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -3806,21 +3805,21 @@
                   ],
                   "price": {
                     "currency": "INR",
-                    "min": 1170,
+                    "min": 1270,
                     "max": 1420
                   },
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 96,
-                    "available_seats": 20,
+                    "available_seats": 15,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
                         "label": "CLASSIC ROWS",
                         "code": "CR",
-                        "price": 1170,
+                        "price": 1270,
                         "total_seats": 60,
-                        "available_seats": 20,
+                        "available_seats": 15,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -3981,7 +3980,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 96,
-                    "available_seats": 24,
+                    "available_seats": 21,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -3989,9 +3988,9 @@
                         "code": "CR",
                         "price": 1170,
                         "total_seats": 60,
-                        "available_seats": 24,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 21,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -4066,7 +4065,7 @@
                         "code": "PC",
                         "price": 920,
                         "total_seats": 96,
-                        "available_seats": 22,
+                        "available_seats": 23,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -4088,10 +4087,10 @@
                         "code": "OR",
                         "price": 1000,
                         "total_seats": 20,
-                        "available_seats": 1,
-                        "status": "few_left",
-                        "status_raw": "Almost Full",
-                        "bookable": true,
+                        "available_seats": 0,
+                        "status": "sold_out",
+                        "status_raw": "Sold Out",
+                        "bookable": false,
                         "seat_classes": []
                       },
                       {
@@ -4116,7 +4115,6 @@
                     "after_5_pm",
                     "ms_infinity_vision_3d",
                     "after_6_pm",
-                    "price_1000_1500",
                     "price_900_1000",
                     "wheelchair_friendly"
                   ],
@@ -4145,21 +4143,21 @@
                   ],
                   "price": {
                     "currency": "INR",
-                    "min": 1370,
+                    "min": 1470,
                     "max": 1620
                   },
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 96,
-                    "available_seats": 15,
+                    "available_seats": 16,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
                         "label": "CLASSIC ROWS",
                         "code": "CR",
-                        "price": 1370,
+                        "price": 1470,
                         "total_seats": 60,
-                        "available_seats": 15,
+                        "available_seats": 16,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -4327,7 +4325,7 @@
                   "availability": {
                     "status": "filling_fast",
                     "total_seats": 96,
-                    "available_seats": 27,
+                    "available_seats": 24,
                     "status_raw": "Filling Fast",
                     "areas": [
                       {
@@ -4335,9 +4333,9 @@
                         "code": "CR",
                         "price": 1420,
                         "total_seats": 60,
-                        "available_seats": 24,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 23,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -4346,7 +4344,7 @@
                         "code": "QR",
                         "price": 1720,
                         "total_seats": 36,
-                        "available_seats": 3,
+                        "available_seats": 1,
                         "status": "few_left",
                         "status_raw": "Almost Full",
                         "bookable": true,
@@ -4375,9 +4373,9 @@
             }
           },
           "error": null,
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [],
-          "last_success_at": "2026-11-17T23:17:45+05:30"
+          "last_success_at": "2026-11-18T00:25:18+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -4388,7 +4386,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -4428,7 +4426,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 54,
+                "available_seats": 59,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4447,7 +4445,7 @@
                     "code": "PC",
                     "price": 1170,
                     "total_seats": 96,
-                    "available_seats": 25,
+                    "available_seats": 29,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4458,10 +4456,10 @@
                     "code": "QR",
                     "price": 1200,
                     "total_seats": 80,
-                    "available_seats": 0,
-                    "status": "sold_out",
-                    "status_raw": "Sold Out",
-                    "bookable": false,
+                    "available_seats": 1,
+                    "status": "few_left",
+                    "status_raw": "Almost Full",
+                    "bookable": true,
                     "seat_classes": []
                   },
                   {
@@ -4531,7 +4529,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 245,
-                "available_seats": 68,
+                "available_seats": 64,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4550,7 +4548,7 @@
                     "code": "PC",
                     "price": 920,
                     "total_seats": 96,
-                    "available_seats": 36,
+                    "available_seats": 32,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4629,21 +4627,21 @@
               ],
               "price": {
                 "currency": "INR",
-                "min": 1170,
+                "min": 1270,
                 "max": 1420
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 20,
+                "available_seats": 15,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
                     "label": "CLASSIC ROWS",
                     "code": "CR",
-                    "price": 1170,
+                    "price": 1270,
                     "total_seats": 60,
-                    "available_seats": 20,
+                    "available_seats": 15,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4810,7 +4808,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 24,
+                "available_seats": 21,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -4818,9 +4816,9 @@
                     "code": "CR",
                     "price": 1170,
                     "total_seats": 60,
-                    "available_seats": 24,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 21,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -4898,7 +4896,7 @@
                     "code": "PC",
                     "price": 920,
                     "total_seats": 96,
-                    "available_seats": 22,
+                    "available_seats": 23,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -4920,10 +4918,10 @@
                     "code": "OR",
                     "price": 1000,
                     "total_seats": 20,
-                    "available_seats": 1,
-                    "status": "few_left",
-                    "status_raw": "Almost Full",
-                    "bookable": true,
+                    "available_seats": 0,
+                    "status": "sold_out",
+                    "status_raw": "Sold Out",
+                    "bookable": false,
                     "seat_classes": []
                   },
                   {
@@ -4948,7 +4946,6 @@
                 "after_5_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
-                "price_1000_1500",
                 "price_900_1000",
                 "wheelchair_friendly"
               ],
@@ -4980,21 +4977,21 @@
               ],
               "price": {
                 "currency": "INR",
-                "min": 1370,
+                "min": 1470,
                 "max": 1620
               },
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 15,
+                "available_seats": 16,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
                     "label": "CLASSIC ROWS",
                     "code": "CR",
-                    "price": 1370,
+                    "price": 1470,
                     "total_seats": 60,
-                    "available_seats": 15,
+                    "available_seats": 16,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -5168,7 +5165,7 @@
               "availability": {
                 "status": "filling_fast",
                 "total_seats": 96,
-                "available_seats": 27,
+                "available_seats": 24,
                 "status_raw": "Filling Fast",
                 "areas": [
                   {
@@ -5176,9 +5173,9 @@
                     "code": "CR",
                     "price": 1420,
                     "total_seats": 60,
-                    "available_seats": 24,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 23,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -5187,7 +5184,7 @@
                     "code": "QR",
                     "price": 1720,
                     "total_seats": 36,
-                    "available_seats": 3,
+                    "available_seats": 1,
                     "status": "few_left",
                     "status_raw": "Almost Full",
                     "bookable": true,
@@ -5234,7 +5231,7 @@
             }
           ],
           "booking_status": "filling_fast",
-          "seats_available": 389,
+          "seats_available": 380,
           "price_min": 750,
           "price_max": 1720,
           "first_show": "02:50",
@@ -5310,7 +5307,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 245,
-            "available_seats": 54,
+            "available_seats": 59,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5329,7 +5326,7 @@
                 "code": "PC",
                 "price": 1170,
                 "total_seats": 96,
-                "available_seats": 25,
+                "available_seats": 29,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5340,10 +5337,10 @@
                 "code": "QR",
                 "price": 1200,
                 "total_seats": 80,
-                "available_seats": 0,
-                "status": "sold_out",
-                "status_raw": "Sold Out",
-                "bookable": false,
+                "available_seats": 1,
+                "status": "few_left",
+                "status_raw": "Almost Full",
+                "bookable": true,
                 "seat_classes": []
               },
               {
@@ -5413,7 +5410,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 245,
-            "available_seats": 68,
+            "available_seats": 64,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5432,7 +5429,7 @@
                 "code": "PC",
                 "price": 920,
                 "total_seats": 96,
-                "available_seats": 36,
+                "available_seats": 32,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5511,21 +5508,21 @@
           ],
           "price": {
             "currency": "INR",
-            "min": 1170,
+            "min": 1270,
             "max": 1420
           },
           "availability": {
             "status": "filling_fast",
             "total_seats": 96,
-            "available_seats": 20,
+            "available_seats": 15,
             "status_raw": "Filling Fast",
             "areas": [
               {
                 "label": "CLASSIC ROWS",
                 "code": "CR",
-                "price": 1170,
+                "price": 1270,
                 "total_seats": 60,
-                "available_seats": 20,
+                "available_seats": 15,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5692,7 +5689,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 96,
-            "available_seats": 24,
+            "available_seats": 21,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -5700,9 +5697,9 @@
                 "code": "CR",
                 "price": 1170,
                 "total_seats": 60,
-                "available_seats": 24,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 21,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -5780,7 +5777,7 @@
                 "code": "PC",
                 "price": 920,
                 "total_seats": 96,
-                "available_seats": 22,
+                "available_seats": 23,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -5802,10 +5799,10 @@
                 "code": "OR",
                 "price": 1000,
                 "total_seats": 20,
-                "available_seats": 1,
-                "status": "few_left",
-                "status_raw": "Almost Full",
-                "bookable": true,
+                "available_seats": 0,
+                "status": "sold_out",
+                "status_raw": "Sold Out",
+                "bookable": false,
                 "seat_classes": []
               },
               {
@@ -5830,7 +5827,6 @@
             "after_5_pm",
             "ms_infinity_vision_3d",
             "after_6_pm",
-            "price_1000_1500",
             "price_900_1000",
             "wheelchair_friendly"
           ],
@@ -5862,21 +5858,21 @@
           ],
           "price": {
             "currency": "INR",
-            "min": 1370,
+            "min": 1470,
             "max": 1620
           },
           "availability": {
             "status": "filling_fast",
             "total_seats": 96,
-            "available_seats": 15,
+            "available_seats": 16,
             "status_raw": "Filling Fast",
             "areas": [
               {
                 "label": "CLASSIC ROWS",
                 "code": "CR",
-                "price": 1370,
+                "price": 1470,
                 "total_seats": 60,
-                "available_seats": 15,
+                "available_seats": 16,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -6050,7 +6046,7 @@
           "availability": {
             "status": "filling_fast",
             "total_seats": 96,
-            "available_seats": 27,
+            "available_seats": 24,
             "status_raw": "Filling Fast",
             "areas": [
               {
@@ -6058,9 +6054,9 @@
                 "code": "CR",
                 "price": 1420,
                 "total_seats": 60,
-                "available_seats": 24,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 23,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -6069,7 +6065,7 @@
                 "code": "QR",
                 "price": 1720,
                 "total_seats": 36,
-                "available_seats": 3,
+                "available_seats": 1,
                 "status": "few_left",
                 "status_raw": "Almost Full",
                 "bookable": true,
@@ -6153,19 +6149,23 @@
           {
             "area": "CLASSIC PLUS ROWS",
             "price": 1170,
-            "available_seats": 25,
+            "available_seats": 29,
             "total_seats": 96,
-            "fill_percent": 26,
+            "fill_percent": 30,
             "status": "filling_fast"
           }
         ],
-        "second_best": [],
-        "avoid": [
+        "second_best": [
           {
             "area": "PRIME ROWS",
             "price": 1200,
-            "reason": "reported sold out by the source"
-          },
+            "available_seats": 1,
+            "total_seats": 80,
+            "fill_percent": 1,
+            "status": "few_left"
+          }
+        ],
+        "avoid": [
           {
             "area": "EXTRA LEGROOM ROWS",
             "price": 1250,
@@ -6236,11 +6236,11 @@
           "shows": [],
           "dates": {},
           "error": null,
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "Cinema not present in District's session list for this movie."
           ],
-          "last_success_at": "2026-11-17T23:17:45+05:30"
+          "last_success_at": "2026-11-18T00:25:18+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -6251,7 +6251,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -6370,7 +6370,7 @@
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 146,
+                "available_seats": 148,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -6389,7 +6389,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 59,
+                    "available_seats": 68,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6400,7 +6400,7 @@
                     "code": "QR",
                     "price": 900,
                     "total_seats": 108,
-                    "available_seats": 46,
+                    "available_seats": 44,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6411,8 +6411,8 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 9,
-                    "status": "filling_fast",
+                    "available_seats": 4,
+                    "status": "few_left",
                     "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
@@ -6472,7 +6472,7 @@
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 136,
+                "available_seats": 140,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -6491,7 +6491,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 59,
+                    "available_seats": 64,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6502,7 +6502,7 @@
                     "code": "QR",
                     "price": 900,
                     "total_seats": 108,
-                    "available_seats": 40,
+                    "available_seats": 41,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -6524,9 +6524,9 @@
                     "code": "BR",
                     "price": 1250,
                     "total_seats": 12,
-                    "available_seats": 5,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 3,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -6679,7 +6679,7 @@
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 142,
+                "available_seats": 109,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -6696,9 +6696,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 770,
+                    "price": 870,
                     "total_seats": 90,
-                    "available_seats": 65,
+                    "available_seats": 41,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -6709,7 +6709,7 @@
                     "code": "QR",
                     "price": 900,
                     "total_seats": 108,
-                    "available_seats": 42,
+                    "available_seats": 35,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -6720,9 +6720,9 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 4,
+                    "available_seats": 2,
                     "status": "few_left",
-                    "status_raw": "Filling Fast",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -6744,17 +6744,18 @@
               "source_show_id": "26537",
               "tags": [
                 "recliner",
+                "after_10_pm",
+                "price_1000_1500",
+                "price_900_1000",
+                "7_pm_to_12_am",
                 "after_9_pm",
                 "after_8_pm",
+                "price_800_900",
                 "after_5_pm",
-                "after_10_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
                 "after_7_pm",
-                "price_700_800",
-                "price_1000_1500",
-                "price_900_1000",
-                "7_pm_to_12_am"
+                "price_700_800"
               ],
               "notes": []
             }
@@ -6792,7 +6793,7 @@
                   "availability": {
                     "status": "bookable",
                     "total_seats": 270,
-                    "available_seats": 146,
+                    "available_seats": 148,
                     "status_raw": "Available",
                     "areas": [
                       {
@@ -6811,7 +6812,7 @@
                         "code": "PC",
                         "price": 770,
                         "total_seats": 90,
-                        "available_seats": 59,
+                        "available_seats": 68,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -6822,7 +6823,7 @@
                         "code": "QR",
                         "price": 900,
                         "total_seats": 108,
-                        "available_seats": 46,
+                        "available_seats": 44,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -6833,8 +6834,8 @@
                         "code": "PI",
                         "price": 970,
                         "total_seats": 30,
-                        "available_seats": 9,
-                        "status": "filling_fast",
+                        "available_seats": 4,
+                        "status": "few_left",
                         "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
@@ -6894,7 +6895,7 @@
                   "availability": {
                     "status": "bookable",
                     "total_seats": 270,
-                    "available_seats": 136,
+                    "available_seats": 140,
                     "status_raw": "Available",
                     "areas": [
                       {
@@ -6913,7 +6914,7 @@
                         "code": "PC",
                         "price": 770,
                         "total_seats": 90,
-                        "available_seats": 59,
+                        "available_seats": 64,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -6924,7 +6925,7 @@
                         "code": "QR",
                         "price": 900,
                         "total_seats": 108,
-                        "available_seats": 40,
+                        "available_seats": 41,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -6946,9 +6947,9 @@
                         "code": "BR",
                         "price": 1250,
                         "total_seats": 12,
-                        "available_seats": 5,
-                        "status": "bookable",
-                        "status_raw": "Available",
+                        "available_seats": 3,
+                        "status": "filling_fast",
+                        "status_raw": "Filling Fast",
                         "bookable": true,
                         "seat_classes": []
                       }
@@ -7101,7 +7102,7 @@
                   "availability": {
                     "status": "bookable",
                     "total_seats": 270,
-                    "available_seats": 142,
+                    "available_seats": 109,
                     "status_raw": "Available",
                     "areas": [
                       {
@@ -7118,9 +7119,9 @@
                       {
                         "label": "CLASSIC PLUS ROWS",
                         "code": "PC",
-                        "price": 770,
+                        "price": 870,
                         "total_seats": 90,
-                        "available_seats": 65,
+                        "available_seats": 41,
                         "status": "bookable",
                         "status_raw": "Available",
                         "bookable": true,
@@ -7131,7 +7132,7 @@
                         "code": "QR",
                         "price": 900,
                         "total_seats": 108,
-                        "available_seats": 42,
+                        "available_seats": 35,
                         "status": "filling_fast",
                         "status_raw": "Filling Fast",
                         "bookable": true,
@@ -7142,9 +7143,9 @@
                         "code": "PI",
                         "price": 970,
                         "total_seats": 30,
-                        "available_seats": 4,
+                        "available_seats": 2,
                         "status": "few_left",
-                        "status_raw": "Filling Fast",
+                        "status_raw": "Almost Full",
                         "bookable": true,
                         "seat_classes": []
                       },
@@ -7166,17 +7167,18 @@
                   "source_show_id": "26537",
                   "tags": [
                     "recliner",
+                    "after_10_pm",
+                    "price_1000_1500",
+                    "price_900_1000",
+                    "7_pm_to_12_am",
                     "after_9_pm",
                     "after_8_pm",
+                    "price_800_900",
                     "after_5_pm",
-                    "after_10_pm",
                     "ms_infinity_vision_3d",
                     "after_6_pm",
                     "after_7_pm",
-                    "price_700_800",
-                    "price_1000_1500",
-                    "price_900_1000",
-                    "7_pm_to_12_am"
+                    "price_700_800"
                   ],
                   "notes": []
                 }
@@ -7184,9 +7186,9 @@
             }
           },
           "error": null,
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [],
-          "last_success_at": "2026-11-17T23:17:45+05:30"
+          "last_success_at": "2026-11-18T00:25:18+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -7197,7 +7199,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -7237,7 +7239,7 @@
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 146,
+                "available_seats": 148,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -7256,7 +7258,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 59,
+                    "available_seats": 68,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7267,7 +7269,7 @@
                     "code": "QR",
                     "price": 900,
                     "total_seats": 108,
-                    "available_seats": 46,
+                    "available_seats": 44,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7278,8 +7280,8 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 9,
-                    "status": "filling_fast",
+                    "available_seats": 4,
+                    "status": "few_left",
                     "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
@@ -7342,7 +7344,7 @@
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 136,
+                "available_seats": 140,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -7361,7 +7363,7 @@
                     "code": "PC",
                     "price": 770,
                     "total_seats": 90,
-                    "available_seats": 59,
+                    "available_seats": 64,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7372,7 +7374,7 @@
                     "code": "QR",
                     "price": 900,
                     "total_seats": 108,
-                    "available_seats": 40,
+                    "available_seats": 41,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -7394,9 +7396,9 @@
                     "code": "BR",
                     "price": 1250,
                     "total_seats": 12,
-                    "available_seats": 5,
-                    "status": "bookable",
-                    "status_raw": "Available",
+                    "available_seats": 3,
+                    "status": "filling_fast",
+                    "status_raw": "Filling Fast",
                     "bookable": true,
                     "seat_classes": []
                   }
@@ -7555,7 +7557,7 @@
               "availability": {
                 "status": "bookable",
                 "total_seats": 270,
-                "available_seats": 142,
+                "available_seats": 109,
                 "status_raw": "Available",
                 "areas": [
                   {
@@ -7572,9 +7574,9 @@
                   {
                     "label": "CLASSIC PLUS ROWS",
                     "code": "PC",
-                    "price": 770,
+                    "price": 870,
                     "total_seats": 90,
-                    "available_seats": 65,
+                    "available_seats": 41,
                     "status": "bookable",
                     "status_raw": "Available",
                     "bookable": true,
@@ -7585,7 +7587,7 @@
                     "code": "QR",
                     "price": 900,
                     "total_seats": 108,
-                    "available_seats": 42,
+                    "available_seats": 35,
                     "status": "filling_fast",
                     "status_raw": "Filling Fast",
                     "bookable": true,
@@ -7596,9 +7598,9 @@
                     "code": "PI",
                     "price": 970,
                     "total_seats": 30,
-                    "available_seats": 4,
+                    "available_seats": 2,
                     "status": "few_left",
-                    "status_raw": "Filling Fast",
+                    "status_raw": "Almost Full",
                     "bookable": true,
                     "seat_classes": []
                   },
@@ -7620,17 +7622,18 @@
               "source_show_id": "26537",
               "tags": [
                 "recliner",
+                "after_10_pm",
+                "price_1000_1500",
+                "price_900_1000",
+                "7_pm_to_12_am",
                 "after_9_pm",
                 "after_8_pm",
+                "price_800_900",
                 "after_5_pm",
-                "after_10_pm",
                 "ms_infinity_vision_3d",
                 "after_6_pm",
                 "after_7_pm",
-                "price_700_800",
-                "price_1000_1500",
-                "price_900_1000",
-                "7_pm_to_12_am"
+                "price_700_800"
               ],
               "notes": [],
               "platforms": [
@@ -7649,7 +7652,7 @@
             }
           ],
           "booking_status": "bookable",
-          "seats_available": 535,
+          "seats_available": 508,
           "price_min": 750,
           "price_max": 1300,
           "first_show": "06:15",
@@ -7717,7 +7720,7 @@
           "availability": {
             "status": "bookable",
             "total_seats": 270,
-            "available_seats": 146,
+            "available_seats": 148,
             "status_raw": "Available",
             "areas": [
               {
@@ -7736,7 +7739,7 @@
                 "code": "PC",
                 "price": 770,
                 "total_seats": 90,
-                "available_seats": 59,
+                "available_seats": 68,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -7747,7 +7750,7 @@
                 "code": "QR",
                 "price": 900,
                 "total_seats": 108,
-                "available_seats": 46,
+                "available_seats": 44,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -7758,8 +7761,8 @@
                 "code": "PI",
                 "price": 970,
                 "total_seats": 30,
-                "available_seats": 9,
-                "status": "filling_fast",
+                "available_seats": 4,
+                "status": "few_left",
                 "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
@@ -7822,7 +7825,7 @@
           "availability": {
             "status": "bookable",
             "total_seats": 270,
-            "available_seats": 136,
+            "available_seats": 140,
             "status_raw": "Available",
             "areas": [
               {
@@ -7841,7 +7844,7 @@
                 "code": "PC",
                 "price": 770,
                 "total_seats": 90,
-                "available_seats": 59,
+                "available_seats": 64,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -7852,7 +7855,7 @@
                 "code": "QR",
                 "price": 900,
                 "total_seats": 108,
-                "available_seats": 40,
+                "available_seats": 41,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -7874,9 +7877,9 @@
                 "code": "BR",
                 "price": 1250,
                 "total_seats": 12,
-                "available_seats": 5,
-                "status": "bookable",
-                "status_raw": "Available",
+                "available_seats": 3,
+                "status": "filling_fast",
+                "status_raw": "Filling Fast",
                 "bookable": true,
                 "seat_classes": []
               }
@@ -8035,7 +8038,7 @@
           "availability": {
             "status": "bookable",
             "total_seats": 270,
-            "available_seats": 142,
+            "available_seats": 109,
             "status_raw": "Available",
             "areas": [
               {
@@ -8052,9 +8055,9 @@
               {
                 "label": "CLASSIC PLUS ROWS",
                 "code": "PC",
-                "price": 770,
+                "price": 870,
                 "total_seats": 90,
-                "available_seats": 65,
+                "available_seats": 41,
                 "status": "bookable",
                 "status_raw": "Available",
                 "bookable": true,
@@ -8065,7 +8068,7 @@
                 "code": "QR",
                 "price": 900,
                 "total_seats": 108,
-                "available_seats": 42,
+                "available_seats": 35,
                 "status": "filling_fast",
                 "status_raw": "Filling Fast",
                 "bookable": true,
@@ -8076,9 +8079,9 @@
                 "code": "PI",
                 "price": 970,
                 "total_seats": 30,
-                "available_seats": 4,
+                "available_seats": 2,
                 "status": "few_left",
-                "status_raw": "Filling Fast",
+                "status_raw": "Almost Full",
                 "bookable": true,
                 "seat_classes": []
               },
@@ -8100,17 +8103,18 @@
           "source_show_id": "26537",
           "tags": [
             "recliner",
+            "after_10_pm",
+            "price_1000_1500",
+            "price_900_1000",
+            "7_pm_to_12_am",
             "after_9_pm",
             "after_8_pm",
+            "price_800_900",
             "after_5_pm",
-            "after_10_pm",
             "ms_infinity_vision_3d",
             "after_6_pm",
             "after_7_pm",
-            "price_700_800",
-            "price_1000_1500",
-            "price_900_1000",
-            "7_pm_to_12_am"
+            "price_700_800"
           ],
           "notes": [],
           "platforms": [
@@ -8163,29 +8167,29 @@
             "status": "bookable"
           },
           {
+            "area": "CLASSIC PLUS ROWS",
+            "price": 770,
+            "available_seats": 68,
+            "total_seats": 90,
+            "fill_percent": 76,
+            "status": "bookable"
+          }
+        ],
+        "second_best": [
+          {
             "area": "RECLINER ROWS",
             "price": 1250,
             "available_seats": 2,
             "total_seats": 12,
             "fill_percent": 17,
             "status": "filling_fast"
-          }
-        ],
-        "second_best": [
-          {
-            "area": "CLASSIC PLUS ROWS",
-            "price": 770,
-            "available_seats": 59,
-            "total_seats": 90,
-            "fill_percent": 66,
-            "status": "bookable"
           },
           {
             "area": "PRIME ROWS",
             "price": 900,
-            "available_seats": 46,
+            "available_seats": 44,
             "total_seats": 108,
-            "fill_percent": 43,
+            "fill_percent": 41,
             "status": "bookable"
           }
         ],
@@ -8254,11 +8258,11 @@
           "shows": [],
           "dates": {},
           "error": null,
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "Cinema not present in District's session list for this movie."
           ],
-          "last_success_at": "2026-11-17T23:17:45+05:30"
+          "last_success_at": "2026-11-18T00:25:18+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -8269,7 +8273,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -8359,11 +8363,11 @@
           "shows": [],
           "dates": {},
           "error": null,
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "Cinema not present in District's session list for this movie."
           ],
-          "last_success_at": "2026-11-17T23:17:45+05:30"
+          "last_success_at": "2026-11-18T00:25:18+05:30"
         },
         "bookmyshow": {
           "platform": "bookmyshow",
@@ -8374,7 +8378,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-          "checked_at": "2026-11-17T23:17:45+05:30",
+          "checked_at": "2026-11-18T00:25:18+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -8446,7 +8450,7 @@
       "source": "district",
       "status": "ok",
       "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres.",
-      "checked_at": "2026-11-17T17:45:00Z",
+      "checked_at": "2026-11-18T00:25:04+05:30",
       "evidence": {
         "transport": "nas_inbox",
         "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
@@ -8482,18 +8486,18 @@
         "Collected by the Indian-egress NAS collector and ingested without a network fetch.",
         "Area-wise seat counts are published by District; individual seat numbers are not invented. Missing data stays missing."
       ],
-      "last_success_at": "2026-11-17T17:45:00Z"
+      "last_success_at": "2026-11-18T00:25:04+05:30"
     },
     {
       "source": "bookmyshow",
       "status": "blocked",
       "message": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-      "checked_at": "2026-11-17T23:17:45+05:30",
+      "checked_at": "2026-11-18T00:25:18+05:30",
       "evidence": {
         "transport": "nas_inbox",
         "bypassed": false,
         "http_status": 403,
-        "checked_at": "2026-11-17T17:45:00Z"
+        "checked_at": "2026-11-18T00:25:04+05:30"
       },
       "movie": {},
       "notes": [],
@@ -8519,75 +8523,24 @@
   ],
   "events": [
     {
-      "id": "ace4193cce70cf88",
+      "id": "3db114ce066a9688",
       "type": "seats_dropped",
       "severity": "low",
       "theatre_id": "lulu-global-mall",
       "theatre_name": "Lulu Global Mall, Rajajinagar",
       "platform": "district",
       "date": "2026-12-17",
-      "start": "07:05",
+      "start": "03:50",
       "screen": "MACRO XE",
-      "message": "Lulu Global Mall, Rajajinagar: available seats for 07:05 on 2026-12-17 fell from 91 to 78 (availability, not confirmed sales)",
+      "message": "Lulu Global Mall, Rajajinagar: available seats for 03:50 on 2026-12-17 fell from 74 to 70 (availability, not confirmed sales)",
       "data": {
-        "before": 91,
-        "after": 78
+        "before": 74,
+        "after": 70
       },
-      "created_at": "2026-11-17T23:17:45+05:30"
+      "created_at": "2026-11-18T00:25:18+05:30"
     },
     {
-      "id": "c59f9a22bd6c5b72",
-      "type": "seats_dropped",
-      "severity": "low",
-      "theatre_id": "lulu-global-mall",
-      "theatre_name": "Lulu Global Mall, Rajajinagar",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "13:40",
-      "screen": "MACRO XE",
-      "message": "Lulu Global Mall, Rajajinagar: available seats for 13:40 on 2026-12-17 fell from 56 to 49 (availability, not confirmed sales)",
-      "data": {
-        "before": 56,
-        "after": 49
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "667345bb88c71e75",
-      "type": "price_changed",
-      "severity": "low",
-      "theatre_id": "lulu-global-mall",
-      "theatre_name": "Lulu Global Mall, Rajajinagar",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "13:40",
-      "screen": "MACRO XE",
-      "message": "Lulu Global Mall, Rajajinagar: 13:40 on 2026-12-17 price changed ₹840 → ₹890",
-      "data": {
-        "before": 840,
-        "after": 890
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "fd147c9af5b4357e",
-      "type": "seats_dropped",
-      "severity": "low",
-      "theatre_id": "orion-mall",
-      "theatre_name": "Orion Mall, Dr Rajkumar Road",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "02:50",
-      "screen": "AUDI 11",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 02:50 on 2026-12-17 fell from 62 to 54 (availability, not confirmed sales)",
-      "data": {
-        "before": 62,
-        "after": 54
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "281d5e382681a7eb",
+      "id": "7cdad3cc0225e036",
       "type": "seats_dropped",
       "severity": "low",
       "theatre_id": "orion-mall",
@@ -8596,15 +8549,15 @@
       "date": "2026-12-17",
       "start": "06:15",
       "screen": "AUDI 11",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 06:15 on 2026-12-17 fell from 72 to 68 (availability, not confirmed sales)",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 06:15 on 2026-12-17 fell from 68 to 64 (availability, not confirmed sales)",
       "data": {
-        "before": 72,
-        "after": 68
+        "before": 68,
+        "after": 64
       },
-      "created_at": "2026-11-17T23:17:45+05:30"
+      "created_at": "2026-11-18T00:25:18+05:30"
     },
     {
-      "id": "7cf5edabbc95b9c4",
+      "id": "e7989654c32796af",
       "type": "seats_dropped",
       "severity": "low",
       "theatre_id": "orion-mall",
@@ -8613,50 +8566,50 @@
       "date": "2026-12-17",
       "start": "06:45",
       "screen": "AUDI 03 4DX",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 06:45 on 2026-12-17 fell from 26 to 20 (availability, not confirmed sales)",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 06:45 on 2026-12-17 fell from 20 to 15 (availability, not confirmed sales)",
       "data": {
-        "before": 26,
-        "after": 20
+        "before": 20,
+        "after": 15
       },
-      "created_at": "2026-11-17T23:17:45+05:30"
+      "created_at": "2026-11-18T00:25:18+05:30"
     },
     {
-      "id": "7283e5fd68aa5282",
+      "id": "a94c3b086b2cda9f",
+      "type": "price_changed",
+      "severity": "low",
+      "theatre_id": "orion-mall",
+      "theatre_name": "Orion Mall, Dr Rajkumar Road",
+      "platform": "district",
+      "date": "2026-12-17",
+      "start": "06:45",
+      "screen": "AUDI 03 4DX",
+      "message": "Orion Mall, Dr Rajkumar Road: 06:45 on 2026-12-17 price changed ₹1170 → ₹1270",
+      "data": {
+        "before": 1170,
+        "after": 1270
+      },
+      "created_at": "2026-11-18T00:25:18+05:30"
+    },
+    {
+      "id": "2fa39121ef5cc9f5",
       "type": "seats_dropped",
       "severity": "low",
       "theatre_id": "orion-mall",
       "theatre_name": "Orion Mall, Dr Rajkumar Road",
       "platform": "district",
       "date": "2026-12-17",
-      "start": "09:40",
-      "screen": "AUDI 11",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 09:40 on 2026-12-17 fell from 74 to 60 (availability, not confirmed sales)",
+      "start": "10:10",
+      "screen": "AUDI 03 4DX",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 10:10 on 2026-12-17 fell from 24 to 21 (availability, not confirmed sales)",
       "data": {
-        "before": 74,
-        "after": 60
+        "before": 24,
+        "after": 21
       },
-      "created_at": "2026-11-17T23:17:45+05:30"
+      "created_at": "2026-11-18T00:25:18+05:30"
     },
     {
-      "id": "8bb75691f5988d6d",
-      "type": "seats_dropped",
-      "severity": "low",
-      "theatre_id": "orion-mall",
-      "theatre_name": "Orion Mall, Dr Rajkumar Road",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "13:05",
-      "screen": "AUDI 11",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 13:05 on 2026-12-17 fell from 62 to 51 (availability, not confirmed sales)",
-      "data": {
-        "before": 62,
-        "after": 51
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "1ec206e33793f72b",
-      "type": "seats_dropped",
+      "id": "88ce3a2bffb56c97",
+      "type": "price_changed",
       "severity": "low",
       "theatre_id": "orion-mall",
       "theatre_name": "Orion Mall, Dr Rajkumar Road",
@@ -8664,32 +8617,15 @@
       "date": "2026-12-17",
       "start": "13:35",
       "screen": "AUDI 03 4DX",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 13:35 on 2026-12-17 fell from 25 to 15 (availability, not confirmed sales)",
+      "message": "Orion Mall, Dr Rajkumar Road: 13:35 on 2026-12-17 price changed ₹1370 → ₹1470",
       "data": {
-        "before": 25,
-        "after": 15
+        "before": 1370,
+        "after": 1470
       },
-      "created_at": "2026-11-17T23:17:45+05:30"
+      "created_at": "2026-11-18T00:25:18+05:30"
     },
     {
-      "id": "7e0ae46bf084d6eb",
-      "type": "seats_dropped",
-      "severity": "low",
-      "theatre_id": "orion-mall",
-      "theatre_name": "Orion Mall, Dr Rajkumar Road",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "16:30",
-      "screen": "AUDI 11",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 16:30 on 2026-12-17 fell from 79 to 70 (availability, not confirmed sales)",
-      "data": {
-        "before": 79,
-        "after": 70
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "90428636b3878501",
+      "id": "011ad217914bb96a",
       "type": "seats_dropped",
       "severity": "low",
       "theatre_id": "orion-mall",
@@ -8698,66 +8634,15 @@
       "date": "2026-12-17",
       "start": "17:00",
       "screen": "AUDI 03 4DX",
-      "message": "Orion Mall, Dr Rajkumar Road: available seats for 17:00 on 2026-12-17 fell from 34 to 27 (availability, not confirmed sales)",
+      "message": "Orion Mall, Dr Rajkumar Road: available seats for 17:00 on 2026-12-17 fell from 27 to 24 (availability, not confirmed sales)",
       "data": {
-        "before": 34,
-        "after": 27
+        "before": 27,
+        "after": 24
       },
-      "created_at": "2026-11-17T23:17:45+05:30"
+      "created_at": "2026-11-18T00:25:18+05:30"
     },
     {
-      "id": "26209dec1554d35b",
-      "type": "seats_dropped",
-      "severity": "low",
-      "theatre_id": "gt-world-mall",
-      "theatre_name": "GT World Mall, Magadi Road",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "06:15",
-      "screen": "SCREEN 5",
-      "message": "GT World Mall, Magadi Road: available seats for 06:15 on 2026-12-17 fell from 215 to 146 (availability, not confirmed sales)",
-      "data": {
-        "before": 215,
-        "after": 146
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "7e6092da5bcd3478",
-      "type": "seats_dropped",
-      "severity": "low",
-      "theatre_id": "gt-world-mall",
-      "theatre_name": "GT World Mall, Magadi Road",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "09:40",
-      "screen": "SCREEN 5",
-      "message": "GT World Mall, Magadi Road: available seats for 09:40 on 2026-12-17 fell from 254 to 136 (availability, not confirmed sales)",
-      "data": {
-        "before": 254,
-        "after": 136
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "a6fcb61afe4b76dc",
-      "type": "seats_dropped",
-      "severity": "low",
-      "theatre_id": "gt-world-mall",
-      "theatre_name": "GT World Mall, Magadi Road",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "13:05",
-      "screen": "SCREEN 5",
-      "message": "GT World Mall, Magadi Road: available seats for 13:05 on 2026-12-17 fell from 157 to 111 (availability, not confirmed sales)",
-      "data": {
-        "before": 157,
-        "after": 111
-      },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "e2b97cc2d0eef38c",
+      "id": "508cab9617dbbdef",
       "type": "seats_dropped",
       "severity": "low",
       "theatre_id": "gt-world-mall",
@@ -8766,40 +8651,12 @@
       "date": "2026-12-17",
       "start": "16:30",
       "screen": "SCREEN 5",
-      "message": "GT World Mall, Magadi Road: available seats for 16:30 on 2026-12-17 fell from 201 to 142 (availability, not confirmed sales)",
+      "message": "GT World Mall, Magadi Road: available seats for 16:30 on 2026-12-17 fell from 142 to 109 (availability, not confirmed sales)",
       "data": {
-        "before": 201,
-        "after": 142
+        "before": 142,
+        "after": 109
       },
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "0e5287f767358696",
-      "type": "show_removed",
-      "severity": "medium",
-      "theatre_id": "gt-world-mall",
-      "theatre_name": "GT World Mall, Magadi Road",
-      "platform": "district",
-      "date": "2026-12-17",
-      "start": "02:50",
-      "screen": "SCREEN 5",
-      "message": "GT World Mall, Magadi Road: show 02:50 on 2026-12-17 is no longer listed on district",
-      "data": {},
-      "created_at": "2026-11-17T23:17:45+05:30"
-    },
-    {
-      "id": "60908d42a5e17bc6",
-      "type": "source_recovered",
-      "severity": "medium",
-      "theatre_id": "-",
-      "theatre_name": "District",
-      "platform": "district",
-      "date": null,
-      "start": null,
-      "screen": null,
-      "message": "district: access recovered, monitoring resumed",
-      "data": {},
-      "created_at": "2026-11-17T23:17:45+05:30"
+      "created_at": "2026-11-18T00:25:18+05:30"
     }
   ],
   "provenance": {
@@ -8811,21 +8668,17 @@
       "parser": "district-next-data"
     },
     "transport": "nas_inbox",
-    "collected_at": "2026-11-17T17:45:00Z",
-    "ingested_at": "2026-11-17T23:17:45+05:30",
-    "content_sha256": "748b87ec579607c5a300d9f2150dc9046324139fb6e89faadb27f75a31d32224",
+    "collected_at": "2026-11-18T00:25:04+05:30",
+    "ingested_at": "2026-11-18T00:25:18+05:30",
+    "content_sha256": "66e17cbfdb54b12500dae5dca532f71e516643c9bc1df8715c97083d5bf6e164",
     "payload_schema_version": 1
   },
   "notifications": {
-    "checked_at": "2026-11-17T23:17:45+05:30",
+    "checked_at": "2026-11-18T00:25:18+05:30",
     "channels": [],
-    "candidates": 1,
+    "candidates": 0,
     "sent": [],
-    "skipped": [
-      {
-        "reason": "no notification credentials configured"
-      }
-    ],
+    "skipped": [],
     "errors": []
   }
 }
