@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "run_id": "20261117T205928-45782f",
-  "checked_at": "2026-11-17T20:59:29+05:30",
-  "started_at": "2026-11-17T20:59:28+05:30",
-  "duration_ms": 537,
+  "run_id": "20261117T210420-00e7c4",
+  "checked_at": "2026-11-17T21:04:20+05:30",
+  "started_at": "2026-11-17T21:04:20+05:30",
+  "duration_ms": 496,
   "status": "degraded",
   "movie": {
     "title": "Avengers: Doomsday",
@@ -1284,12 +1284,12 @@
             }
           },
           "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
-            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (7 minutes old)."
+            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (12 minutes old)."
           ],
           "stale": true,
-          "data_age_minutes": 7,
+          "data_age_minutes": 12,
           "last_success_at": "2026-11-17T20:51:53+05:30"
         },
         "bookmyshow": {
@@ -1301,7 +1301,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -2712,7 +2712,7 @@
       },
       "health": {
         "status": "stale",
-        "age_minutes": 7,
+        "age_minutes": 12,
         "platforms_live": [],
         "platforms_stale": [
           "district"
@@ -4309,12 +4309,12 @@
             }
           },
           "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
-            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (7 minutes old)."
+            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (12 minutes old)."
           ],
           "stale": true,
-          "data_age_minutes": 7,
+          "data_age_minutes": 12,
           "last_success_at": "2026-11-17T20:51:53+05:30"
         },
         "bookmyshow": {
@@ -4326,7 +4326,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -6127,7 +6127,7 @@
       },
       "health": {
         "status": "stale",
-        "age_minutes": 7,
+        "age_minutes": 12,
         "platforms_live": [],
         "platforms_stale": [
           "district"
@@ -6154,7 +6154,7 @@
           "shows": [],
           "dates": {},
           "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": []
         },
         "bookmyshow": {
@@ -6166,7 +6166,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -7276,12 +7276,12 @@
             }
           },
           "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
-            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (7 minutes old)."
+            "Showing the last successful snapshot from 2026-11-17T20:51:53+05:30 (12 minutes old)."
           ],
           "stale": true,
-          "data_age_minutes": 7,
+          "data_age_minutes": 12,
           "last_success_at": "2026-11-17T20:51:53+05:30"
         },
         "bookmyshow": {
@@ -7293,7 +7293,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -8516,7 +8516,7 @@
       },
       "health": {
         "status": "stale",
-        "age_minutes": 7,
+        "age_minutes": 12,
         "platforms_live": [],
         "platforms_stale": [
           "district"
@@ -8543,7 +8543,7 @@
           "shows": [],
           "dates": {},
           "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": []
         },
         "bookmyshow": {
@@ -8555,7 +8555,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -8629,7 +8629,7 @@
           "shows": [],
           "dates": {},
           "error": "No observation returned by district this run.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": []
         },
         "bookmyshow": {
@@ -8641,7 +8641,7 @@
           "shows": [],
           "dates": {},
           "error": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-          "checked_at": "2026-11-17T20:59:29+05:30",
+          "checked_at": "2026-11-17T21:04:20+05:30",
           "notes": [
             "BookMyShow showtimes are behind an anti-bot challenge; no show or seat data is invented. The previous snapshot (if any) is preserved."
           ],
@@ -8702,12 +8702,12 @@
       "source": "district",
       "status": "blocked",
       "message": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed.",
-      "checked_at": "2026-11-17T20:59:28+05:30",
+      "checked_at": "2026-11-17T21:04:20+05:30",
       "evidence": {
         "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
         "status": "blocked",
         "http_status": 403,
-        "latency_ms": 23,
+        "latency_ms": 83,
         "attempts": 1,
         "error": "HTTP 403",
         "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed."
@@ -8720,12 +8720,12 @@
       "source": "bookmyshow",
       "status": "blocked",
       "message": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-      "checked_at": "2026-11-17T20:59:29+05:30",
+      "checked_at": "2026-11-17T21:04:20+05:30",
       "evidence": {
         "url": "https://in.bookmyshow.com/explore/movies-bengaluru",
         "status": "blocked",
         "http_status": 403,
-        "latency_ms": 43,
+        "latency_ms": 29,
         "attempts": 1,
         "error": "HTTP 403",
         "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'challenge-platform'). Not bypassed.",
@@ -8753,32 +8753,13 @@
       "reason": "Premium wing of the same mall, tracked separately only if enabled. Main wing is 56450."
     }
   ],
-  "events": [
-    {
-      "id": "a7a80787e0aff606",
-      "type": "source_blocked",
-      "severity": "high",
-      "theatre_id": "-",
-      "theatre_name": "District",
-      "platform": "district",
-      "date": null,
-      "start": null,
-      "screen": null,
-      "message": "district: automated access blocked — Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed.",
-      "data": {},
-      "created_at": "2026-11-17T20:59:29+05:30"
-    }
-  ],
+  "events": [],
   "notifications": {
-    "checked_at": "2026-11-17T20:59:29+05:30",
+    "checked_at": "2026-11-17T21:04:20+05:30",
     "channels": [],
-    "candidates": 1,
+    "candidates": 0,
     "sent": [],
-    "skipped": [
-      {
-        "reason": "no notification credentials configured"
-      }
-    ],
+    "skipped": [],
     "errors": []
   }
 }

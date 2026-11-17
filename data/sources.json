@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-17T20:59:29+05:30",
+  "checked_at": "2026-11-17T21:04:20+05:30",
   "sources": {
     "district": {
       "source": "district",
       "status": "blocked",
       "message": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed.",
-      "checked_at": "2026-11-17T20:59:28+05:30",
+      "checked_at": "2026-11-17T21:04:20+05:30",
       "evidence": {
         "url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
         "status": "blocked",
         "http_status": 403,
-        "latency_ms": 23,
+        "latency_ms": 83,
         "attempts": 1,
         "error": "HTTP 403",
         "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'access denied'). Not bypassed."
@@ -24,12 +24,12 @@
       "source": "bookmyshow",
       "status": "blocked",
       "message": "BookMyShow refused automated access to its movie list with an anti-bot challenge (HTTP 403). Not bypassed.",
-      "checked_at": "2026-11-17T20:59:29+05:30",
+      "checked_at": "2026-11-17T21:04:20+05:30",
       "evidence": {
         "url": "https://in.bookmyshow.com/explore/movies-bengaluru",
         "status": "blocked",
         "http_status": 403,
-        "latency_ms": 43,
+        "latency_ms": 29,
         "attempts": 1,
         "error": "HTTP 403",
         "blocked_reason": "Automated access refused by the site (HTTP 403, challenge marker: 'challenge-platform'). Not bypassed.",
