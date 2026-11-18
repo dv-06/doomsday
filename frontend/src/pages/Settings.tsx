@@ -49,7 +49,15 @@ export default function SettingsPage() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
     void refreshDiagnostics();
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.ready
+        .then(() => {
+          if (!cancelled) void refreshDiagnostics();
+        })
+        .catch(() => undefined);
+    }
     const onNotification = () => void refreshDiagnostics();
     const onVisible = () => {
       if (document.visibilityState === "visible") void refreshDiagnostics();
@@ -57,6 +65,7 @@ export default function SettingsPage() {
     window.addEventListener("dw:notification", onNotification);
     document.addEventListener("visibilitychange", onVisible);
     return () => {
+      cancelled = true;
       window.removeEventListener("dw:notification", onNotification);
       document.removeEventListener("visibilitychange", onVisible);
     };
