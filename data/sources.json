@@ -1,12 +1,12 @@
 {
-  "schema_version": 1,
-  "checked_at": "2026-11-18T11:37:25+05:30",
+  "schema_version": 2,
+  "checked_at": "2026-11-18T11:50:11+05:30",
   "sources": {
     "district": {
       "source": "district",
       "status": "ok",
-      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres.",
-      "checked_at": "2026-11-18T11:37:00+05:30",
+      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres. | 6 cinema group(s) supplied by the NAS collector; target-date shows found at 2 of 6 monitored theatres.",
+      "checked_at": "2026-11-18T11:43:51+05:30",
       "evidence": {
         "transport": "nas_inbox",
         "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
@@ -15,13 +15,7 @@
         "dates_with_sessions": [
           "2026-12-17"
         ],
-        "collector": {
-          "name": "openwrt-ucode",
-          "version": "1.0.0",
-          "host": "openwrt",
-          "egress": "IN",
-          "parser": "district-next-data"
-        }
+        "collector": {}
       },
       "movie": {
         "content_id": "176735",
@@ -38,26 +32,12 @@
           "2026-12-17"
         ]
       },
+      "movie_id": "avengers-doomsday",
       "notes": [
         "Collected by the Indian-egress NAS collector and ingested without a network fetch.",
         "Area-wise seat counts are published by District; individual seat numbers are not invented. Missing data stays missing."
       ],
-      "last_success_at": "2026-11-18T11:37:00+05:30"
-    },
-    "bookmyshow": {
-      "source": "bookmyshow",
-      "status": "blocked",
-      "message": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-      "checked_at": "2026-11-18T11:37:25+05:30",
-      "evidence": {
-        "transport": "nas_inbox",
-        "bypassed": false,
-        "http_status": 403,
-        "checked_at": "2026-11-18T11:37:00+05:30"
-      },
-      "movie": {},
-      "notes": [],
-      "last_success_at": "2026-11-17T19:48:12+05:30"
+      "last_success_at": "2026-11-18T11:43:51+05:30"
     }
   }
 }
