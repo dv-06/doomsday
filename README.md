@@ -331,7 +331,7 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-56 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
+57 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
 ingestion, duplicate/stale payload protection, format normalisation (including
 Infinity Vision ≠ IMAX, explicit 4DX 3D vs plain 3D), District parsing against a trimmed real fixture, multi-movie config and payloads, UTC→IST
 show-clock conversion and date boundaries, legacy-snapshot migration without

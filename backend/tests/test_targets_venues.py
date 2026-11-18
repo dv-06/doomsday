@@ -138,6 +138,21 @@ def test_healthy_empty_dates_are_unpublished_not_failed(config):
     assert snap["totals"]["theatres_monitored"] == 8
 
 
+def test_date_with_shows_is_published(config):
+    movie = config.movie("ramayana")
+    show = {
+        "id": "rx-published", "source_show_id": "rx-published", "platform": "district",
+        "theatre_id": "orion-mall", "date": "2026-11-19", "start": "11:40",
+        "start_iso": "2026-11-19T11:40:00+05:30", "screen": "AUDI 04",
+        "format": {"key": "4dx_3d", "label": "4DX 3D", "is_3d": True, "is_premium": True},
+        "availability": {"status": "bookable", "available_seats": 10, "total_seats": 100},
+        "price": {"min": 500, "max": 500},
+    }
+    snap = _snapshot(config, movie, _source(config, movie, shows=[show]))
+    assert snap["totals"]["dates"]["2026-11-19"]["state"] == "published"
+    assert snap["totals"]["dates"]["2026-11-20"]["state"] == "unpublished"
+
+
 def test_every_unpublished_date_is_retained(config):
     movie = config.movie("ramayana")
     snap = _snapshot(config, movie, _source(config, movie))

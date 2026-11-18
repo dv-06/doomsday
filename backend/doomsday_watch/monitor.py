@@ -296,7 +296,13 @@ def build_snapshot(
         ),
         "dates": {
             d: {
-                "state": by_date[d]["state"],
+                "state": (
+                    "incomplete" if source_failed and sum(1 for s in all_shows if s["date"] == d)
+                    else "source_failed" if source_failed
+                    else "incomplete" if source_incomplete
+                    else "published" if sum(1 for s in all_shows if s["date"] == d)
+                    else "unpublished"
+                ),
                 "shows": sum(1 for s in all_shows if s["date"] == d),
                 "theatres": sum(1 for t in theatres if (t["dates"].get(d) or {}).get("listed")),
                 "shows_3d": sum(1 for s in all_shows if s["date"] == d and s["format"]["is_3d"]),

@@ -210,7 +210,7 @@ than 3 hours old or in the future, or a timestamp older than the current snapsho
 An `unavailable`/`error` movie entry is accepted and preserves that movie's last
 good snapshot while the other movie updates. A payload whose canonical data hash
 equals the previous snapshot (and whose `normalizer_version` is current) is ignored
-without writing data. The current normalizer version is **4**; bumping it permits
+without writing data. The current normalizer version is **5**; bumping it permits
 one safe re-ingest after a normalisation change.
 
 Schema-v1 single-movie payloads are still accepted for compatibility; the other
