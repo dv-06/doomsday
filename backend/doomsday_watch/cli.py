@@ -29,7 +29,7 @@ from .store import Store
 # Bump when the meaning/shape of a normally-identical inbox payload changes.
 # Snapshot provenance records it so a one-time re-ingest can repair old data
 # without weakening duplicate protection for every future run.
-PAYLOAD_NORMALIZER_VERSION = 5
+PAYLOAD_NORMALIZER_VERSION = 6
 
 
 def _summarise(result: dict) -> str:
@@ -102,6 +102,8 @@ def _payload_digest(payload: dict) -> str:
                     "error": entry.get("error"),
                     "movie": entry.get("movie"),
                     "show_dates": entry.get("show_dates"),
+                    "checked_dates": entry.get("checked_dates"),
+                    "failed_dates": entry.get("failed_dates"),
                     "groups": entry.get("groups"),
                 }
                 for entry in payload.get("movies", [])
@@ -119,11 +121,11 @@ def _payload_digest(payload: dict) -> str:
 
 
 def _movie_entries(payload: dict, config) -> list[tuple[object, dict]]:
-    """Return (movie config, entry payload) pairs for schema 1 or 2."""
+    """Return (movie config, entry payload) pairs for schema 1, 2 or 3."""
     version = int(payload.get("schema_version", 0))
     if version == 1:
         return [(config.primary_movie, payload)]
-    if version != 2:
+    if version not in (2, 3):
         raise ValueError(f"unsupported payload schema_version {payload.get('schema_version')!r}")
     raw_movies = payload.get("movies")
     if not isinstance(raw_movies, list) or not raw_movies:
@@ -147,7 +149,7 @@ def cmd_ingest(args: argparse.Namespace) -> int:
         if not isinstance(payload, dict):
             raise ValueError("payload is not a JSON object")
         version = int(payload.get("schema_version", 0))
-        if version not in (1, 2):
+        if version not in (1, 2, 3):
             raise ValueError(f"unsupported payload schema_version {payload.get('schema_version')!r}")
 
         collected = parse_iso(str(payload.get("collected_at") or ""))
@@ -189,12 +191,23 @@ def cmd_ingest(args: argparse.Namespace) -> int:
                 "collected_at": payload.get("collected_at"),
                 "content_id": entry.get("content_id") or movie.district_content_id,
             }
-            source_results.append(district.result_from_payload(
+            result = district.result_from_payload(
                 config,
                 entry_payload,
                 movie=movie,
                 source_url=entry.get("movie_url"),
-            ))
+            )
+            checked = [str(d) for d in (entry.get("checked_dates") or [])]
+            failed = [str(d) for d in (entry.get("failed_dates") or [])]
+            result.evidence["checked_dates"] = checked
+            result.evidence["failed_dates"] = failed
+            if status == "partial":
+                result.status = "partial"
+                result.message = (
+                    f"{result.message} Partial collection: failed date(s) "
+                    f"{', '.join(failed) or 'unknown'}."
+                )
+            source_results.append(result)
         digest = _payload_digest(payload)
 
         store = Store(args.data)

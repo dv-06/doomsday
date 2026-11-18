@@ -150,6 +150,12 @@ def build_snapshot(
 
     source_failed = not source_results or any(r.status in {"blocked", "error"} for r in source_results)
     source_incomplete = source_failed or any(r.status == "partial" for r in source_results)
+    failed_dates = {
+        d for r in source_results for d in (r.evidence.get("failed_dates") or [])
+    }
+    checked_dates = {
+        d for r in source_results for d in (r.evidence.get("checked_dates") or [])
+    }
 
     theatres: list[dict[str, Any]] = []
     theatre_errors: list[dict[str, Any]] = []
@@ -297,9 +303,11 @@ def build_snapshot(
         "dates": {
             d: {
                 "state": (
-                    "incomplete" if source_failed and sum(1 for s in all_shows if s["date"] == d)
+                    "incomplete" if d in failed_dates and sum(1 for s in all_shows if s["date"] == d)
+                    else "source_failed" if d in failed_dates
                     else "source_failed" if source_failed
-                    else "incomplete" if source_incomplete
+                    else "incomplete" if checked_dates and d not in checked_dates
+                    else "incomplete" if source_incomplete and not checked_dates
                     else "published" if sum(1 for s in all_shows if s["date"] == d)
                     else "unpublished"
                 ),

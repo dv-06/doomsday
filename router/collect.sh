@@ -90,55 +90,88 @@ COLLECTED_AT=$(TZ=IST-5:30 date '+%Y-%m-%dT%H:%M:%S+05:30')
 MOVIE_COUNT=$(printf '%s\n' "$MOVIE_IDS" | wc -w)
 log "start host=openwrt movies=$MOVIE_COUNT available_mb=$AVAIL_MB upload=$UPLOAD force=$FORCE"
 
-# ---------- fetch every movie page (bounded retries, no bypass) ----------
-printf '{"collected_at":"%s","items":[' "$COLLECTED_AT" > "$MANIFEST"
+# ---------- fetch every movie/date page (bounded retries, no bypass) ----------
+# District returns only one date's sessions per page unless ?fromdate= is used.
+printf '{"collected_at":"%s","pages":[' "$COLLECTED_AT" > "$MANIFEST"
 fetch_ok_count=0
 movie_index=0
+page_index=0
 first_item=1
 for MOVIE_ID in $MOVIE_IDS; do
     URL=$(jsonfilter -e "@.movies[$movie_index].movie_url" < "$CONFIG" 2>/dev/null)
-    HTML="$TMP/district-$movie_index.html"
     if [ -z "$URL" ]; then
         log "FATAL movie $MOVIE_ID has no movie_url"
         exit 1
     fi
-    fetch_ok=0
-    attempt=1
-    while [ "$attempt" -le 2 ]; do
-        if wget -q -T "$TIMEOUT" -U "$UA" -O "$HTML" "$URL"; then
-            fetch_ok=1
-            break
-        fi
-        rc=$?
-        log "fetch $MOVIE_ID attempt $attempt failed rc=$rc"
-        attempt=$((attempt + 1))
-        [ "$attempt" -le 2 ] && sleep 5
-    done
-    item_ok=0
-    item_error=""
-    if [ "$fetch_ok" -eq 1 ]; then
-        BYTES=$(wc -c < "$HTML" 2>/dev/null || echo 0)
-        if [ "$BYTES" -ge 100000 ] && [ "$BYTES" -le "$MAX_BYTES" ]; then
-            item_ok=1
-            fetch_ok_count=$((fetch_ok_count + 1))
-            log "fetch $MOVIE_ID ok bytes=$BYTES"
-        else
-            item_error="response size ${BYTES} outside allowed range"
-            log "fetch $MOVIE_ID rejected: $item_error"
-        fi
-    else
-        item_error="page fetch failed"
-        log "fetch $MOVIE_ID failed; other movies continue"
+    DATES=$(jsonfilter -e "@.movies[$movie_index].target_dates[*]" < "$CONFIG" 2>/dev/null)
+    if [ -z "$DATES" ]; then
+        DATES=""
     fi
-    if [ "$first_item" -eq 0 ]; then printf ',' >> "$MANIFEST"; fi
-    first_item=0
-    printf '{"id":"%s","html":"%s","ok":%s,"error":"%s"}'         "$MOVIE_ID" "$HTML" "$item_ok" "$item_error" >> "$MANIFEST"
+    movie_ok=0
+    movie_pages=0
+    for DATE in $DATES; do
+        PAGE_URL="$URL?fromdate=$DATE"
+        HTML="$TMP/district-$movie_index-$page_index.html"
+        fetch_ok=0
+        attempt=1
+        while [ "$attempt" -le 2 ]; do
+            if wget -q -T "$TIMEOUT" -U "$UA" -O "$HTML" "$PAGE_URL"; then
+                fetch_ok=1
+                break
+            fi
+            rc=$?
+            log "fetch $MOVIE_ID $DATE attempt $attempt failed rc=$rc"
+            attempt=$((attempt + 1))
+            [ "$attempt" -le 2 ] && sleep 5
+        done
+        item_ok=0
+        item_error=""
+        if [ "$fetch_ok" -eq 1 ]; then
+            BYTES=$(wc -c < "$HTML" 2>/dev/null || echo 0)
+            if [ "$BYTES" -ge 100000 ] && [ "$BYTES" -le "$MAX_BYTES" ]; then
+                item_ok=1
+                fetch_ok_count=$((fetch_ok_count + 1))
+                movie_ok=$((movie_ok + 1))
+                log "fetch $MOVIE_ID $DATE ok bytes=$BYTES"
+            else
+                item_error="response size ${BYTES} outside allowed range"
+                log "fetch $MOVIE_ID $DATE rejected: $item_error"
+            fi
+        else
+            item_error="date page fetch failed"
+            log "fetch $MOVIE_ID $DATE failed; other dates continue"
+        fi
+        if [ "$first_item" -eq 0 ]; then printf ',' >> "$MANIFEST"; fi
+        first_item=0
+        printf '{"movie_id":"%s","date":"%s","html":"%s","ok":%s,"error":"%s"}'             "$MOVIE_ID" "$DATE" "$HTML" "$item_ok" "$item_error" >> "$MANIFEST"
+        page_index=$((page_index + 1))
+        movie_pages=$((movie_pages + 1))
+    done
+    if [ "$movie_pages" -eq 0 ]; then
+        # Backwards-compatible single-page fetch when a movie has no date rule.
+        HTML="$TMP/district-$movie_index-$page_index.html"
+        if wget -q -T "$TIMEOUT" -U "$UA" -O "$HTML" "$URL"; then
+            BYTES=$(wc -c < "$HTML" 2>/dev/null || echo 0)
+            if [ "$BYTES" -ge 100000 ] && [ "$BYTES" -le "$MAX_BYTES" ]; then
+                fetch_ok_count=$((fetch_ok_count + 1))
+                movie_ok=$((movie_ok + 1))
+                if [ "$first_item" -eq 0 ]; then printf ',' >> "$MANIFEST"; fi
+                first_item=0
+                printf '{"movie_id":"%s","date":"","html":"%s","ok":1,"error":""}' "$MOVIE_ID" "$HTML" >> "$MANIFEST"
+                log "fetch $MOVIE_ID undated ok bytes=$BYTES"
+            fi
+        fi
+        page_index=$((page_index + 1))
+    fi
+    if [ "$movie_ok" -eq 0 ]; then
+        log "movie $MOVIE_ID: no date page succeeded; other movies continue"
+    fi
     movie_index=$((movie_index + 1))
 done
 printf ']}' >> "$MANIFEST"
 
 if [ "$fetch_ok_count" -eq 0 ]; then
-    log "FATAL every District movie fetch failed; previous snapshot and state preserved"
+    log "FATAL every District date page failed; previous snapshot and state preserved"
     exit 1
 fi
 

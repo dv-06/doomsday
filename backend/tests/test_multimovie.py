@@ -95,10 +95,9 @@ def test_config_tracks_two_movies_with_separate_dates(config):
     ramayana = config.movie("ramayana")
     assert ramayana.district_content_id == "176276"
     assert ramayana.required_format_keys == ("4dx_3d",)
-    assert len(ramayana.target_dates) == 20
-    assert "2026-11-18" not in ramayana.target_dates
-    assert ramayana.target_dates[0] == "2026-11-19"
-    assert "2026-11-30" in ramayana.target_dates
+    assert len(ramayana.target_dates) == 10
+    assert ramayana.target_dates[0] == "2026-11-18"
+    assert "2026-11-30" not in ramayana.target_dates
     assert "2026-12-05" in ramayana.target_dates
     assert "2026-12-01" not in ramayana.target_dates
 

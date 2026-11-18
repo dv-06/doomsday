@@ -6,8 +6,8 @@ computer off. Each movie has its own venue list: 6 theatres for Doomsday and all
 8 Bengaluru venues that actually expose 4DX for Ramayana.
 
 - **Avengers: Doomsday** — 17–18 Dec 2026, every published format.
-- **Ramayana** — remaining November 2026 dates plus December weekends, **4DX 3D
-  only**, matched only when District's source label is `4DX-3D`.
+- **Ramayana** — exactly 10 dates: 18/19/21/22/28/29 Nov and 5/6/12/13 Dec 2026,
+  **4DX 3D only**, matched only when District's source label is `4DX-3D`.
 
 > **Data honesty first.** Every show, format, price and seat count below comes from
 > a public source page. Missing data is shown as missing. Seat drops are
@@ -50,7 +50,7 @@ connection still collect fresh data. See `docs/DEPLOYMENT.md` for options.
 | Status | `ok` — District is the sole source |
 | Shows found | Movie-scoped; see `data/latest.json` |
 | Doomsday | 17–18 Dec 2026, every published format |
-| Ramayana | 20 target dates (19–30 Nov + Dec weekends), explicit `4DX-3D` only |
+| Ramayana | 10 target dates (18/19/21/22/28/29 Nov + 5/6/12/13 Dec), explicit `4DX-3D` only |
 | IMAX 3D | Counted separately from Infinity Vision and 4DX |
 
 This is real captured data in `data/latest.json`; it changes as District releases
@@ -230,8 +230,8 @@ twice. Set `DASHBOARD_URL` to include a link in messages.
 | Key | Purpose |
 |---|---|
 | `movies[]` | One tracked film per entry. Each has its own `id`, District `content_id`/`slug`, dates, `theatre_ids` and optional `required_format_keys`. |
-| `movies[].target_dates` | IST calendar dates. Doomsday: 17–18 Dec 2026. Ramayana: 19–30 Nov 2026 plus 5/6, 12/13, 19/20, 26/27 Dec 2026 (20 dates). |
-| `movies[].date_rule` | `ramayana_2026` generates those 20 dates in `backend/doomsday_watch/targets.py`; the loader rejects a mismatched explicit list. |
+| `movies[].target_dates` | IST calendar dates. Doomsday: 17–18 Dec 2026. Ramayana: 18/19/21/22/28/29 Nov and 5/6/12/13 Dec 2026 (10 dates). |
+| `movies[].date_rule` | `ramayana_2026` supplies those exact 10 dates from `backend/doomsday_watch/targets.py`; the loader rejects a mismatched explicit list. |
 | `movies[].required_format_keys` | `["4dx_3d"]` for Ramayana. Only explicit source `4DX-3D` sessions are kept; plain 3D, 4DX and IMAX never substitute. |
 | `monitoring.interval_minutes` | Displayed interval; the real cadence is the workflow cron. |
 | `monitoring.request_timeout_seconds` / `max_retries` | HTTP resilience. |
@@ -331,14 +331,17 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-57 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
+58 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
 ingestion, duplicate/stale payload protection, format normalisation (including
 Infinity Vision ≠ IMAX, explicit 4DX 3D vs plain 3D), District parsing against a trimmed real fixture, multi-movie config and payloads, UTC→IST
 show-clock conversion and date boundaries, legacy-snapshot migration without
 duplicate events, seat heuristics, diff/notification rules, snapshot retention,
 duplicate-safe combined ingestion of two movies, generated Ramayana target dates,
 separate movie venue lists, newly discovered 4DX venues, missing/invalid
-timestamps, Nov→Dec midnight boundaries, and unpublished-vs-failed date states.
+timestamps, Nov→Dec midnight boundaries, the exact 10 Ramayana dates, multi-date
+merging, and published-vs-failed-vs-unpublished date states. The router fetches
+one District page per target date because District only returns one date's
+sessions per request.
 
 Frontend checks:
 

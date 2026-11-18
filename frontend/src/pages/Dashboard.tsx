@@ -26,7 +26,7 @@ interface Filters {
 }
 
 const initialFilters: Filters = {
-  date: "all",
+  date: "",
   theatre: "all",
   platform: "all",
   format: "all",
@@ -34,14 +34,16 @@ const initialFilters: Filters = {
   onlyListed: false,
 };
 
-function Hero({ snapshot }: { snapshot: MovieSnapshot }) {
+function Hero({ snapshot, selectedDate, summary }: {
+  snapshot: MovieSnapshot;
+  selectedDate: string;
+  summary?: MovieSnapshot["totals"]["dates"][string];
+}) {
   const { meta, fromCache } = useAppData();
   const targetDates = snapshot.movie.target_dates;
   const sourceRows = snapshot.sources;
   const lastSuccess = meta?.last_success_at ?? snapshot.checked_at;
   const attemptedLater = new Date(snapshot.checked_at).getTime() > new Date(lastSuccess).getTime();
-  const previewDates = targetDates.length > 6 ? targetDates.slice(0, 6) : targetDates;
-  const hiddenDates = targetDates.length - previewDates.length;
   const fourDxOnly = (snapshot.movie.required_format_keys ?? []).includes("4dx_3d");
 
   return (
@@ -79,38 +81,24 @@ function Hero({ snapshot }: { snapshot: MovieSnapshot }) {
             {snapshot.movie.duration_minutes && <Chip tone="muted">{snapshot.movie.duration_minutes} min</Chip>}
             {snapshot.movie.district_url && <ExternalLink href={snapshot.movie.district_url}>District movie page</ExternalLink>}
           </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {previewDates.map((date) => {
-              const summary = snapshot.totals.dates[date];
-              return (
-                <div key={date} className="rounded-xl border border-white/10 bg-black/25 px-3.5 py-2.5">
-                  <p className="text-[11px] font-medium uppercase tracking-wider text-ash">{formatDate(date)}</p>
-                  <p className={`mt-1 text-sm font-semibold ${summary?.state === "source_failed" ? "text-red-300" : summary?.state === "incomplete" ? "text-amber-300" : "text-white"}`}>
-                    {summary?.shows
-                      ? `${summary.shows} shows · ${summary.theatres} theatres`
-                      : summary?.state === "source_failed"
-                        ? "Source request failed"
-                        : summary?.state === "incomplete"
-                          ? "Data incomplete — unknown"
-                          : "No sessions published"}
-                  </p>
-                  {summary?.shows > 0 && (
-                    <p className="mt-0.5 text-[11px] text-ash">
-                      {fourDxOnly
-                        ? `${summary.shows_4dx_3d ?? 0} in 4DX 3D`
-                        : `${summary.shows_3d} in 3D · ${summary.shows_infinity_vision_3d} Infinity Vision 3D`}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
-            {hiddenDates > 0 && (
-              <div className="rounded-xl border border-dashed border-white/10 bg-black/20 px-3.5 py-2.5">
-                <p className="text-[11px] font-medium uppercase tracking-wider text-ash">Also watched</p>
-                <p className="mt-1 text-sm font-semibold text-white">+{hiddenDates} more dates</p>
-                <p className="mt-0.5 text-[11px] text-ash">Use the date filter below</p>
+          <div className="mt-5 rounded-xl border border-white/10 bg-black/25 px-3.5 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p className="label">Selected date</p>
+                <p className="mt-0.5 text-sm font-semibold text-white">
+                  {formatDate(selectedDate)} · {dateStateLabel(summary?.state)}
+                </p>
               </div>
-            )}
+              <p className="text-[11px] text-ash">
+                {summary?.shows
+                  ? `${summary.shows} show${summary.shows === 1 ? "" : "s"} · ${summary.theatres} theatre${summary.theatres === 1 ? "" : "s"}`
+                  : summary?.state === "source_failed"
+                    ? "Collection failed — not a release signal"
+                    : summary?.state === "incomplete"
+                      ? "Only partial data collected"
+                      : "Successful check found no matching sessions"}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -262,45 +250,16 @@ function LatestChanges({ events }: { events: HistoryEvent[] }) {
   );
 }
 
-function FiltersBar({ filters, onChange, theatres, formats, dates }: {
+function FiltersBar({ filters, onChange, theatres, formats }: {
   filters: Filters;
   onChange: (patch: Partial<Filters>) => void;
   theatres: Theatre[];
   formats: { key: string; label: string }[];
-  dates: string[];
 }) {
   const selectClass =
     "rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[13px] text-sand outline-none transition hover:border-white/20 focus:border-flame/60";
   return (
     <div className="panel sticky top-[68px] z-30 mt-4 flex flex-wrap items-center gap-2 p-3 backdrop-blur-xl md:top-[61px]">
-      {dates.length > 4 ? (
-        <select
-          aria-label="Filter by date"
-          className={selectClass}
-          value={filters.date}
-          onChange={(e) => onChange({ date: e.target.value })}
-        >
-          <option value="all">All dates</option>
-          {dates.map((date) => (
-            <option key={date} value={date}>{formatDate(date, { year: undefined })}</option>
-          ))}
-        </select>
-      ) : (
-        <div className="flex rounded-xl border border-white/10 bg-black/30 p-1">
-          {[{ value: "all", label: dates.length === 2 ? "Both dates" : "All dates" }, ...dates.map((d) => ({ value: d, label: formatDate(d, { year: undefined }) }))].map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => onChange({ date: option.value })}
-              className={`rounded-lg px-2.5 py-1.5 text-[12px] font-medium transition ${
-                filters.date === option.value ? "bg-ember text-white" : "text-ash hover:text-sand"
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
       <select aria-label="Filter by theatre" className={selectClass} value={filters.theatre} onChange={(e) => onChange({ theatre: e.target.value })}>
         <option value="all">All theatres</option>
         {theatres.map((theatre) => (
@@ -345,6 +304,108 @@ function EmptyState({ message, hint }: { message: string; hint?: string }) {
   );
 }
 
+function dateStateLabel(state?: string): string {
+  if (state === "published") return "Published";
+  if (state === "source_failed") return "Source failed";
+  if (state === "incomplete") return "Incomplete";
+  return "Not released";
+}
+
+function dateStateClass(state?: string): string {
+  if (state === "published") return "border-emerald-400/25 bg-emerald-400/10 text-emerald-300";
+  if (state === "source_failed") return "border-red-400/25 bg-red-400/10 text-red-300";
+  if (state === "incomplete") return "border-amber-400/25 bg-amber-400/10 text-amber-300";
+  return "border-white/10 bg-white/[0.03] text-ash";
+}
+
+function istToday(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+}
+
+function nextDate(iso: string): string {
+  const parsed = new Date(`${iso}T12:00:00+05:30`);
+  parsed.setUTCDate(parsed.getUTCDate() + 1);
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(parsed);
+}
+
+function shortDay(date: string, today: string): string {
+  if (date === today) return "Today";
+  if (date === nextDate(today)) return "Tomorrow";
+  const weekday = formatDate(date, { weekday: "long", day: undefined, month: undefined, year: undefined });
+  return weekday === "Saturday" || weekday === "Sunday"
+    ? weekday
+    : formatDate(date, { weekday: "short", day: undefined, month: undefined, year: undefined });
+}
+
+function DateStrip({ dates, summaries, selected, onSelect }: {
+  dates: string[];
+  summaries: MovieSnapshot["totals"]["dates"];
+  selected: string;
+  onSelect: (date: string) => void;
+}) {
+  const today = istToday();
+  return (
+    <div className="panel mt-3 min-w-0 p-2.5">
+      <div className="mb-2 flex items-center justify-between gap-3 px-1">
+        <p className="label">Date · {dates.length} tracked</p>
+        <p className="text-[10.5px] text-ash">Today is {formatDate(today)}</p>
+      </div>
+      <div className="hide-scrollbar -mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Ramayana target dates">
+        {dates.map((date) => {
+          const summary = summaries[date];
+          const isSelected = date === selected;
+          return (
+            <button
+              key={date}
+              type="button"
+              role="tab"
+              aria-selected={isSelected}
+              aria-label={`${formatDate(date)}, ${dateStateLabel(summary?.state)}, ${summary?.shows ?? 0} shows`}
+              onClick={() => onSelect(date)}
+              className={`min-w-[92px] snap-start rounded-xl border px-2.5 py-2 text-left transition ${
+                isSelected ? "border-flame/60 bg-ember/15 text-white ring-1 ring-flame/30" : "border-white/10 bg-black/25 text-ash hover:border-white/20 hover:text-sand"
+              }`}
+            >
+              <span className="flex items-baseline justify-between gap-1">
+                <span className="text-[11px] font-semibold uppercase tracking-wide">{shortDay(date, today)}</span>
+                <span className="text-[10px]">{formatDate(date, { weekday: undefined, year: undefined })}</span>
+              </span>
+              <span className={`mt-1.5 inline-flex rounded-md border px-1.5 py-0.5 text-[9.5px] ${dateStateClass(summary?.state)}`}>
+                {dateStateLabel(summary?.state)}
+              </span>
+              <span className="mt-1 block text-[10px] text-ash">{summary?.shows ?? 0} show{summary?.shows === 1 ? "" : "s"}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function DateStateNotice({ summary, checkedAt }: {
+  summary?: MovieSnapshot["totals"]["dates"][string];
+  checkedAt: string;
+}) {
+  if (!summary || summary.state === "published") return null;
+  const sourceFailed = summary.state === "source_failed";
+  const incomplete = summary.state === "incomplete";
+  return (
+    <div className={`mt-4 rounded-xl border p-3 text-[12px] leading-relaxed ${
+      sourceFailed ? "border-red-400/25 bg-red-400/10 text-red-200"
+        : incomplete ? "border-amber-400/25 bg-amber-400/10 text-amber-200"
+          : "border-white/10 bg-white/[0.03] text-ash"
+    }`}>
+      <strong className="font-semibold">{dateStateLabel(summary.state)}.</strong>{" "}
+      {sourceFailed
+        ? "The source request for this date did not complete. This is not evidence that shows were not released."
+        : incomplete
+          ? "Only part of the source check completed, so absence of sessions is unknown rather than confirmed."
+          : "A successful, complete source check found no matching 4DX 3D sessions for this date."}
+      {" "}Last checked {formatDateTime(checkedAt)} IST.
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const { snapshot, loading, error, refresh, settings, fromCache } = useAppData();
   const [filters, setFilters] = useState<Filters>(initialFilters);
@@ -358,6 +419,14 @@ export default function Dashboard() {
   }, [snapshot]);
 
   const active = movies.find((movie) => movie.movie.id === selectedMovieId) ?? movies[0] ?? null;
+  const today = istToday();
+  const targetDates = active?.movie.target_dates ?? [];
+  const selectedDate = filters.date && targetDates.includes(filters.date)
+    ? filters.date
+    : targetDates.includes(today)
+      ? today
+      : targetDates[0] ?? "";
+  const selectedSummary = active?.totals.dates[selectedDate];
 
   const formats = useMemo(() => {
     const map = new Map<string, string>();
@@ -450,7 +519,7 @@ export default function Dashboard() {
                 type="button"
                 onClick={() => {
                   setSelectedMovieId(movie.movie.id);
-                  setFilters(initialFilters);
+                  setFilters({ ...initialFilters });
                 }}
                 className={`flex-1 rounded-xl px-4 py-2.5 text-left transition ${
                   selected ? "bg-ember/15 text-white ring-1 ring-ember/40" : "text-ash hover:bg-white/[0.04] hover:text-sand"
@@ -467,16 +536,22 @@ export default function Dashboard() {
           })}
         </div>
       )}
-      <Hero snapshot={active} />
+      <Hero snapshot={active} selectedDate={selectedDate} summary={selectedSummary} />
       <StatGrid snapshot={active} />
       <LatestChanges events={active.events} />
+      <DateStrip
+        dates={targetDates}
+        summaries={active.totals.dates}
+        selected={selectedDate}
+        onSelect={(date) => setFilters({ ...initialFilters, date })}
+      />
       <FiltersBar
-        filters={filters}
+        filters={{ ...filters, date: selectedDate }}
         onChange={(patch) => setFilters((current) => ({ ...current, ...patch }))}
         theatres={theatres}
         formats={formats}
-        dates={active.movie.target_dates}
       />
+      <DateStateNotice summary={selectedSummary} checkedAt={active.checked_at} />
 
       <div className="mt-5">
         <SectionHeading
@@ -498,8 +573,16 @@ export default function Dashboard() {
         />
         {shown.length === 0 ? (
           <EmptyState
-            message="No theatres match these filters"
-            hint="Try clearing the format or availability filter. Theatres without a released show are still worth watching — they appear as “Not released yet”."
+            message={selectedSummary?.state === "source_failed"
+              ? "The source check failed for this date"
+              : selectedSummary?.state === "incomplete"
+                ? "This date was only partially checked"
+                : selectedSummary?.shows
+                  ? "No theatres match these filters"
+                  : "No matching 4DX 3D sessions on this date"}
+            hint={selectedSummary?.state === "published"
+              ? "Try clearing the format or availability filter."
+              : "The date selector above keeps the exact publication state; a failed check is never shown as “not released”."}
           />
         ) : (
           <div className="grid gap-4 xl:grid-cols-2">

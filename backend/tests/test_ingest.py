@@ -114,7 +114,7 @@ def test_legacy_provenance_is_reingested_once_without_duplicate_sessions(
 
     assert main(args) == 0
     repaired = json.loads((data / "latest.json").read_text(encoding="utf-8"))
-    assert repaired["provenance"]["normalizer_version"] == 5
+    assert repaired["provenance"]["normalizer_version"] == 6
     assert len((data / "history/runs.jsonl").read_text(encoding="utf-8").splitlines()) == runs_before + 1
     ids = [s["id"] for t in repaired["theatres"] for s in t["shows"]]
     assert len(ids) == len(set(ids)), "re-ingestion must not duplicate sessions"

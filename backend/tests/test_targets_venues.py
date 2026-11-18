@@ -11,18 +11,19 @@ from doomsday_watch.sources import district
 
 from test_multimovie import RAMAYANA_MOVIE, _ramayana_group, _ramayana_payload, _session
 
-EXPECTED = (
-    [f"2026-11-{day:02d}" for day in range(19, 31)]
-    + ["2026-12-05", "2026-12-06", "2026-12-12", "2026-12-13",
-       "2026-12-19", "2026-12-20", "2026-12-26", "2026-12-27"]
-)
+EXPECTED = [
+    "2026-11-18", "2026-11-19", "2026-11-21", "2026-11-22",
+    "2026-11-28", "2026-11-29",
+    "2026-12-05", "2026-12-06", "2026-12-12", "2026-12-13",
+]
 
 
 def test_ramayana_target_dates_are_exact_and_unique(config):
     dates = list(config.movie("ramayana").target_dates)
     assert dates == EXPECTED
-    assert len(dates) == len(set(dates)) == 20
-    assert "2026-11-18" not in dates
+    assert len(dates) == len(set(dates)) == 10
+    assert "2026-11-20" not in dates
+    assert "2026-11-30" not in dates
 
 
 def test_movies_have_separate_venue_lists(config):
@@ -81,8 +82,8 @@ def test_november_december_boundary_and_midnight(config):
     group = {
         **_ramayana_group(),
         "sessions": [
-            _session("b-1", "2026-11-30T18:29:00"),  # 23:59 IST Nov 30
-            _session("b-2", "2026-11-30T18:30:00"),  # 00:00 IST Dec 1 -> excluded
+            _session("b-1", "2026-11-29T18:29:00"),  # 23:59 IST Nov 29
+            _session("b-2", "2026-11-29T18:30:00"),  # 00:00 IST Nov 30 -> excluded
             _session("b-3", "2026-12-04T18:30:00"),  # 00:00 IST Dec 5 -> included
         ],
     }
@@ -93,13 +94,14 @@ def test_november_december_boundary_and_midnight(config):
     )
     shows = result.observations["orion-mall"].shows
     assert [(s["date"], s["start"]) for s in shows] == [
-        ("2026-11-30", "23:59"), ("2026-12-05", "00:00"),
+        ("2026-11-29", "23:59"), ("2026-12-05", "00:00"),
     ]
-    assert shows[0]["source_time"] == "2026-11-30T18:29:00"
+    assert shows[0]["source_time"] == "2026-11-29T18:29:00"
     assert shows[1]["source_time"] == "2026-12-04T18:30:00"
 
 
-def _source(config, movie, *, status="ok", shows=None, observation_status="ok"):
+def _source(config, movie, *, status="ok", shows=None, observation_status="ok",
+            checked_dates=None, failed_dates=None):
     observations = {
         theatre.id: TheatreObservation(
             platform="district",
@@ -115,6 +117,10 @@ def _source(config, movie, *, status="ok", shows=None, observation_status="ok"):
     return SourceResult(
         source="district", status=status, message="test", movie_id=movie.id,
         checked_at=iso_ist(), observations=observations,
+        evidence={
+            "checked_dates": checked_dates or [],
+            "failed_dates": failed_dates or [],
+        },
     )
 
 
@@ -150,7 +156,27 @@ def test_date_with_shows_is_published(config):
     }
     snap = _snapshot(config, movie, _source(config, movie, shows=[show]))
     assert snap["totals"]["dates"]["2026-11-19"]["state"] == "published"
-    assert snap["totals"]["dates"]["2026-11-20"]["state"] == "unpublished"
+    assert snap["totals"]["dates"]["2026-11-21"]["state"] == "unpublished"
+
+
+def test_partial_date_check_does_not_hide_published_date(config):
+    movie = config.movie("ramayana")
+    show = {
+        "id": "rx-18", "source_show_id": "58516", "platform": "district",
+        "theatre_id": "orion-mall", "date": "2026-11-18", "start": "22:20",
+        "start_iso": "2026-11-18T22:20:00+05:30", "screen": "AUDI 04",
+        "format": {"key": "4dx_3d", "label": "4DX 3D", "is_3d": True, "is_premium": True},
+        "availability": {"status": "bookable", "available_seats": 21, "total_seats": 100},
+        "price": {"min": 900, "max": 900},
+    }
+    source = _source(
+        config, movie, status="partial", shows=[show],
+        checked_dates=["2026-11-18"], failed_dates=["2026-11-19"],
+    )
+    snap = _snapshot(config, movie, source)
+    assert snap["totals"]["dates"]["2026-11-18"]["state"] == "published"
+    assert snap["totals"]["dates"]["2026-11-19"]["state"] == "source_failed"
+    assert snap["totals"]["dates"]["2026-11-21"]["state"] == "incomplete"
 
 
 def test_every_unpublished_date_is_retained(config):

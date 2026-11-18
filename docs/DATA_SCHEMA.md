@@ -210,11 +210,13 @@ than 3 hours old or in the future, or a timestamp older than the current snapsho
 An `unavailable`/`error` movie entry is accepted and preserves that movie's last
 good snapshot while the other movie updates. A payload whose canonical data hash
 equals the previous snapshot (and whose `normalizer_version` is current) is ignored
-without writing data. The current normalizer version is **5**; bumping it permits
+without writing data. The current normalizer version is **6**; bumping it permits
 one safe re-ingest after a normalisation change.
 
-Schema-v1 single-movie payloads are still accepted for compatibility; the other
-configured movie is recorded as missing/partial rather than silently dropped.
+Schema-v1 single-movie and schema-v2 payloads are still accepted for compatibility.
+Schema 3 adds `checked_dates` and `failed_dates` per movie so a partially failed
+collection can mark only the failed dates as failed. A date page with zero
+sessions is a successful `unpublished` check, not a failure.
 
 ### Multi-movie invariants
 
@@ -226,6 +228,9 @@ configured movie is recorded as missing/partial rather than silently dropped.
 - A movie with no published sessions remains present with zero shows. Every
   target date carries a `state`: `published`, `unpublished`, `source_failed` or
   `incomplete`. A failed request is never labelled unpublished.
+- District requires `?fromdate=YYYY-MM-DD` to return a future date's sessions.
+  The router fetches every target date and merges by cinema/session ID; the
+  Python adapter applies the target-date filter only after UTC→IST conversion.
 - Each movie uses its own `theatre_ids`; Doomsday's six theatres are not reused
   for Ramayana's eight 4DX venues.
 - A newly listed venue with an explicit target-format session is included as a
