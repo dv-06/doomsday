@@ -82,7 +82,7 @@ export function Toggle({
 }) {
   return (
     <label
-      className={`flex cursor-pointer items-start justify-between gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 transition hover:border-white/15 ${
+      className={`flex min-h-[56px] cursor-pointer items-start justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition hover:border-white/15 active:bg-white/[0.04] ${
         disabled ? "cursor-not-allowed opacity-50" : ""
       }`}
     >
@@ -97,15 +97,19 @@ export function Toggle({
         aria-label={label}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative mt-0.5 h-6 w-11 shrink-0 rounded-full border transition ${
-          checked ? "border-ember bg-ember/80" : "border-white/15 bg-white/10"
-        }`}
+        className="relative mt-0.5 h-11 w-12 shrink-0"
       >
         <span
-          className={`absolute top-0.5 h-4.5 w-4.5 rounded-full bg-white transition-all ${
-            checked ? "left-[22px]" : "left-0.5"
+          className={`absolute left-0 top-1/2 h-7 w-12 -translate-y-1/2 rounded-full border transition ${
+            checked ? "border-ember bg-ember/80" : "border-white/15 bg-white/10"
           }`}
-          style={{ height: 18, width: 18 }}
+          aria-hidden="true"
+        />
+        <span
+          className={`absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-white shadow-sm transition-all ${
+            checked ? "left-[25px]" : "left-1"
+          }`}
+          aria-hidden="true"
         />
       </button>
     </label>

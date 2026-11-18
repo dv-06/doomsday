@@ -9,7 +9,7 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
   return (
     <button
       type="button"
-      className="btn !px-2.5 !py-1.5 text-[11px]"
+      className="btn !min-h-[40px] !px-3 !py-1.5 text-[11px]"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(text);
@@ -65,7 +65,7 @@ on:
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <p className="label text-flame/80">Configuration</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Settings</h1>
@@ -75,27 +75,27 @@ on:
         </p>
       </div>
 
-      <div className="grid min-w-0 gap-4 lg:grid-cols-2">
-        <div className="panel min-w-0 p-4 sm:p-5">
+      <div className="grid min-w-0 gap-3 sm:gap-4 lg:grid-cols-2">
+        <div className="panel min-w-0 p-3 sm:p-5">
           <SectionHeading
             eyebrow="Schedule"
             title="Hourly monitoring"
             description="The Indian-egress OpenWrt collector pushes District data hourly; GitHub Actions validates, ingests and commits it. The schedule is managed on the router, not in this browser."
           />
           <dl className="space-y-2.5 text-sm">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-0.5 border-b border-white/[0.05] pb-2 last:border-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <dt className="text-ash">Interval</dt>
               <dd className="font-medium text-white">Every {meta?.monitoring.interval_minutes ?? 60} minutes</dd>
             </div>
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-0.5 border-b border-white/[0.05] pb-2 last:border-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <dt className="text-ash">Next check</dt>
-              <dd className="text-right font-medium text-white">{timeUntil(meta?.monitoring.next_check_at)}<span className="block text-[11px] font-normal text-ash">{meta?.monitoring.schedule_note}</span></dd>
+              <dd className="font-medium text-white sm:text-right">{timeUntil(meta?.monitoring.next_check_at)}<span className="block text-[11px] font-normal leading-snug text-ash">{meta?.monitoring.schedule_note}</span></dd>
             </div>
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-0.5 border-b border-white/[0.05] pb-2 last:border-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <dt className="text-ash">Last successful run</dt>
               <dd className="font-medium text-white">{relativeTime(meta?.last_success_at ?? snapshot?.checked_at)}</dd>
             </div>
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-0.5 border-b border-white/[0.05] pb-2 last:border-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <dt className="text-ash">Locale</dt>
               <dd className="font-medium text-white">Asia/Kolkata (IST)</dd>
             </div>
@@ -105,7 +105,7 @@ on:
               <p className="label">To change the schedule</p>
               <CopyButton text={cronSnippet} />
             </div>
-            <pre className="mt-2 overflow-x-auto text-[10.5px] leading-relaxed text-ash"><code>{cronSnippet}</code></pre>
+            <pre className="mt-2 max-w-full overflow-x-auto whitespace-pre text-[10px] leading-relaxed text-ash sm:text-[10.5px]"><code>{cronSnippet}</code></pre>
             <p className="mt-2 text-[11px] leading-relaxed text-ash/80">
               GitHub&apos;s scheduler is best-effort: runs can be delayed by several minutes during peak load, and
               scheduled workflows are disabled after 60 days without repository activity. This project commits every
@@ -114,13 +114,13 @@ on:
           </div>
         </div>
 
-        <div className="panel min-w-0 p-4 sm:p-5">
+        <div className="panel min-w-0 p-3 sm:p-5">
           <SectionHeading
             eyebrow="Notifications"
             title="Alert channels"
             description="Browser alerts are foreground-only. For phone alerts with your computer off, use Telegram or ntfy — both free."
           />
-          <div className="mb-3 rounded-xl border border-white/[0.06] bg-black/30 p-3 text-[11px] leading-relaxed">
+          <div className="mb-3 rounded-xl border border-white/[0.06] bg-black/30 p-2.5 text-[11px] leading-relaxed sm:p-3">
             <div className="flex items-center justify-between gap-2">
               <span className="label">Status</span>
               <Chip tone={effectivePermission === "granted" && settings.notifyBrowser ? "live" : "muted"}>
@@ -216,8 +216,8 @@ on:
               <code className="text-flame">TELEGRAM_CHAT_ID</code> (or <code className="text-flame">NTFY_TOPIC</code>) in
               GitHub → Settings → Secrets and variables → Actions. Optional Redis-free dedupe is handled in the run state.
             </p>
-            <div className="mt-2 flex items-center justify-between gap-2">
-              <code className="truncate text-[10.5px] text-sand">gh secret set TELEGRAM_BOT_TOKEN</code>
+            <div className="mt-2 flex items-start justify-between gap-2">
+              <code className="break-all text-[10.5px] text-sand">gh secret set TELEGRAM_BOT_TOKEN</code>
               <CopyButton text="gh secret set TELEGRAM_BOT_TOKEN" label="Copy" />
             </div>
             <p className="mt-2 text-[11px] text-ash/80">
@@ -228,7 +228,7 @@ on:
         </div>
       </div>
 
-      <div className="panel p-4 sm:p-5">
+      <div className="panel p-3 sm:p-5">
         <SectionHeading
           eyebrow="Watchlist"
           title="Theatres"
@@ -236,14 +236,14 @@ on:
           right={
             <button
               type="button"
-              className="btn !py-1.5 text-[11px]"
+              className="btn min-h-[44px] !py-1.5 text-[11px]"
               onClick={() => updateSettings({ enabledTheatres: allOn ? [] : theatreIds })}
             >
               {allOn ? "Hide all" : "Show all"}
             </button>
           }
         />
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-1.5 sm:grid-cols-2 sm:gap-2">
           {snapshot?.theatres.map((theatre) => (
             <Toggle
               key={theatre.id}
@@ -263,15 +263,15 @@ on:
         </div>
       </div>
 
-      <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1.4fr),minmax(0,1fr)]">
-        <div className="panel min-w-0 overflow-hidden p-4 sm:p-5">
+      <div className="grid min-w-0 gap-3 sm:gap-4 lg:grid-cols-[minmax(0,1.4fr),minmax(0,1fr)]">
+        <div className="panel min-w-0 overflow-hidden p-3 sm:p-5">
           <SectionHeading
             eyebrow="Repo config"
             title="Export your preferences"
             description="Commit these values to config/monitor.json so the hourly runner uses the same watchlist and interval. Display-only preferences stay in this browser."
             right={<CopyButton text={configJson} label="Copy JSON" />}
           />
-          <pre className="max-h-72 max-w-full overflow-auto whitespace-pre-wrap break-words rounded-xl border border-white/[0.06] bg-black/40 p-3 text-[11px] leading-relaxed text-sand/90">
+          <pre className="max-h-64 max-w-full overflow-auto whitespace-pre-wrap break-words rounded-xl border border-white/[0.06] bg-black/40 p-2.5 text-[10.5px] leading-relaxed text-sand/90 sm:max-h-72 sm:p-3 sm:text-[11px]">
             <code>{configJson}</code>
           </pre>
           <p className="mt-1 text-[10.5px] text-ash/80">Scroll inside the box to see the full file. It contains no secrets.</p>
@@ -287,14 +287,14 @@ on:
           </div>
         </div>
 
-        <div className="panel p-4 sm:p-5">
+        <div className="panel p-3 sm:p-5">
           <SectionHeading eyebrow="Local data" title="Reset this browser" />
           <p className="text-[12px] leading-relaxed text-ash">
             Clears cached snapshots, alert history and display preferences. Monitoring data on the server is untouched.
           </p>
           <button
             type="button"
-            className="btn mt-3 w-full"
+            className="btn mt-3 min-h-[44px] w-full"
             onClick={() => {
               for (const key of Object.keys(localStorage)) {
                 if (key.startsWith("dw:")) localStorage.removeItem(key);

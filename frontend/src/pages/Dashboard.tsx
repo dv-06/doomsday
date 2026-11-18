@@ -1,16 +1,17 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { HistoryEvent, MovieSnapshot, Platform, Theatre } from "../types";
 import {
   countdown,
   formatDate,
   formatDateTime,
+  formatClock,
   relativeTime,
   timeUntil,
   inr,
   DATA_BASE,
 } from "../lib/data";
 import { useAppData } from "../App";
-import { Chip, ExternalLink, SectionHeading, StatusDot } from "../components/ui";
+import { AvailabilityChip, Chip, ExternalLink, SectionHeading, StatusDot } from "../components/ui";
 import { toneClasses } from "../lib/data";
 import TheatreCard from "../components/TheatreCard";
 
@@ -59,29 +60,30 @@ function Hero({ snapshot, selectedDate, summary }: {
           aria-hidden="true"
         />
       )}
-      <div className="relative grid grid-cols-1 gap-6 p-5 sm:p-7 lg:grid-cols-[minmax(0,1.35fr),minmax(0,1fr)] lg:gap-8">
+      <div className="relative grid grid-cols-1 gap-4 p-3.5 sm:gap-6 sm:p-7 lg:grid-cols-[minmax(0,1.35fr),minmax(0,1fr)] lg:gap-8">
         <div className="min-w-0">
           <p className="label text-flame/80">Tracked movie · Bengaluru</p>
-          <h1 className="mt-2 font-display text-4xl leading-[0.95] tracking-[0.02em] text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mt-1.5 font-display text-[30px] leading-[0.95] tracking-[0.02em] text-white sm:mt-2 sm:text-5xl lg:text-6xl">
             {snapshot.movie.title.toUpperCase()}
           </h1>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-sand/80">
-            Hourly ticket watch across {snapshot.totals.theatres_monitored} monitored Bengaluru venues for{" "}
+          <p className="mt-2 max-w-xl text-[12.5px] leading-snug text-sand/80 sm:mt-3 sm:text-sm sm:leading-relaxed">
+            Hourly watch across {snapshot.totals.theatres_monitored} Bengaluru venues for{" "}
             <strong className="font-semibold text-white">
               {targetDates.length > 3
-                ? `${targetDates.length} target dates from ${formatDate(targetDates[0], { weekday: undefined })}`
+                ? `${targetDates.length} dates from ${formatDate(targetDates[0], { weekday: undefined })}`
                 : targetDates.map((d) => formatDate(d, { weekday: undefined })).join(" and ")}
-            </strong>. {fourDxOnly
+            </strong>
+            <span className="hidden sm:inline">. {fourDxOnly
               ? "Only sessions whose source format is explicitly 4DX 3D are matched; plain 3D, 4DX and IMAX are excluded."
-              : "Formats are detected per show — Infinity Vision 3D is tracked separately from IMAX 3D."}
+              : "Formats are detected per show — Infinity Vision 3D is tracked separately from IMAX 3D."}</span>
           </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <Chip tone="ember">In cinemas {formatDate(snapshot.movie.release_date)}</Chip>
+          <div className="mt-3 flex flex-wrap items-center gap-1.5 sm:mt-4 sm:gap-2">
+            <Chip tone="ember">In cinemas {formatDate(snapshot.movie.release_date, { weekday: undefined })}</Chip>
             <Chip tone="muted">Countdown {countdown(snapshot.movie.release_date)}</Chip>
             {snapshot.movie.duration_minutes && <Chip tone="muted">{snapshot.movie.duration_minutes} min</Chip>}
-            {snapshot.movie.district_url && <ExternalLink href={snapshot.movie.district_url}>District movie page</ExternalLink>}
+            {snapshot.movie.district_url && <ExternalLink href={snapshot.movie.district_url} className="text-[12px] sm:text-sm">District page</ExternalLink>}
           </div>
-          <div className="mt-5 rounded-xl border border-white/10 bg-black/25 px-3.5 py-3">
+          <div className="mt-3 rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 sm:mt-5 sm:px-3.5 sm:py-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="label">Selected date</p>
@@ -102,7 +104,7 @@ function Hero({ snapshot, selectedDate, summary }: {
           </div>
         </div>
 
-        <div className="min-w-0 rounded-2xl border border-white/[0.08] bg-black/45 p-4 backdrop-blur">
+        <div className="min-w-0 rounded-2xl border border-white/[0.08] bg-black/45 p-3 backdrop-blur sm:p-4">
           <div className="flex items-center justify-between">
             <p className="label">Monitoring</p>
             <span className={`chip ${toneClasses[fromCache ? "warn" : snapshot.status === "ok" ? "live" : "ember"]}`}>
@@ -110,7 +112,7 @@ function Hero({ snapshot, selectedDate, summary }: {
               {fromCache ? "Cached" : snapshot.status === "ok" ? "All sources OK" : snapshot.status === "partial" ? "Partial coverage" : "Degraded"}
             </span>
           </div>
-          <dl className="mt-4 space-y-3 text-sm">
+          <dl className="mt-3 space-y-2.5 text-[12.5px] sm:mt-4 sm:space-y-3 sm:text-sm">
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-ash">Last successful check</dt>
               <dd className="text-right font-medium text-white" title={formatDateTime(lastSuccess)}>
@@ -176,6 +178,56 @@ function Hero({ snapshot, selectedDate, summary }: {
   );
 }
 
+function NextUp({ snapshot }: { snapshot: MovieSnapshot }) {
+  const next = useMemo(() => {
+    const now = Date.now() - 5 * 60 * 1000;
+    return snapshot.theatres
+      .flatMap((theatre) => theatre.shows.map((show) => ({ theatre, show })))
+      .filter(({ show }) => {
+        const at = new Date(show.start_iso ?? `${show.date}T${show.start}:00+05:30`).getTime();
+        return Number.isFinite(at) && at >= now;
+      })
+      .sort((a, b) => (a.show.start_iso ?? "").localeCompare(b.show.start_iso ?? ""))
+      .slice(0, 3);
+  }, [snapshot]);
+
+  if (!next.length) return null;
+  return (
+    <div className="panel mt-3 p-3 sm:mt-4 sm:p-4">
+      <div className="flex items-center justify-between gap-2">
+        <p className="label text-flame/80">Next upcoming shows</p>
+        <span className="text-[10px] text-ash">Asia/Kolkata</span>
+      </div>
+      <ul className="mt-1.5 divide-y divide-white/[0.06]">
+        {next.map(({ theatre, show }) => (
+          <li key={show.id} className="py-2 first:pt-1 last:pb-0">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="font-mono text-[14px] font-semibold text-white">
+                  {formatClock(show.start_iso) || show.start}
+                  <span className="ml-2 font-sans text-[11px] font-normal text-ash">{formatDate(show.date, { weekday: "short", year: undefined })}</span>
+                </p>
+                <p className="mt-0.5 break-words text-[12.5px] font-medium leading-snug text-sand">{theatre.name}</p>
+                <p className="text-[10.5px] leading-snug text-ash">
+                  {theatre.area} · {show.format.label}
+                  {show.screen ? ` · ${show.screen}` : ""}
+                  {show.price.min !== null ? ` · from ${inr(show.price.min)}` : ""}
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-col items-end gap-1">
+                <AvailabilityChip status={show.availability.status} raw={show.availability.status_raw} />
+                {show.availability.available_seats !== null && (
+                  <span className="text-[10px] text-ash">{show.availability.available_seats} seats</span>
+                )}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function StatGrid({ snapshot }: { snapshot: MovieSnapshot }) {
   const totals = snapshot.totals;
   const fourDxOnly = (snapshot.movie.required_format_keys ?? []).includes("4dx_3d");
@@ -213,15 +265,15 @@ function StatGrid({ snapshot }: { snapshot: MovieSnapshot }) {
     { label: "Bookable now", value: String(totals.bookable_shows), note: "Source says seats can be bought" },
   ];
   return (
-    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+    <div className="mt-3 grid grid-cols-3 gap-2 sm:mt-4 sm:gap-3 xl:grid-cols-6">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className={`panel grain relative overflow-hidden p-4 ${stat.accent ? "border-ember/25" : ""}`}
+          className={`panel grain relative min-w-0 overflow-hidden p-2.5 sm:p-4 ${stat.accent ? "border-ember/25" : ""}`}
         >
-          <p className="label">{stat.label}</p>
-          <p className={`stat-number mt-2 ${stat.accent ? "!text-flame" : ""}`}>{stat.value}</p>
-          <p className="mt-1 text-[11px] leading-snug text-ash">{stat.note}</p>
+          <p className="text-[8.5px] font-semibold uppercase leading-tight tracking-[0.12em] text-ash sm:text-[10px] sm:tracking-[0.18em]">{stat.label}</p>
+          <p className={`stat-number mt-1.5 !text-[26px] sm:mt-2 sm:!text-5xl ${stat.accent ? "!text-flame" : ""}`}>{stat.value}</p>
+          <p className="mt-1 hidden text-[11px] leading-snug text-ash sm:block">{stat.note}</p>
         </div>
       ))}
     </div>
@@ -232,17 +284,17 @@ function LatestChanges({ events }: { events: HistoryEvent[] }) {
   if (!events.length) return null;
   const top = events.slice(0, 3);
   return (
-    <div className="panel mt-4 p-4">
-      <div className="flex items-center justify-between">
+    <div className="panel mt-3 p-3 sm:mt-4 sm:p-4">
+      <div className="flex items-center justify-between gap-2">
         <p className="label text-flame/80">Latest detected changes</p>
-        <ExternalLink href={`${DATA_BASE}/history/events.jsonl`}>raw log</ExternalLink>
+        <ExternalLink href={`${DATA_BASE}/history/events.jsonl`} className="text-[11px] sm:text-sm">raw log</ExternalLink>
       </div>
-      <ul className="mt-2.5 space-y-1.5">
+      <ul className="mt-2 space-y-1.5">
         {top.map((event) => (
-          <li key={event.id} className="flex items-baseline gap-2 text-[13px] text-sand/90">
-            <span className="text-flame">↗</span>
-            <span className="min-w-0 flex-1">{event.message}</span>
-            <span className="shrink-0 text-[11px] text-ash">{relativeTime(event.created_at)}</span>
+          <li key={event.id} className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-2 text-[12.5px] leading-snug text-sand/90 sm:flex sm:items-baseline sm:gap-2 sm:text-[13px]">
+            <span className="text-flame" aria-hidden="true">↗</span>
+            <span className="min-w-0 break-words">{event.message}</span>
+            <span className="col-start-2 mt-0.5 text-[10px] text-ash sm:col-auto sm:ml-auto sm:mt-0 sm:shrink-0 sm:text-[11px]">{relativeTime(event.created_at)}</span>
           </li>
         ))}
       </ul>
@@ -256,40 +308,64 @@ function FiltersBar({ filters, onChange, theatres, formats }: {
   theatres: Theatre[];
   formats: { key: string; label: string }[];
 }) {
+  const [open, setOpen] = useState(false);
   const selectClass =
-    "rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[13px] text-sand outline-none transition hover:border-white/20 focus:border-flame/60";
+    "h-11 w-full min-w-0 rounded-xl border border-white/10 bg-graphite px-2.5 text-[12.5px] text-sand outline-none transition focus:border-flame/60";
+  const activeCount =
+    Number(filters.theatre !== "all") +
+    Number(filters.platform !== "all") +
+    Number(filters.format !== "all") +
+    Number(filters.availability !== "all") +
+    Number(filters.onlyListed);
+  const clear = () => onChange({ theatre: "all", platform: "all", format: "all", availability: "all", onlyListed: false });
   return (
-    <div className="panel sticky top-[68px] z-30 mt-4 flex flex-wrap items-center gap-2 p-3 backdrop-blur-xl md:top-[61px]">
-      <select aria-label="Filter by theatre" className={selectClass} value={filters.theatre} onChange={(e) => onChange({ theatre: e.target.value })}>
-        <option value="all">All theatres</option>
-        {theatres.map((theatre) => (
-          <option key={theatre.id} value={theatre.id}>{theatre.name}</option>
-        ))}
-      </select>
-      <select aria-label="Filter by platform" className={selectClass} value={filters.platform} onChange={(e) => onChange({ platform: e.target.value as Filters["platform"] })}>
-        <option value="all">All platforms</option>
-        <option value="district">District</option>
-      </select>
-      <select aria-label="Filter by format" className={selectClass} value={filters.format} onChange={(e) => onChange({ format: e.target.value })}>
-        <option value="all">All formats</option>
-        {formats.map((format) => (
-          <option key={format.key} value={format.key}>{format.label}</option>
-        ))}
-      </select>
-      <select aria-label="Filter by availability" className={selectClass} value={filters.availability} onChange={(e) => onChange({ availability: e.target.value as AvailabilityFilter })}>
-        <option value="all">Any availability</option>
-        <option value="bookable">Bookable only</option>
-        <option value="unavailable">Unavailable only</option>
-      </select>
-      <label className="ml-auto flex cursor-pointer items-center gap-2 text-[12px] text-ash">
-        <input
-          type="checkbox"
-          checked={filters.onlyListed}
-          onChange={(e) => onChange({ onlyListed: e.target.checked })}
-          className="h-3.5 w-3.5 accent-[#e2571e]"
-        />
-        Only with shows
-      </label>
+    <div className="panel mt-3 p-2.5 md:sticky md:top-[61px] md:z-30 md:p-3 md:backdrop-blur-xl">
+      <div className="mb-2 flex items-center justify-between gap-2 px-0.5 md:hidden">
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          aria-expanded={open}
+          aria-controls="mobile-filters"
+          className="flex min-h-[44px] items-center gap-1.5 text-[12px] font-medium text-sand"
+        >
+          Filters
+          {activeCount > 0 && <span className="rounded-full bg-ember/20 px-1.5 py-0.5 text-[10px] text-flame">{activeCount}</span>}
+          <span className="text-[10px] text-ash">{open ? "Hide" : "Show"}</span>
+        </button>
+        {activeCount > 0 && <button type="button" onClick={clear} className="min-h-[44px] text-[11px] text-ash">Clear</button>}
+      </div>
+      <div id="mobile-filters" className={`${open ? "grid" : "hidden"} grid-cols-2 gap-2 md:grid md:grid-cols-[repeat(4,minmax(0,1fr))_auto] md:items-center`}>
+        <select aria-label="Filter by theatre" className={selectClass} value={filters.theatre} onChange={(e) => onChange({ theatre: e.target.value })}>
+          <option value="all">All theatres</option>
+          {theatres.map((theatre) => (
+            <option key={theatre.id} value={theatre.id}>{theatre.name}</option>
+          ))}
+        </select>
+        <select aria-label="Filter by platform" className={selectClass} value={filters.platform} onChange={(e) => onChange({ platform: e.target.value as Filters["platform"] })}>
+          <option value="all">All platforms</option>
+          <option value="district">District</option>
+        </select>
+        <select aria-label="Filter by format" className={selectClass} value={filters.format} onChange={(e) => onChange({ format: e.target.value })}>
+          <option value="all">All formats</option>
+          {formats.map((format) => (
+            <option key={format.key} value={format.key}>{format.label}</option>
+          ))}
+        </select>
+        <select aria-label="Filter by availability" className={selectClass} value={filters.availability} onChange={(e) => onChange({ availability: e.target.value as AvailabilityFilter })}>
+          <option value="all">Any availability</option>
+          <option value="bookable">Bookable only</option>
+          <option value="unavailable">Unavailable only</option>
+        </select>
+        <label className="col-span-2 flex min-h-[44px] cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3 text-[12px] text-ash md:col-auto md:border-0 md:bg-transparent md:px-1">
+          <input
+            type="checkbox"
+            checked={filters.onlyListed}
+            onChange={(e) => onChange({ onlyListed: e.target.checked })}
+            className="h-4 w-4 accent-[#e2571e]"
+          />
+          Only theatres with shows
+        </label>
+      </div>
     </div>
   );
 }
@@ -344,13 +420,31 @@ function DateStrip({ dates, summaries, selected, onSelect }: {
   onSelect: (date: string) => void;
 }) {
   const today = istToday();
+  const scroller = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = scroller.current;
+    const chip = container?.querySelector<HTMLElement>(`[data-date="${selected}"]`);
+    if (!container || !chip) return;
+    const box = container.getBoundingClientRect();
+    const target = chip.getBoundingClientRect();
+    const left = container.scrollLeft + (target.left - box.left) - (box.width - target.width) / 2;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    container.scrollTo({ left: Math.max(0, left), behavior: reduce ? "auto" : "smooth" });
+  }, [selected]);
+
   return (
-    <div className="panel mt-3 min-w-0 p-2.5">
-      <div className="mb-2 flex items-center justify-between gap-3 px-1">
+    <div className="panel mt-3 min-w-0 p-2 sm:p-2.5">
+      <div className="mb-1.5 flex items-center justify-between gap-3 px-1">
         <p className="label">Date · {dates.length} tracked</p>
-        <p className="text-[10.5px] text-ash">Today is {formatDate(today)}</p>
+        <p className="text-[10px] text-ash">{dates.length > 3 ? "Swipe for more →" : "Tap a date"}</p>
       </div>
-      <div className="hide-scrollbar -mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Ramayana target dates">
+      <div
+        ref={scroller}
+        className="hide-scrollbar touch-scroll-x -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-1 sm:gap-2"
+        role="tablist"
+        aria-label="Target dates"
+      >
         {dates.map((date) => {
           const summary = summaries[date];
           const isSelected = date === selected;
@@ -359,17 +453,17 @@ function DateStrip({ dates, summaries, selected, onSelect }: {
               key={date}
               type="button"
               role="tab"
+              data-date={date}
               aria-selected={isSelected}
+              aria-controls="date-sessions"
               aria-label={`${formatDate(date)}, ${dateStateLabel(summary?.state)}, ${summary?.shows ?? 0} shows`}
               onClick={() => onSelect(date)}
-              className={`min-w-[92px] snap-start rounded-xl border px-2.5 py-2 text-left transition ${
-                isSelected ? "border-flame/60 bg-ember/15 text-white ring-1 ring-flame/30" : "border-white/10 bg-black/25 text-ash hover:border-white/20 hover:text-sand"
+              className={`min-h-[72px] min-w-[100px] snap-start rounded-xl border px-2.5 py-2 text-left transition sm:min-w-[108px] ${
+                isSelected ? "border-flame/70 bg-ember/15 text-white ring-1 ring-flame/40" : "border-white/10 bg-black/25 text-ash active:bg-white/[0.06]"
               }`}
             >
-              <span className="flex items-baseline justify-between gap-1">
-                <span className="text-[11px] font-semibold uppercase tracking-wide">{shortDay(date, today)}</span>
-                <span className="text-[10px]">{formatDate(date, { weekday: undefined, year: undefined })}</span>
-              </span>
+              <span className="block text-[10.5px] font-semibold uppercase leading-none tracking-wide">{shortDay(date, today)}</span>
+              <span className="mt-1 block text-[11px] font-medium leading-none text-white/90">{formatDate(date, { weekday: undefined, year: undefined })}</span>
               <span className={`mt-1.5 inline-flex rounded-md border px-1.5 py-0.5 text-[9.5px] ${dateStateClass(summary?.state)}`}>
                 {dateStateLabel(summary?.state)}
               </span>
@@ -427,6 +521,7 @@ export default function Dashboard() {
       ? today
       : targetDates[0] ?? "";
   const selectedSummary = active?.totals.dates[selectedDate];
+  const effectiveFilters = useMemo<Filters>(() => ({ ...filters, date: selectedDate }), [filters, selectedDate]);
 
   const formats = useMemo(() => {
     const map = new Map<string, string>();
@@ -443,27 +538,26 @@ export default function Dashboard() {
 
   const visible = useMemo(() => {
     return theatres.filter((theatre) => {
-      if (filters.theatre !== "all" && theatre.id !== filters.theatre) return false;
-      if (filters.onlyListed && !theatre.listed) return false;
+      if (effectiveFilters.theatre !== "all" && theatre.id !== effectiveFilters.theatre) return false;
+      if (effectiveFilters.onlyListed && !theatre.listed) return false;
       const relevant = theatre.shows.filter((show) => {
-        if (filters.date !== "all" && show.date !== filters.date) return false;
-        if (filters.platform !== "all" && show.platform !== filters.platform) return false;
-        if (filters.format !== "all" && show.format.key !== filters.format) return false;
-        if (filters.availability === "bookable" && !["bookable", "few_left", "filling_fast"].includes(show.availability.status)) return false;
-        if (filters.availability === "unavailable" && show.availability.status !== "sold_out") return false;
+        if (show.date !== effectiveFilters.date) return false;
+        if (effectiveFilters.platform !== "all" && show.platform !== effectiveFilters.platform) return false;
+        if (effectiveFilters.format !== "all" && show.format.key !== effectiveFilters.format) return false;
+        if (effectiveFilters.availability === "bookable" && !["bookable", "few_left", "filling_fast"].includes(show.availability.status)) return false;
+        if (effectiveFilters.availability === "unavailable" && show.availability.status !== "sold_out") return false;
         return true;
       });
-      const narrowed = filters.platform !== "all" || filters.format !== "all" || filters.availability !== "all" || filters.date !== "all";
-      return narrowed ? relevant.length > 0 : true;
+      return relevant.length > 0;
     });
-  }, [theatres, filters]);
+  }, [theatres, effectiveFilters]);
 
   const ordered = useMemo(
     () => [...visible].sort((a, b) => Number(b.listed) - Number(a.listed) || a.name.localeCompare(b.name)),
     [visible],
   );
 
-  const shown = showAll ? ordered : ordered.slice(0, 6);
+  const shown = showAll ? ordered : ordered.slice(0, 8);
   const minPrice = Math.min(
     ...(active?.theatres.flatMap((t) => t.shows.map((s) => s.price.min).filter((p): p is number => p !== null)) ?? []),
   );
@@ -509,7 +603,7 @@ export default function Dashboard() {
         </div>
       )}
       {movies.length > 1 && (
-        <div className="mb-3 flex flex-wrap gap-2 rounded-2xl border border-white/[0.07] bg-black/25 p-2">
+        <div className="mb-3 grid grid-cols-2 gap-1.5 rounded-2xl border border-white/[0.07] bg-black/25 p-1.5">
           {movies.map((movie) => {
             const selected = movie.movie.id === active.movie.id;
             const isFourDx = (movie.movie.required_format_keys ?? []).includes("4dx_3d");
@@ -521,12 +615,13 @@ export default function Dashboard() {
                   setSelectedMovieId(movie.movie.id);
                   setFilters({ ...initialFilters });
                 }}
-                className={`flex-1 rounded-xl px-4 py-2.5 text-left transition ${
-                  selected ? "bg-ember/15 text-white ring-1 ring-ember/40" : "text-ash hover:bg-white/[0.04] hover:text-sand"
+                aria-pressed={selected}
+                className={`min-w-0 rounded-xl px-2.5 py-2 text-left transition sm:px-4 sm:py-2.5 ${
+                  selected ? "bg-ember/15 text-white ring-1 ring-ember/40" : "text-ash active:bg-white/[0.06]"
                 }`}
               >
-                <span className="block text-sm font-semibold">{movie.movie.title}</span>
-                <span className="mt-0.5 block text-[11px]">
+                <span className="block text-[13px] font-semibold leading-tight sm:text-sm">{movie.movie.title}</span>
+                <span className="mt-0.5 block text-[10px] leading-snug sm:text-[11px]">
                   {movie.totals.shows_total} show{movie.totals.shows_total === 1 ? "" : "s"}
                   {isFourDx ? ` · ${movie.totals.shows_4dx_3d ?? movie.totals.shows_4dx} in 4DX 3D` : ""}
                   {" · "}{movie.status}
@@ -538,6 +633,7 @@ export default function Dashboard() {
       )}
       <Hero snapshot={active} selectedDate={selectedDate} summary={selectedSummary} />
       <StatGrid snapshot={active} />
+      <NextUp snapshot={active} />
       <LatestChanges events={active.events} />
       <DateStrip
         dates={targetDates}
@@ -546,14 +642,14 @@ export default function Dashboard() {
         onSelect={(date) => setFilters({ ...initialFilters, date })}
       />
       <FiltersBar
-        filters={{ ...filters, date: selectedDate }}
+        filters={effectiveFilters}
         onChange={(patch) => setFilters((current) => ({ ...current, ...patch }))}
         theatres={theatres}
         formats={formats}
       />
       <DateStateNotice summary={selectedSummary} checkedAt={active.checked_at} />
 
-      <div className="mt-5">
+      <div className="mt-4" id="date-sessions">
         <SectionHeading
           eyebrow="Watchlist"
           title="Bengaluru theatres"
@@ -563,7 +659,7 @@ export default function Dashboard() {
           right={
             <div className="flex items-center gap-2 text-[12px] text-ash">
               <span>{ordered.length} of {theatres.length} theatres match</span>
-              {ordered.length > 6 && (
+              {ordered.length > 8 && (
                 <button type="button" className="btn !py-1.5 text-xs" onClick={() => setShowAll((current) => !current)}>
                   {showAll ? "Show fewer" : "Show all"}
                 </button>
@@ -590,7 +686,7 @@ export default function Dashboard() {
               <TheatreCard
                 key={theatre.id}
                 theatre={theatre}
-                filters={filters}
+                filters={effectiveFilters}
                 targetDates={active.movie.target_dates}
                 platforms={settings.enabledPlatforms}
               />

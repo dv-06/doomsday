@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Area,
@@ -70,9 +70,9 @@ function ChartCard({ runs }: { runs: RunRecord[] }) {
   }
 
   return (
-    <div className="h-64 w-full sm:h-72">
+    <div className="h-56 w-full sm:h-72">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+        <AreaChart data={data} margin={{ top: 8, right: 4, left: -8, bottom: 0 }}>
           <defs>
             <linearGradient id="gShows" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#e2571e" stopOpacity={0.45} />
@@ -80,8 +80,8 @@ function ChartCard({ runs }: { runs: RunRecord[] }) {
             </linearGradient>
           </defs>
           <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
-          <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={40} tick={{ fill: "#7d7d8a", fontSize: 10 }} />
-          <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "#7d7d8a", fontSize: 10 }} width={40} />
+          <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={56} tick={{ fill: "#7d7d8a", fontSize: 9 }} />
+          <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "#7d7d8a", fontSize: 9 }} width={32} />
           <Tooltip
             contentStyle={{
               background: "#121216",
@@ -101,7 +101,7 @@ function ChartCard({ runs }: { runs: RunRecord[] }) {
   );
 }
 
-function TimelineEvent({ event }: { event: HistoryEvent }) {
+const TimelineEvent = memo(function TimelineEvent({ event }: { event: HistoryEvent }) {
   const legacy = event.time_basis ? null : legacyEventClock(event.date, event.start);
   const shownDate = legacy?.date ?? event.date;
   const shownStart = legacy?.start ?? event.start;
@@ -111,30 +111,27 @@ function TimelineEvent({ event }: { event: HistoryEvent }) {
         .split(event.date ?? "").join(legacy.date)
     : event.message;
   return (
-    <li className="relative flex gap-3 pb-4 last:pb-0">
-      <span className="absolute left-[15px] top-7 h-full w-px bg-white/[0.07] last:hidden" aria-hidden="true" />
-      <span className={`relative z-10 mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border text-[13px] ${severityClasses[event.severity] ?? severityClasses.low}`}>
+    <li className="cv-auto relative flex gap-2.5 pb-3 last:pb-0 sm:gap-3 sm:pb-4">
+      <span className="absolute left-[13px] top-7 h-full w-px bg-white/[0.07] last:hidden sm:left-[15px]" aria-hidden="true" />
+      <span className={`relative z-10 mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full border text-[12px] sm:h-8 sm:w-8 sm:text-[13px] ${severityClasses[event.severity] ?? severityClasses.low}`}>
         {eventIcons[event.type] ?? "•"}
       </span>
-      <div className="min-w-0 flex-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="min-w-0 flex-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-2.5 sm:p-3">
+        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
           <span className="text-[12px] font-semibold text-sand">{eventLabels[event.type] ?? event.type}</span>
-          {event.movie_title && <Chip tone="ember" className="!px-1.5 !py-0 !text-[9px]">{event.movie_title}</Chip>}
-          <span className="text-[11px] text-ash">{event.theatre_name}</span>
-          {event.platform && <Chip tone="muted" className="!px-1.5 !py-0 !text-[9px]">{event.platform === "bookmyshow" ? "BookMyShow" : event.platform}</Chip>}
-          {shownDate && (
-            <span className="text-[10px] text-ash/80">
-              {formatDate(shownDate, { year: undefined })}
-              {shownStart ? ` · ${shownStart}` : ""}
-            </span>
-          )}
+          {event.movie_title && <Chip tone="ember" className="!max-w-full !break-words !px-1.5 !py-0 !text-[9px]">{event.movie_title}</Chip>}
           <span className="ml-auto shrink-0 text-[10px] text-ash/70" title={formatDateTime(event.created_at)}>{relativeTime(event.created_at)}</span>
         </div>
-        <p className="mt-1 text-[12px] leading-relaxed text-sand/90">{shownMessage}</p>
+        <p className="mt-0.5 break-words text-[11px] leading-snug text-ash">
+          {event.theatre_name}
+          {event.platform ? ` · ${event.platform === "bookmyshow" ? "BookMyShow" : event.platform}` : ""}
+          {shownDate ? ` · ${formatDate(shownDate, { year: undefined })}${shownStart ? ` ${shownStart}` : ""}` : ""}
+        </p>
+        <p className="mt-1 break-words text-[12px] leading-relaxed text-sand/90">{shownMessage}</p>
       </div>
     </li>
   );
-}
+});
 
 export default function History() {
   const { snapshot } = useAppData();
@@ -209,7 +206,7 @@ export default function History() {
   }, [events]);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <p className="label text-flame/80">Audit trail</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Availability history</h1>
@@ -219,22 +216,22 @@ export default function History() {
         </p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
         {[
           { label: "Recorded runs", value: String(runs.length), note: "Hourly snapshots in history" },
           { label: "Change events", value: String(events.length), note: "All event types, never pruned" },
           { label: "First release seen", value: firstListing ? relativeTime(firstListing.created_at) : "—", note: firstListing ? firstListing.theatre_name : "Waiting for the first show" },
           { label: "Last check", value: snapshot ? relativeTime(snapshot.checked_at) : "—", note: snapshot ? formatDateTime(snapshot.checked_at) : "" },
         ].map((card) => (
-          <div key={card.label} className="panel p-4">
-            <p className="label">{card.label}</p>
-            <p className="mt-1.5 text-2xl font-semibold text-white">{card.value}</p>
-            <p className="mt-0.5 truncate text-[11px] text-ash" title={card.note}>{card.note}</p>
+          <div key={card.label} className="panel min-w-0 p-3 sm:p-4">
+            <p className="text-[8.5px] font-semibold uppercase leading-tight tracking-[0.14em] text-ash sm:text-[10px] sm:tracking-[0.18em]">{card.label}</p>
+            <p className="mt-1 text-xl font-semibold leading-none text-white sm:mt-1.5 sm:text-2xl">{card.value}</p>
+            <p className="mt-1 line-clamp-2 break-words text-[10px] leading-snug text-ash sm:mt-0.5 sm:truncate sm:text-[11px]" title={card.note}>{card.note}</p>
           </div>
         ))}
       </div>
 
-      <div className="panel p-4 sm:p-5">
+      <div className="panel p-3 sm:p-5">
         <SectionHeading
           eyebrow="Trend"
           title="Shows and formats per hourly check"
@@ -258,60 +255,108 @@ export default function History() {
         )}
       </div>
 
-      <div className="panel p-4 sm:p-5">
+      <div className="panel p-3 sm:p-5">
         <SectionHeading
           eyebrow="Change log"
           title="Timeline"
           description="Newest first. Each entry maps to a real diff between two stored snapshots."
-          right={
-            <div className="flex flex-wrap gap-2">
-              <select
-                aria-label="Filter events by movie"
-                value={movie}
-                onChange={(e) => { setMovie(e.target.value); setLimit(PAGE); }}
-                className="rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[12px] text-sand"
-              >
-                <option value="all">All movies</option>
-                {(snapshot?.movies ?? []).map((entry) => (
-                  <option key={entry.movie.id} value={entry.movie.id}>{entry.movie.title}</option>
-                ))}
-              </select>
-              <select
-                aria-label="Filter events by show date"
-                value={date}
-                onChange={(e) => { setDate(e.target.value); setLimit(PAGE); }}
-                className="rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[12px] text-sand"
-              >
-                <option value="all">All show dates</option>
-                {eventDates.map((day) => (
-                  <option key={day} value={day}>{formatDate(day)}</option>
-                ))}
-              </select>
-              <select
-                aria-label="Filter events by type"
-                value={type}
-                onChange={(e) => { setType(e.target.value); setLimit(PAGE); }}
-                className="rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[12px] text-sand"
-              >
-                <option value="all">All event types</option>
-                {Object.entries(eventLabels).map(([key, label]) => (
-                  <option key={key} value={key}>{label} ({counts.get(key) ?? 0})</option>
-                ))}
-              </select>
-              <select
-                aria-label="Filter events by theatre"
-                value={theatre}
-                onChange={(e) => { setTheatre(e.target.value); setLimit(PAGE); }}
-                className="rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[12px] text-sand"
-              >
-                <option value="all">All theatres</option>
-                {theatres.map((item) => (
-                  <option key={item.id} value={item.id}>{item.name}</option>
-                ))}
-              </select>
-            </div>
-          }
         />
+
+        <div className="mb-3 space-y-2">
+          <div className="hide-scrollbar touch-scroll-x -mx-1 flex gap-1.5 overflow-x-auto px-1" role="group" aria-label="Filter by movie">
+            {[{ id: "all", title: "All movies" }, ...(snapshot?.movies ?? []).map((entry) => ({ id: entry.movie.id, title: entry.movie.title }))].map((item) => {
+              const active = movie === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => { setMovie(item.id); setLimit(PAGE); }}
+                  className={`min-h-[40px] shrink-0 rounded-xl border px-3 text-[12px] font-medium transition ${
+                    active ? "border-flame/50 bg-ember/15 text-white" : "border-white/10 bg-white/[0.03] text-ash active:bg-white/[0.07]"
+                  }`}
+                >
+                  <span className="sm:hidden">
+                    {item.id === "all" ? "All" : item.id === "avengers-doomsday" ? "Avengers" : item.id === "ramayana" ? "Ramayana" : item.title}
+                  </span>
+                  <span className="hidden sm:inline">{item.title}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex gap-1.5">
+            <button
+              type="button"
+              aria-label={date === "all" ? "Go to earliest show date" : "Previous show date"}
+              disabled={eventDates.length === 0}
+              onClick={() => {
+                const index = eventDates.indexOf(date);
+                setDate(date === "all" ? eventDates[0] : eventDates[Math.max(0, index - 1)]);
+                setLimit(PAGE);
+              }}
+              className="btn min-h-[44px] min-w-[44px] !px-3 disabled:opacity-30"
+            >
+              ‹
+            </button>
+            <select
+              aria-label="Filter events by show date"
+              value={date}
+              onChange={(e) => { setDate(e.target.value); setLimit(PAGE); }}
+              className="h-11 min-w-0 flex-1 rounded-xl border border-white/10 bg-graphite px-2.5 text-[12px] text-sand"
+            >
+              <option value="all">All show dates</option>
+              {eventDates.map((day) => (
+                <option key={day} value={day}>{formatDate(day)}</option>
+              ))}
+            </select>
+            <button
+              type="button"
+              aria-label={date === "all" ? "Go to latest show date" : "Next show date"}
+              disabled={eventDates.length === 0}
+              onClick={() => {
+                const index = eventDates.indexOf(date);
+                setDate(date === "all" ? eventDates[eventDates.length - 1] : eventDates[Math.min(eventDates.length - 1, index + 1)]);
+                setLimit(PAGE);
+              }}
+              className="btn min-h-[44px] min-w-[44px] !px-3 disabled:opacity-30"
+            >
+              ›
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-1.5">
+            <select
+              aria-label="Filter events by type"
+              value={type}
+              onChange={(e) => { setType(e.target.value); setLimit(PAGE); }}
+              className="h-11 min-w-0 rounded-xl border border-white/10 bg-graphite px-2.5 text-[12px] text-sand"
+            >
+              <option value="all">All event types</option>
+              {Object.entries(eventLabels).map(([key, label]) => (
+                <option key={key} value={key}>{label} ({counts.get(key) ?? 0})</option>
+              ))}
+            </select>
+            <select
+              aria-label="Filter events by theatre"
+              value={theatre}
+              onChange={(e) => { setTheatre(e.target.value); setLimit(PAGE); }}
+              className="h-11 min-w-0 rounded-xl border border-white/10 bg-graphite px-2.5 text-[12px] text-sand"
+            >
+              <option value="all">All theatres</option>
+              {theatres.map((item) => (
+                <option key={item.id} value={item.id}>{item.name}</option>
+              ))}
+            </select>
+          </div>
+          {(movie !== "all" || date !== "all" || type !== "all" || theatre !== "all") && (
+            <button
+              type="button"
+              onClick={() => { setMovie("all"); setDate("all"); setType("all"); setTheatre("all"); setLimit(PAGE); }}
+              className="min-h-[36px] text-[11px] text-ash underline-offset-4 hover:underline"
+            >
+              Clear all filters
+            </button>
+          )}
+        </div>
 
         {loading ? (
           <p className="py-8 text-center text-sm text-ash">Loading history…</p>
@@ -325,7 +370,7 @@ export default function History() {
           <>
             {grouped.map(([day, dayEvents]) => (
               <div key={day} className="mb-5 last:mb-0">
-                <p className="label mb-2 sticky top-[120px] z-10 w-fit rounded-full border border-white/10 bg-charcoal/90 px-2.5 py-1 backdrop-blur">
+                <p className="label mb-2 w-fit rounded-full border border-white/10 bg-charcoal/90 px-2.5 py-1 backdrop-blur sm:sticky sm:top-[64px] sm:z-10">
                   {formatDate(day, { weekday: "long" })}
                   <span className="ml-2 text-ash/70">{dayEvents.length} change{dayEvents.length === 1 ? "" : "s"}</span>
                 </p>
@@ -335,7 +380,7 @@ export default function History() {
               </div>
             ))}
             {filtered.length > limit && (
-              <button type="button" className="btn mx-auto mt-2 block" onClick={() => setLimit((current) => current + PAGE)}>
+              <button type="button" className="btn mx-auto mt-2 block min-h-[44px]" onClick={() => setLimit((current) => current + PAGE)}>
                 Show more ({filtered.length - limit} older)
               </button>
             )}

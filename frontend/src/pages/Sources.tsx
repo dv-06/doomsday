@@ -32,7 +32,7 @@ export default function Sources() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <p className="label text-flame/80">Transparency</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Sources &amp; access</h1>
@@ -41,18 +41,21 @@ export default function Sources() {
         </p>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 lg:grid-cols-2">
         {snapshot.sources.map((source) => {
           const tone = source.status === "ok" ? "live" : source.status === "partial" ? "ember" : "danger";
           const notes = sourceNotes[source.source];
           return (
-            <div key={source.source} className="panel p-4 sm:p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
+            <div key={source.source} className="panel min-w-0 p-3 sm:p-5">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
                   <h2 className="text-lg font-semibold text-white">{platformLabel[source.source] ?? source.source}</h2>
-                  <p className="text-[11px] text-ash">checked {relativeTime(source.checked_at)} · last success {relativeTime(source.last_success_at)}</p>
+                  <p className="mt-0.5 break-words text-[10.5px] leading-snug text-ash">
+                    Last collection {formatDateTime(source.checked_at)} IST
+                    <span className="block">Last success {formatDateTime(source.last_success_at)} · {relativeTime(source.checked_at)}</span>
+                  </p>
                 </div>
-                <span className={`chip ${toneClasses[tone]}`}>
+                <span className={`chip shrink-0 ${toneClasses[tone]}`}>
                   <StatusDot tone={tone} pulse={false} />
                   {source.status}
                 </span>
@@ -66,7 +69,7 @@ export default function Sources() {
                 {notes.evidenceKeys.map(([key, label]) => (
                   <div key={key} className="col-span-1 min-w-0">
                     <dt className="text-ash">{label}</dt>
-                    <dd className="truncate font-mono text-[11px] text-sand" title={valueOf(source.evidence?.[key])}>
+                    <dd className="break-words font-mono text-[11px] leading-snug text-sand">
                       {valueOf(source.evidence?.[key])}
                     </dd>
                   </div>
@@ -89,13 +92,39 @@ export default function Sources() {
         })}
       </div>
 
-      <div className="panel p-4 sm:p-5">
+      <div className="panel p-3 sm:p-5">
         <SectionHeading
           eyebrow="Verification"
           title="Theatre identity check"
           description="Each row is matched by the platform's own venue ID — not by name similarity alone. Similar-named malls are explicitly excluded below."
         />
-        <div className="w-full max-w-full min-w-0 overflow-x-auto">
+        <ul className="space-y-2 md:hidden">
+          {snapshot.theatres.map((theatre) => {
+            const observation = theatre.platforms.district;
+            const verification = theatre.verification.district;
+            return (
+              <li key={theatre.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="break-words text-[13px] font-medium leading-snug text-sand">{theatre.name}</p>
+                    <p className="text-[10.5px] text-ash">{theatre.area}</p>
+                  </div>
+                  <Chip tone={verification?.status === "verified" ? "live" : "warn"} className="!shrink-0 !px-2 !py-0.5 text-[9px]">
+                    {verification?.status ?? "unverified"}
+                  </Chip>
+                </div>
+                <dl className="mt-2 grid grid-cols-[auto_minmax(0,1fr)] gap-x-2 gap-y-1 text-[11px]">
+                  <dt className="text-ash">Source venue</dt>
+                  <dd className="break-words text-sand/90">{observation?.venue?.name ?? verification?.source_name ?? "—"}</dd>
+                  <dt className="text-ash">Venue ID</dt>
+                  <dd className="font-mono text-[10.5px] text-ash">{observation?.venue?.id ?? "—"}</dd>
+                </dl>
+                {observation?.venue?.url && <div className="mt-1.5"><ExternalLink href={observation.venue.url}>Open venue</ExternalLink></div>}
+              </li>
+            );
+          })}
+        </ul>
+        <div className="hidden w-full max-w-full min-w-0 overflow-x-auto md:block">
           <table className="w-full min-w-[720px] text-left text-[12px]">
             <thead>
               <tr className="border-b border-white/[0.08] text-[10px] uppercase tracking-wider text-ash">
@@ -139,7 +168,7 @@ export default function Sources() {
       </div>
 
       {snapshot.excluded_lookalikes && snapshot.excluded_lookalikes.length > 0 && (
-        <div className="panel p-4 sm:p-5">
+        <div className="panel p-3 sm:p-5">
           <SectionHeading
             eyebrow="Avoided confusion"
             title="Similar names we deliberately do not track"
@@ -147,7 +176,7 @@ export default function Sources() {
           />
           <ul className="space-y-2">
             {snapshot.excluded_lookalikes.map((item) => (
-              <li key={item.name} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+              <li key={item.name} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 sm:p-3">
                 <p className="text-[13px] font-medium text-sand">{item.name} {item.district_id && <span className="font-mono text-[10px] text-ash">#{item.district_id}</span>}</p>
                 <p className="mt-0.5 text-[11px] leading-relaxed text-ash">{item.reason}</p>
               </li>
@@ -156,7 +185,7 @@ export default function Sources() {
         </div>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 lg:grid-cols-3">
         {[
           {
             title: "What we request",
@@ -171,7 +200,7 @@ export default function Sources() {
             body: "The run is marked blocked/partial, the last successful platform snapshot is preserved with its age, and the dashboard says so. Other theatres and sources keep running.",
           },
         ].map((card) => (
-          <div key={card.title} className="panel p-4">
+          <div key={card.title} className="panel p-3 sm:p-4">
             <p className="label text-flame/80">{card.title}</p>
             <p className="mt-2 text-[12px] leading-relaxed text-ash">{card.body}</p>
           </div>

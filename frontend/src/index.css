@@ -9,10 +9,15 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
     @apply bg-ink text-sand font-sans antialiased;
+    min-width: 320px;
+    -webkit-tap-highlight-color: transparent;
     background-image:
       radial-gradient(1100px 520px at 12% -10%, rgba(226, 87, 30, 0.16), transparent 62%),
       radial-gradient(900px 480px at 88% -20%, rgba(120, 53, 15, 0.18), transparent 60%),
@@ -41,6 +46,17 @@
 
   :focus-visible {
     @apply outline-none ring-2 ring-flame/70 ring-offset-2 ring-offset-ink;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -79,9 +95,21 @@
 
   .hide-scrollbar {
     scrollbar-width: none;
+    -ms-overflow-style: none;
   }
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  .touch-scroll-x {
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 96px;
   }
 }
 

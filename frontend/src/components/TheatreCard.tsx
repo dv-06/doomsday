@@ -62,11 +62,16 @@ function matches(show: Show, filters: Props["filters"]): boolean {
 function ShowChip({ show }: { show: Show }) {
   const tone = availabilityTone[show.availability.status] ?? "muted";
   const displayTime = formatClock(show.start_iso) || show.start;
+  const seats = show.availability.available_seats;
   const label = (
     <>
-      <span className="font-mono text-[12px] font-medium text-white">{displayTime}</span>
-      <span className="text-[10px] uppercase tracking-wide text-ash">{show.format.label}</span>
-      {show.availability.status === "sold_out" && <span className="text-[10px] text-red-300">sold out</span>}
+      <span className="font-mono text-[13px] font-semibold leading-none text-white">{displayTime}</span>
+      <span className="text-[9.5px] uppercase leading-none tracking-wide text-ash">{show.format.label}</span>
+      {show.availability.status === "sold_out"
+        ? <span className="text-[9.5px] leading-none text-red-300">sold out</span>
+        : seats !== null
+          ? <span className="text-[9.5px] leading-none text-ash">{seats} seats</span>
+          : null}
     </>
   );
   const title = [
@@ -85,31 +90,31 @@ function ShowChip({ show }: { show: Show }) {
         target="_blank"
         rel="noopener noreferrer"
         title={title}
-        className={`chip ${toneClasses[tone]} transition hover:-translate-y-0.5 hover:border-flame/50 hover:text-white`}
+        className={`chip ${toneClasses[tone]} !min-h-[44px] !min-w-[78px] !justify-start !rounded-xl !px-2.5 !py-1.5 transition hover:border-flame/50 hover:text-white active:scale-[0.98]`}
       >
         {label}
       </a>
     );
   }
-  return <span className={`chip ${toneClasses[tone]}`} title={title}>{label}</span>;
+  return <span className={`chip !min-h-[44px] !min-w-[78px] !justify-start !rounded-xl !px-2.5 !py-1.5 ${toneClasses[tone]}`} title={title}>{label}</span>;
 }
 
 function DayRow({ date, day, shows, theatre }: { date: string; day?: DateSummary; shows: Show[]; theatre: Theatre }) {
   const listedAnywhere = Object.values(theatre.platforms).some((obs) => obs?.listed);
   return (
-    <div className="border-t border-white/[0.05] py-3 first:border-t-0">
+    <div className="border-t border-white/[0.05] py-2.5 first:border-t-0 sm:py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="text-[13px] font-semibold text-sand">{formatDate(date, { year: undefined })}</span>
           {day?.listed ? <AvailabilityChip status={day.booking_status} /> : <Chip tone="muted">Not released</Chip>}
         </div>
-        <div className="flex items-center gap-2 text-[11px] text-ash">
+        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-ash">
           {day?.listed && day.seats_available !== null && <span>{day.seats_available} seats reported</span>}
           {day?.listed && <span>{shows.length} show{shows.length === 1 ? "" : "s"}</span>}
         </div>
       </div>
       {shows.length > 0 ? (
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-wrap gap-2">
           {shows.map((show) => (
             <ShowChip key={show.id} show={show} />
           ))}
@@ -149,7 +154,7 @@ function SeatPreview({ theatre }: { theatre: Theatre }) {
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className="flex w-full items-center justify-between gap-2 p-3 text-left"
+        className="flex min-h-[44px] w-full items-center justify-between gap-2 p-3 text-left"
         aria-expanded={open}
       >
         <div className="min-w-0">
@@ -159,7 +164,7 @@ function SeatPreview({ theatre }: { theatre: Theatre }) {
               {isHeuristic ? "heuristic" : "seat map"}
             </span>
           </p>
-          <p className="mt-1 truncate text-[12px] text-sand">
+          <p className="mt-1 break-words text-[12px] leading-snug text-sand">
             {isHeuristic
               ? `${rec.best.map((area) => area.area).slice(0, 2).join(" · ")} — centre, ${rec.target_zone.depth_percent[0]}–${rec.target_zone.depth_percent[1]}% back`
               : `Best seats ${rec.best.slice(0, 3).map((seat) => `${seat.row}${seat.number}`).join(", ")}`}
@@ -257,7 +262,7 @@ function PlatformRow({ platform, obs }: { platform: string; obs: PlatformObserva
     <div className="flex items-start justify-between gap-3 rounded-lg border border-white/[0.05] bg-white/[0.015] px-2.5 py-2">
       <div className="min-w-0">
         <p className="text-[12px] font-medium text-sand">{platformLabel[platform] ?? platform}</p>
-        <p className="truncate text-[11px] text-ash" title={detail}>{detail}</p>
+        <p className="break-words text-[11px] leading-snug text-ash">{detail}</p>
       </div>
       <div className="flex shrink-0 items-center gap-1.5">
         {obs.stale && obs.data_age_minutes !== null && obs.data_age_minutes !== undefined && (
@@ -283,27 +288,29 @@ export default function TheatreCard({ theatre, targetDates, filters, platforms }
 
   return (
     <article className="panel grain relative flex flex-col overflow-hidden">
-      <header className="p-4 pb-2.5">
-        <div className="flex items-start justify-between gap-3">
+      <header className="p-3.5 pb-2 sm:p-4 sm:pb-2.5">
+        <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-[15px] font-semibold leading-tight text-white">{theatre.name}</h3>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <h3 className="break-words text-[14.5px] font-semibold leading-tight text-white sm:text-[15px]">{theatre.name}</h3>
               {healthChip(theatre)}
             </div>
-            <p className="mt-0.5 text-[11px] text-ash">
+            <p className="mt-0.5 break-words text-[11px] leading-snug text-ash">
               {theatre.area}
-              {theatre.platforms.district?.venue?.id ? ` · District venue ${theatre.platforms.district.venue.id}` : ""}
+              {theatre.platforms.district?.venue?.id
+                ? <span className="hidden sm:inline">{` · District venue ${theatre.platforms.district.venue.id}`}</span>
+                : null}
             </p>
           </div>
           {verified ? (
-            <Chip tone="live" title={theatre.verification.district?.note ?? "Venue matched by ID on the platform"}>
-              ✓ Venue verified
+            <Chip tone="live" className="!shrink-0 !px-2 !py-0.5 text-[9.5px]" title={theatre.verification.district?.note ?? "Venue matched by ID on the platform"}>
+              ✓ <span className="hidden sm:inline">Venue verified</span><span className="sm:hidden">Verified</span>
             </Chip>
           ) : (
-            <Chip tone="warn" title="Venue could not be matched by ID this run">Unverified</Chip>
+            <Chip tone="warn" className="!shrink-0 !px-2 !py-0.5 text-[9.5px]" title="Venue could not be matched by ID this run">Unverified</Chip>
           )}
         </div>
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-wrap gap-1.5">
           {theatre.formats.map((format) => (
             <Chip key={format.key} className={formatBadgeClass(format.key)}>
               {format.label} · {format.count}
@@ -326,7 +333,7 @@ export default function TheatreCard({ theatre, targetDates, filters, platforms }
         <SeatPreview theatre={theatre} />
       </div>
 
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.06] p-3">
+      <div className="mt-auto border-t border-white/[0.06] p-2.5 sm:p-3">
         <div className="flex flex-wrap items-center gap-1.5">
           {Object.entries(theatre.platforms).map(([platform, obs]) =>
             obs ? <Chip key={platform} tone={platformTone(obs.status)} className="!px-2 !py-0.5 text-[10px]">{platformLabel[platform] ?? platform}: {obs.status}</Chip> : null,
@@ -335,16 +342,16 @@ export default function TheatreCard({ theatre, targetDates, filters, platforms }
             <span className="text-[10px] text-amber-300">data {theatre.health.age_minutes}m old</span>
           )}
         </div>
-        <div className="flex items-center gap-2">
-          <button type="button" className="btn !px-2.5 !py-1.5 text-[11px]" onClick={() => setExpanded((current) => !current)} aria-expanded={expanded}>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <button type="button" className="btn !h-11 w-full !px-2 text-[12px]" onClick={() => setExpanded((current) => !current)} aria-expanded={expanded}>
             {expanded ? "Less" : `Details${allVisibleShows.length ? ` · ${allVisibleShows.length}` : ""}`}
           </button>
           {primaryUrl ? (
-            <a href={primaryUrl} target="_blank" rel="noopener noreferrer" className="btn-ember !px-3 !py-1.5 text-[11px]">
+            <a href={primaryUrl} target="_blank" rel="noopener noreferrer" className="btn-ember !h-11 w-full !px-2 text-[12px]">
               Book on {host?.includes("district") ? "District" : host?.includes("bookmyshow") ? "BookMyShow" : "source"}
             </a>
           ) : (
-            <span className="chip border-white/10 bg-white/5 text-[10px] text-ash">No booking link yet</span>
+            <span className="flex min-h-[44px] items-center justify-center rounded-xl border border-white/10 bg-white/5 px-2 text-[10px] text-ash">No booking link</span>
           )}
         </div>
       </div>
@@ -359,14 +366,14 @@ export default function TheatreCard({ theatre, targetDates, filters, platforms }
               <div className="space-y-2">
                 {allVisibleShows.map((show) => (
                   <div key={show.id} className="rounded-lg border border-white/[0.05] bg-white/[0.02] p-2.5">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                         <span className="font-mono text-[13px] font-semibold text-white">{formatClock(show.start_iso) || show.start}</span>
                         <span className="text-[11px] text-ash">{formatDate(show.date, { year: undefined })}</span>
                         <Chip className={formatBadgeClass(show.format.key)}>{show.format.label}</Chip>
                         {show.screen && <Chip tone="muted">{show.screen}</Chip>}
                       </div>
-                      <div className="flex items-center gap-2 text-[11px] text-ash">
+                      <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-ash">
                         {show.price.min !== null && <span>{inr(show.price.min)}–{inr(show.price.max)}</span>}
                         <AvailabilityChip status={show.availability.status} raw={show.availability.status_raw} />
                       </div>
