@@ -267,20 +267,34 @@ function FiltersBar({ filters, onChange, theatres, formats, dates }: {
     "rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[13px] text-sand outline-none transition hover:border-white/20 focus:border-flame/60";
   return (
     <div className="panel sticky top-[68px] z-30 mt-4 flex flex-wrap items-center gap-2 p-3 backdrop-blur-xl md:top-[61px]">
-      <div className="flex rounded-xl border border-white/10 bg-black/30 p-1">
-        {[{ value: "all", label: dates.length === 2 ? "Both dates" : "All dates" }, ...dates.map((d) => ({ value: d, label: formatDate(d, { year: undefined }) }))].map((option) => (
-          <button
-            key={option.value}
-            type="button"
-            onClick={() => onChange({ date: option.value })}
-            className={`rounded-lg px-2.5 py-1.5 text-[12px] font-medium transition ${
-              filters.date === option.value ? "bg-ember text-white" : "text-ash hover:text-sand"
-            }`}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
+      {dates.length > 4 ? (
+        <select
+          aria-label="Filter by date"
+          className={selectClass}
+          value={filters.date}
+          onChange={(e) => onChange({ date: e.target.value })}
+        >
+          <option value="all">All dates</option>
+          {dates.map((date) => (
+            <option key={date} value={date}>{formatDate(date, { year: undefined })}</option>
+          ))}
+        </select>
+      ) : (
+        <div className="flex rounded-xl border border-white/10 bg-black/30 p-1">
+          {[{ value: "all", label: dates.length === 2 ? "Both dates" : "All dates" }, ...dates.map((d) => ({ value: d, label: formatDate(d, { year: undefined }) }))].map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => onChange({ date: option.value })}
+              className={`rounded-lg px-2.5 py-1.5 text-[12px] font-medium transition ${
+                filters.date === option.value ? "bg-ember text-white" : "text-ash hover:text-sand"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
       <select aria-label="Filter by theatre" className={selectClass} value={filters.theatre} onChange={(e) => onChange({ theatre: e.target.value })}>
         <option value="all">All theatres</option>
         {theatres.map((theatre) => (
