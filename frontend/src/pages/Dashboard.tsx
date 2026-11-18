@@ -64,7 +64,7 @@ function Hero({ snapshot }: { snapshot: MovieSnapshot }) {
             {snapshot.movie.title.toUpperCase()}
           </h1>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-sand/80">
-            Hourly ticket watch across six Bengaluru theatres for{" "}
+            Hourly ticket watch across {snapshot.totals.theatres_monitored} monitored Bengaluru venues for{" "}
             <strong className="font-semibold text-white">
               {targetDates.length > 3
                 ? `${targetDates.length} target dates from ${formatDate(targetDates[0], { weekday: undefined })}`
@@ -85,8 +85,14 @@ function Hero({ snapshot }: { snapshot: MovieSnapshot }) {
               return (
                 <div key={date} className="rounded-xl border border-white/10 bg-black/25 px-3.5 py-2.5">
                   <p className="text-[11px] font-medium uppercase tracking-wider text-ash">{formatDate(date)}</p>
-                  <p className="mt-1 text-sm font-semibold text-white">
-                    {summary?.shows ? `${summary.shows} shows · ${summary.theatres} theatres` : "Not published yet"}
+                  <p className={`mt-1 text-sm font-semibold ${summary?.state === "source_failed" ? "text-red-300" : summary?.state === "incomplete" ? "text-amber-300" : "text-white"}`}>
+                    {summary?.shows
+                      ? `${summary.shows} shows · ${summary.theatres} theatres`
+                      : summary?.state === "source_failed"
+                        ? "Source request failed"
+                        : summary?.state === "incomplete"
+                          ? "Data incomplete — unknown"
+                          : "No sessions published"}
                   </p>
                   {summary?.shows > 0 && (
                     <p className="mt-0.5 text-[11px] text-ash">
@@ -200,12 +206,12 @@ function StatGrid({ snapshot }: { snapshot: MovieSnapshot }) {
     { label: "Other formats hidden", value: String(Math.max(0, totals.shows_total - (totals.shows_4dx_3d ?? 0))), note: "Plain 3D, 2D and IMAX are excluded" },
     { label: "Bookable now", value: String(totals.bookable_shows), note: "Source says seats can be bought" },
     { label: "Seats reported", value: totals.seats_available_total.toLocaleString("en-IN"), note: "Availability signal, not sales" },
-    { label: "Dates with shows", value: String(Object.values(totals.dates).filter((d) => d.shows > 0).length), note: "Rest stay unpublished" },
+    { label: "Dates with shows", value: String(Object.values(totals.dates).filter((d) => d.shows > 0).length), note: "Others unpublished, failed or incomplete" },
   ] : [
     {
       label: "Theatres with listings",
       value: `${totals.theatres_with_listings}/${totals.theatres_monitored}`,
-      note: "In your six-theatre watchlist",
+      note: "This movie's Bengaluru venue list",
       accent: true,
     },
     {

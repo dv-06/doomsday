@@ -30,6 +30,36 @@
       "id": "global-mall-mysore-road",
       "district_id": "1022307",
       "name": "Global Mall Mysore Road"
+    },
+    {
+      "id": "nexus-koramangala",
+      "district_id": "1022297",
+      "name": "PVR Nexus (formerly Forum), Koramangala"
+    },
+    {
+      "id": "central-spirit-mall",
+      "district_id": "1022298",
+      "name": "PVR Central Spirit Mall, Bellandur"
+    },
+    {
+      "id": "bhartiya-mall",
+      "district_id": "1020740",
+      "name": "PVR Bhartiya Mall of Bengaluru"
+    },
+    {
+      "id": "vega-city",
+      "district_id": "1022309",
+      "name": "PVR Vega City, Bannerghatta Road"
+    },
+    {
+      "id": "superplex-forum-kanakapura",
+      "district_id": "1022305",
+      "name": "PVR Superplex Forum Mall, Kanakapura Road"
+    },
+    {
+      "id": "cinepolis-nexus-shantiniketan",
+      "district_id": "7508",
+      "name": "Cinepolis Nexus Shantiniketan"
     }
   ],
   "repository": "dv-06/doomsday",
@@ -51,6 +81,14 @@
       "target_dates": [
         "2026-12-17",
         "2026-12-18"
+      ],
+      "cinema_ids": [
+        "lulu-global-mall",
+        "orion-mall",
+        "mantri-square-mall",
+        "gt-world-mall",
+        "miraj-sunkadakatte",
+        "global-mall-mysore-road"
       ]
     },
     {
@@ -59,7 +97,6 @@
       "content_id": "176276",
       "movie_url": "https://www.district.in/movies/ramayana-movie-tickets-in-bengaluru-MV176276",
       "target_dates": [
-        "2026-11-18",
         "2026-11-19",
         "2026-11-20",
         "2026-11-21",
@@ -80,7 +117,18 @@
         "2026-12-20",
         "2026-12-26",
         "2026-12-27"
-      ]
+      ],
+      "cinema_ids": [
+        "orion-mall",
+        "global-mall-mysore-road",
+        "nexus-koramangala",
+        "central-spirit-mall",
+        "bhartiya-mall",
+        "vega-city",
+        "superplex-forum-kanakapura",
+        "cinepolis-nexus-shantiniketan"
+      ],
+      "discover_4dx_3d": true
     }
   ]
 }

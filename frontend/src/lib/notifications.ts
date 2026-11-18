@@ -10,6 +10,11 @@ const HIGH_VALUE_TYPES = new Set([
 ]);
 
 export function wantsNotification(event: HistoryEvent, settings: Settings): boolean {
+  if (!settings.notifyBrowser) return false;
+  if (event.movie_id && settings.notifyMovies[event.movie_id] === false) return false;
+  if (event.type === "seats_dropped" || event.type === "sold_out") {
+    return settings.notifyOn.availability;
+  }
   if (event.type === "source_blocked" || event.type === "source_recovered") {
     return settings.notifyOn.sourceIssues;
   }
@@ -53,21 +58,63 @@ export function alertOnNewEvents(
   const worthTelling = fresh.filter((event) => wantsNotification(event, settings));
   rememberEventIds(fresh.map((event) => event.id));
   if (!settings.notifyBrowser || !worthTelling.length) return worthTelling;
-  if (!("Notification" in window) || Notification.permission !== "granted") return worthTelling;
 
-  const top = worthTelling.slice(0, 3);
-  for (const event of top) {
-    try {
-      new Notification(`Doomsday Watch · ${event.theatre_name}`, {
-        body: event.message,
-        tag: event.id,
-        icon: "./favicon.ico",
-      });
-    } catch {
-      // Some mobile browsers only allow notifications from a service worker.
-    }
+  for (const event of worthTelling.slice(0, 3)) {
+    void showForegroundNotification(event);
   }
   return worthTelling;
+}
+
+export function notificationLink(event: HistoryEvent): string {
+  const params = new URLSearchParams();
+  if (event.movie_id) params.set("movie", event.movie_id);
+  if (event.date) params.set("date", event.date);
+  return `./#/history${params.size ? `?${params.toString()}` : ""}`;
+}
+
+async function showForegroundNotification(event: HistoryEvent): Promise<void> {
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+  const title = `${event.movie_title ?? "Doomsday Watch"} · ${event.theatre_name}`;
+  const options: NotificationOptions = {
+    body: event.message,
+    tag: event.id,
+    icon: "./icon.svg",
+    badge: "./icon.svg",
+    data: { url: notificationLink(event) },
+  };
+  try {
+    const registration = await navigator.serviceWorker?.ready;
+    if (registration) {
+      await registration.showNotification(title, options);
+      return;
+    }
+  } catch {
+    // fall through to the page-level Notification API
+  }
+  try {
+    const notification = new Notification(title, options);
+    notification.onclick = () => {
+      window.focus();
+      window.location.hash = notificationLink(event).replace("./", "");
+    };
+  } catch {
+    // Foreground-only; closed-site delivery needs real Web Push (not configured).
+  }
+}
+
+export function notificationSupport(): {
+  supported: boolean;
+  permission: NotificationPermission | "unsupported";
+  serviceWorker: boolean;
+  backgroundPush: false;
+} {
+  const supported = "Notification" in window;
+  return {
+    supported,
+    permission: supported ? Notification.permission : "unsupported",
+    serviceWorker: "serviceWorker" in navigator,
+    backgroundPush: false,
+  };
 }
 
 export function isHighValue(event: HistoryEvent): boolean {

@@ -82,6 +82,7 @@ def diff_snapshot(
     prev_theatres = previous.get("theatres", {}) or {}
     state_theatres: dict[str, Any] = {}
     names = {t.id: t.name for t in config.theatres}
+    names.update({str(t.get("id")): str(t.get("name")) for t in theatres if t.get("id") and t.get("name")})
 
     for theatre in theatres:
         tid = theatre["id"]
@@ -239,6 +240,8 @@ def diff_snapshot(
             if source_healthy:
                 for show_key, prev_show in prev_shows.items():
                     if show_key in current_shows or show_key in matched_prev_keys or not isinstance(prev_show, dict):
+                        continue
+                    if prev_show.get("date") not in movie.target_dates:
                         continue
                     events.append(_make_event(
                         "show_removed", theatre_id=tid, theatre_name=name, platform=platform,

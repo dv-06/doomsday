@@ -1,8 +1,9 @@
 # Doomsday Watch
 
 Hourly ticket-availability tracker for **Avengers: Doomsday** and **Ramayana** in
-**Bengaluru**, across six theatres on **District**. Static dashboard, no paid
-services, runs with your computer off.
+**Bengaluru**, on **District**. Static dashboard, no paid services, runs with your
+computer off. Each movie has its own venue list: 6 theatres for Doomsday and all
+8 Bengaluru venues that actually expose 4DX for Ramayana.
 
 - **Avengers: Doomsday** — 17–18 Dec 2026, every published format.
 - **Ramayana** — remaining November 2026 dates plus December weekends, **4DX 3D
@@ -17,8 +18,8 @@ services, runs with your computer off.
 
 ## What it does
 
-- Watches **six Bengaluru theatres** every hour via the Indian-egress OpenWrt
-  collector and GitHub Actions, tracking two movies as separate snapshots.
+- Watches **movie-specific Bengaluru venue lists** every hour via the Indian-egress
+  OpenWrt collector and GitHub Actions, tracking two movies as separate snapshots.
 - Keeps movie identities, showtimes, sessions and availability histories separate.
 - Detects show listings, new showtimes, **formats** (2D, 3D, IMAX 3D, **Infinity
   Vision 3D**, **4DX 3D**, 4DX, ICE, Dolby, ScreenX, P[XL], laser), booking
@@ -46,14 +47,15 @@ connection still collect fresh data. See `docs/DEPLOYMENT.md` for options.
 
 | | |
 |---|---|
-| Status | `partial` — District OK, BookMyShow showtimes blocked by Cloudflare |
-| Shows found | 20 (all Infinity Vision 3D; 4 of them 4DX), 3 of 6 theatres |
-| 17 Dec 2026 | 20 shows · 3 theatres |
-| 18 Dec 2026 | **0 shows** — not released by any source yet, so none are shown |
-| IMAX 3D | 0 (Infinity Vision is deliberately **not** counted as IMAX) |
+| Status | `ok` — District is the sole source |
+| Shows found | Movie-scoped; see `data/latest.json` |
+| Doomsday | 17–18 Dec 2026, every published format |
+| Ramayana | 20 target dates (19–30 Nov + Dec weekends), explicit `4DX-3D` only |
+| IMAX 3D | Counted separately from Infinity Vision and 4DX |
 
-This is real captured data in `data/latest.json`; it changes as platforms release
-more shows.
+This is real captured data in `data/latest.json`; it changes as District releases
+more sessions. A target date with no sessions is `unpublished`, never a failure;
+a failed request is `source_failed`, never `unpublished`.
 
 ---
 
@@ -227,8 +229,9 @@ twice. Set `DASHBOARD_URL` to include a link in messages.
 
 | Key | Purpose |
 |---|---|
-| `movies[]` | One tracked film per entry. Each has its own `id`, District `content_id`/`slug`, `target_dates` and optional `required_format_keys`. |
-| `movies[].target_dates` | IST calendar dates. Doomsday: 17–18 Dec 2026. Ramayana: 18–30 Nov 2026 plus 5/6, 12/13, 19/20, 26/27 Dec 2026. |
+| `movies[]` | One tracked film per entry. Each has its own `id`, District `content_id`/`slug`, dates, `theatre_ids` and optional `required_format_keys`. |
+| `movies[].target_dates` | IST calendar dates. Doomsday: 17–18 Dec 2026. Ramayana: 19–30 Nov 2026 plus 5/6, 12/13, 19/20, 26/27 Dec 2026 (20 dates). |
+| `movies[].date_rule` | `ramayana_2026` generates those 20 dates in `backend/doomsday_watch/targets.py`; the loader rejects a mismatched explicit list. |
 | `movies[].required_format_keys` | `["4dx_3d"]` for Ramayana. Only explicit source `4DX-3D` sessions are kept; plain 3D, 4DX and IMAX never substitute. |
 | `monitoring.interval_minutes` | Displayed interval; the real cadence is the workflow cron. |
 | `monitoring.request_timeout_seconds` / `max_retries` | HTTP resilience. |
@@ -257,7 +260,15 @@ normaliser version.
 
 | Watchlist name | District venue | ID |
 |---|---|---|
-| Lulu Global Mall, Rajajinagar | Cinepolis Lulu Global Mall | `56450` |
+| Movie | District venue IDs |
+|---|---|
+| Doomsday (6) | `56450`, `1022299`, `1020725`, `1022303`, `52080`, `1022307` |
+| Ramayana 4DX (8) | `7508`, `1020740`, `1022298`, `1022307`, `1022297`, `1022299`, `1022305`, `1022309` |
+
+Ramayana's list is every Bengaluru venue whose District venue metadata exposes a
+4DX screen. A venue is only kept in a date's results when the session itself says
+`4DX-3D`; a new venue with such a session is discovered and labelled as such even
+before its config entry is added.
 | Orion Mall, Dr Rajkumar Road | PVR Orion Mall | `1022299` |
 | Mantri Square Mall, Malleshwaram | INOX Mantri Square | `1020725` |
 | GT World Mall, Magadi Road | PVR GT World Mall | `1022303` |
@@ -320,13 +331,14 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-48 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
+56 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
 ingestion, duplicate/stale payload protection, format normalisation (including
 Infinity Vision ≠ IMAX, explicit 4DX 3D vs plain 3D), District parsing against a trimmed real fixture, multi-movie config and payloads, UTC→IST
 show-clock conversion and date boundaries, legacy-snapshot migration without
 duplicate events, seat heuristics, diff/notification rules, snapshot retention,
-duplicate-safe combined ingestion of two movies, and the end-to-end pipeline with
-blocked sources.
+duplicate-safe combined ingestion of two movies, generated Ramayana target dates,
+separate movie venue lists, newly discovered 4DX venues, missing/invalid
+timestamps, Nov→Dec midnight boundaries, and unpublished-vs-failed date states.
 
 Frontend checks:
 

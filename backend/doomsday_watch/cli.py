@@ -29,7 +29,7 @@ from .store import Store
 # Bump when the meaning/shape of a normally-identical inbox payload changes.
 # Snapshot provenance records it so a one-time re-ingest can repair old data
 # without weakening duplicate protection for every future run.
-PAYLOAD_NORMALIZER_VERSION = 3
+PAYLOAD_NORMALIZER_VERSION = 4
 
 
 def _summarise(result: dict) -> str:

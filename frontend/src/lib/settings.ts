@@ -7,27 +7,41 @@ export interface Settings {
   enabledTheatres: string[] | null;
   enabledPlatforms: ("district" | "bookmyshow")[];
   notifyBrowser: boolean;
+  notifyMovies: Record<string, boolean>;
   notifyOn: {
     shows: boolean;
     threeD: boolean;
     infinity: boolean;
     booking: boolean;
+    availability: boolean;
     sourceIssues: boolean;
   };
 }
 
 export const defaultSettings: Settings = {
   enabledTheatres: null,
-  enabledPlatforms: ["district", "bookmyshow"],
+  enabledPlatforms: ["district"],
   notifyBrowser: false,
-  notifyOn: { shows: true, threeD: true, infinity: true, booking: true, sourceIssues: true },
+  notifyMovies: { "avengers-doomsday": true, ramayana: true },
+  notifyOn: {
+    shows: true, threeD: true, infinity: true, booking: true,
+    availability: true, sourceIssues: true,
+  },
 };
 
 export function loadSettings(): Settings {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
     if (!raw) return defaultSettings;
-    return { ...defaultSettings, ...(JSON.parse(raw) as Partial<Settings>) };
+    const parsed = JSON.parse(raw) as Partial<Settings>;
+    return {
+      ...defaultSettings,
+      ...parsed,
+      enabledPlatforms: (parsed.enabledPlatforms ?? defaultSettings.enabledPlatforms)
+        .filter((p) => p === "district"),
+      notifyMovies: { ...defaultSettings.notifyMovies, ...(parsed.notifyMovies ?? {}) },
+      notifyOn: { ...defaultSettings.notifyOn, ...(parsed.notifyOn ?? {}) },
+    };
   } catch {
     return defaultSettings;
   }
@@ -62,7 +76,9 @@ export function exportMonitorConfig(settings: Settings, snapshot: Snapshot, meta
       },
       enabled_theatres: enabled,
       enabled_platforms: settings.enabledPlatforms,
-      target_dates: snapshot.movie.target_dates,
+      movies: snapshot.movies?.length
+        ? snapshot.movies.map(({ movie }) => ({ id: movie.id, title: movie.title, target_dates: movie.target_dates }))
+        : [{ id: snapshot.movie.id, title: snapshot.movie.title, target_dates: snapshot.movie.target_dates }],
     },
     null,
     2,

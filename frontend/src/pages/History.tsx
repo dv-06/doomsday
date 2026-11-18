@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Area,
   AreaChart,
@@ -137,13 +138,15 @@ function TimelineEvent({ event }: { event: HistoryEvent }) {
 
 export default function History() {
   const { snapshot } = useAppData();
+  const [searchParams] = useSearchParams();
   const [events, setEvents] = useState<HistoryEvent[]>([]);
   const [runs, setRuns] = useState<RunRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [type, setType] = useState("all");
   const [theatre, setTheatre] = useState("all");
-  const [movie, setMovie] = useState("all");
+  const [movie, setMovie] = useState(searchParams.get("movie") ?? "all");
+  const [date, setDate] = useState(searchParams.get("date") ?? "all");
   const [limit, setLimit] = useState(PAGE);
 
   useEffect(() => {
@@ -172,9 +175,15 @@ export default function History() {
         (event) =>
           (type === "all" || event.type === type) &&
           (theatre === "all" || event.theatre_id === theatre) &&
-          (movie === "all" || event.movie_id === movie || event.movie_title === movie),
+          (movie === "all" || event.movie_id === movie || event.movie_title === movie) &&
+          (date === "all" || event.date === date),
       ),
-    [events, type, theatre, movie],
+    [events, type, theatre, movie, date],
+  );
+
+  const eventDates = useMemo(
+    () => Array.from(new Set(events.map((event) => event.date).filter((value): value is string => Boolean(value)))).sort(),
+    [events],
   );
 
   const grouped = useMemo(() => {
@@ -265,6 +274,17 @@ export default function History() {
                 <option value="all">All movies</option>
                 {(snapshot?.movies ?? []).map((entry) => (
                   <option key={entry.movie.id} value={entry.movie.id}>{entry.movie.title}</option>
+                ))}
+              </select>
+              <select
+                aria-label="Filter events by show date"
+                value={date}
+                onChange={(e) => { setDate(e.target.value); setLimit(PAGE); }}
+                className="rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[12px] text-sand"
+              >
+                <option value="all">All show dates</option>
+                {eventDates.map((day) => (
+                  <option key={day} value={day}>{formatDate(day)}</option>
                 ))}
               </select>
               <select

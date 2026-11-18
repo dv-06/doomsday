@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, Callable
 from uuid import uuid4
 
-from .config import AppConfig, iso_ist, load_config
+from .config import AppConfig, TheatreConfig, iso_ist, load_config
 from .diff import diff_snapshot
 from .http import HttpClient
 from .models import SourceResult, TheatreObservation, summarise_shows
@@ -129,10 +129,32 @@ def build_snapshot(
     for theatre in previous.get("theatres", []) or []:
         prev_by_theatre[theatre.get("id")] = theatre
 
+    theatre_cfgs = list(config.theatres_for(movie))
+    known_theatre_ids = {t.id for t in theatre_cfgs}
+    for result in source_results:
+        for theatre_id, observation in result.observations.items():
+            if theatre_id in known_theatre_ids:
+                continue
+            if not observation.shows:
+                continue
+            venue = observation.venue or {}
+            theatre_cfgs.append(TheatreConfig(
+                id=theatre_id,
+                name=str(venue.get("name") or f"District cinema {venue.get('id') or ''}").strip(),
+                area="Bengaluru (newly discovered)",
+                aliases=(),
+                notes="Discovered from an explicit eligible source session.",
+                district_id=str(venue.get("id") or "") or None,
+            ))
+            known_theatre_ids.add(theatre_id)
+
+    source_failed = not source_results or any(r.status in {"blocked", "error"} for r in source_results)
+    source_incomplete = source_failed or any(r.status == "partial" for r in source_results)
+
     theatres: list[dict[str, Any]] = []
     theatre_errors: list[dict[str, Any]] = []
 
-    for theatre_cfg in config.theatres:
+    for theatre_cfg in theatre_cfgs:
         try:
             platforms: dict[str, Any] = {}
             prev_t = prev_by_theatre.get(theatre_cfg.id, {}) or {}
@@ -177,6 +199,11 @@ def build_snapshot(
                 summary = summarise_shows(day_shows)
                 by_date[date] = {
                     "listed": bool(day_shows),
+                    "state": (
+                        "incomplete" if source_incomplete else
+                        "published" if day_shows else
+                        "unpublished"
+                    ) if not (source_failed and not day_shows) else "source_failed",
                     "shows": day_shows,
                     **summary,
                     "first_show": day_shows[0]["start"] if day_shows else None,
@@ -255,7 +282,7 @@ def build_snapshot(
 
     all_shows = [s for t in theatres for s in t["shows"]]
     totals = {
-        "theatres_monitored": len(config.theatres),
+        "theatres_monitored": len(theatre_cfgs),
         "theatres_with_listings": sum(1 for t in theatres if t["dates"] and any(d["listed"] for d in t["dates"].values())),
         "shows_total": len(all_shows),
         "shows_3d": sum(1 for s in all_shows if s["format"]["is_3d"]),
@@ -269,6 +296,7 @@ def build_snapshot(
         ),
         "dates": {
             d: {
+                "state": by_date[d]["state"],
                 "shows": sum(1 for s in all_shows if s["date"] == d),
                 "theatres": sum(1 for t in theatres if (t["dates"].get(d) or {}).get("listed")),
                 "shows_3d": sum(1 for s in all_shows if s["date"] == d and s["format"]["is_3d"]),
@@ -478,7 +506,7 @@ def run_monitor(
                                     platform=name, theatre_id=t.id, status="error", listed=None,
                                     error=f"{type(exc).__name__}: {exc}",
                                 )
-                                for t in config.theatres
+                                for t in config.theatres_for(movie)
                             },
                         ))
 
@@ -523,7 +551,10 @@ def run_monitor(
     else:
         run_status = "degraded"
 
-    totals = _aggregate_totals(movie_snapshots, len(config.theatres))
+    totals = _aggregate_totals(movie_snapshots, sum(
+        int((snap.get("totals") or {}).get("theatres_monitored") or 0)
+        for snap in movie_snapshots
+    ))
     sources_payload = _aggregate_sources(movie_snapshots)
     primary = movie_snapshots[0]
     checked_at = iso_ist()

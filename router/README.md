@@ -2,8 +2,9 @@
 
 This collector runs on the JioRouter AX6000 (OpenWrt 25.12-SNAPSHOT,
 aarch64) once per hour. It fetches each configured District movie page over the
-home connection, extracts the six configured cinemas, validates the result, and
-uploads one compact multi-movie inbox file:
+home connection, extracts each movie's own cinema list (6 for Doomsday, 8 4DX
+venues for Ramayana), validates the result, and uploads one compact multi-movie
+inbox file:
 
 ```
 data/inbox/district.json
@@ -86,6 +87,9 @@ DW_FORCE=1 /opt/doomsday-watch/collect.sh
   the other movie still uploads.
 * No configured cinema IDs for a movie: that movie is recorded with zero groups;
   the other movie is unaffected.
+* Ramayana discovery: a venue outside `cinema_ids` is included only when one of
+  its sessions literally says 4DX and 3D, so new 4DX venues are not guessed from
+  a cinema page's generic capability list.
 * GitHub 401/403 or network failure: log status, keep local state so the next
   run retries the same content.
 * GitHub 409: refresh the file SHA and retry once.

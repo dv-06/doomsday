@@ -193,7 +193,14 @@ export interface Totals {
   seats_available_total: number;
   dates: Record<
     string,
-    { shows: number; theatres: number; shows_3d: number; shows_infinity_vision_3d: number; shows_4dx_3d?: number }
+    {
+      shows: number;
+      theatres: number;
+      shows_3d: number;
+      shows_infinity_vision_3d: number;
+      shows_4dx_3d?: number;
+      state?: "published" | "unpublished" | "source_failed" | "incomplete";
+    }
   >;
   theatre_errors: { theatre_id: string; error: string }[];
 }

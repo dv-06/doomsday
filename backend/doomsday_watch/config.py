@@ -10,9 +10,11 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+
+from .targets import ramayana_target_dates
 
 IST = timezone(timedelta(hours=5, minutes=30), name="IST")
 
@@ -111,6 +113,7 @@ class MovieConfig:
     district_city: str
     target_dates: tuple[str, ...]
     required_format_keys: tuple[str, ...] = ()
+    theatre_ids: tuple[str, ...] = ()
     notes: str = ""
 
     @property
@@ -167,6 +170,18 @@ class AppConfig:
                 return movie
         raise ConfigError(f"unknown movie id {movie_id!r}")
 
+    def theatres_for(self, movie: MovieConfig) -> tuple[TheatreConfig, ...]:
+        """Movie-specific venue list; never share one hardcoded cinema list."""
+        if not movie.theatre_ids:
+            return self.theatres
+        wanted = set(movie.theatre_ids)
+        unknown = wanted - {t.id for t in self.theatres}
+        if unknown:
+            raise ConfigError(
+                f"movie {movie.id!r} references unknown theatre id(s): {sorted(unknown)}"
+            )
+        return tuple(t for t in self.theatres if t.id in wanted)
+
 
 def _require(mapping: dict[str, Any], key: str, where: str) -> Any:
     if key not in mapping:
@@ -211,7 +226,17 @@ def load_config(path: str | Path | None = None) -> AppConfig:
         if mid in seen_movies:
             raise ConfigError(f"config: duplicate movie id {mid!r}")
         seen_movies.add(mid)
-        dates = [str(d) for d in item.get("target_dates", [])]
+        rule = str(item.get("date_rule") or "").strip()
+        if rule == "ramayana_2026":
+            generated = list(ramayana_target_dates())
+            explicit = [str(d) for d in item.get("target_dates", [])]
+            if explicit and explicit != generated:
+                raise ConfigError(
+                    f"config: movie {mid!r} target_dates do not match date_rule {rule!r}"
+                )
+            dates = generated
+        else:
+            dates = [str(d) for d in item.get("target_dates", [])]
         if not dates:
             raise ConfigError(f"config: movie {mid!r} has no target_dates")
         for d in dates:
@@ -235,6 +260,7 @@ def load_config(path: str | Path | None = None) -> AppConfig:
             district_city=str(district.get("city") or "bengaluru"),
             target_dates=tuple(sorted(set(dates))),
             required_format_keys=tuple(str(k) for k in required),
+            theatre_ids=tuple(str(t) for t in item.get("theatre_ids", [])),
             notes=str(item.get("notes") or ""),
         ))
 

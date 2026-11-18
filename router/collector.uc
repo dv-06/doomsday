@@ -39,9 +39,6 @@ let manifest_by_id = {};
 for (let item in (manifest.items || []))
     if (item && item.id) manifest_by_id['' + item.id] = item;
 
-let wanted = {};
-for (let cinema in cfg.cinemas) wanted['' + cinema.district_id] = cinema;
-
 let max_sessions = ((cfg.limits || {}).max_sessions) || 500;
 let total_sessions = 0;
 
@@ -92,6 +89,31 @@ function find_movie_meta(state, content_id) {
     return null;
 }
 
+function wanted_for(movie_cfg) {
+    let wanted = {};
+    let allowed = (type(movie_cfg.cinema_ids) == 'array' && length(movie_cfg.cinema_ids) > 0)
+        ? movie_cfg.cinema_ids : null;
+    let allowed_ids = {};
+    if (allowed) for (let id in allowed) allowed_ids['' + id] = true;
+    for (let cinema in cfg.cinemas) {
+        let configured = '' + (cinema.id || '');
+        if (allowed_ids[configured] || (!allowed && cinema.district_id))
+            wanted['' + cinema.district_id] = cinema;
+    }
+    return wanted;
+}
+
+function has_4dx_3d(group) {
+    let sessions = (type(group.sessions) == 'array') ? group.sessions : [];
+    for (let session in sessions) {
+        if (!session || type(session) != 'object') continue;
+        let raw = session.scrnFmt;
+        let fmt = lc(type(raw) == 'string' ? raw : '');
+        if (index(fmt, '4dx') >= 0 && index(fmt, '3d') >= 0) return true;
+    }
+    return false;
+}
+
 function extract(movie_cfg, html) {
     let tag = index(html, '<script id="__NEXT_DATA__"');
     if (tag < 0) return { status: 'unavailable', error: 'District page has no __NEXT_DATA__ (layout changed or block page)' };
@@ -136,13 +158,19 @@ function extract(movie_cfg, html) {
     if (!saw_sessions_array)
         return { status: 'unavailable', error: 'District page has no arrangedSessions' };
 
+    let wanted = wanted_for(movie_cfg);
     let out_groups = [];
     let seen = {};
     let session_count = 0;
     for (let group in groups) {
         let blob = group.data || {};
         let id = '' + (blob.id || '');
-        if (!wanted[id] || seen[id]) continue;
+        if (!wanted[id]) {
+            /* Newly listed 4DX venues are discovered from explicit sessions,
+             * not from guessed venue capability fields. */
+            if (!movie_cfg.discover_4dx_3d || !has_4dx_3d(group)) continue;
+        }
+        if (seen[id]) continue;
         seen[id] = true;
 
         let sessions = [];

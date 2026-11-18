@@ -1,11 +1,9 @@
 import { useMemo, useState } from "react";
 import { useAppData } from "../App";
 import { exportMonitorConfig } from "../lib/settings";
-import { ensurePermission } from "../lib/notifications";
+import { ensurePermission, notificationSupport } from "../lib/notifications";
 import { relativeTime, timeUntil } from "../lib/data";
 import { Chip, SectionHeading, Toggle } from "../components/ui";
-import type { Platform } from "../types";
-
 function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -27,13 +25,13 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
   );
 }
 
-const ALL_PLATFORMS: Platform[] = ["district", "bookmyshow"];
-
 export default function SettingsPage() {
   const { snapshot, meta, settings, updateSettings } = useAppData();
   const [permission, setPermission] = useState<NotificationPermission | null>(
     typeof Notification !== "undefined" ? Notification.permission : null,
   );
+  const support = notificationSupport();
+  const effectivePermission = permission ?? (support.permission === "unsupported" ? null : support.permission);
 
   const theatreIds = useMemo(() => snapshot?.theatres.map((theatre) => theatre.id) ?? [], [snapshot]);
   const enabledTheatres = settings.enabledTheatres ?? theatreIds;
@@ -120,22 +118,64 @@ on:
           <SectionHeading
             eyebrow="Notifications"
             title="Alert channels"
-            description="Browser alerts only fire while this tab is open. For phone alerts with your computer off, use Telegram or ntfy — both free."
+            description="Browser alerts are foreground-only. For phone alerts with your computer off, use Telegram or ntfy — both free."
           />
+          <div className="mb-3 rounded-xl border border-white/[0.06] bg-black/30 p-3 text-[11px] leading-relaxed">
+            <div className="flex items-center justify-between gap-2">
+              <span className="label">Status</span>
+              <Chip tone={effectivePermission === "granted" && settings.notifyBrowser ? "live" : "muted"}>
+                {!support.supported
+                  ? "Unsupported browser"
+                  : effectivePermission === "granted" && settings.notifyBrowser
+                    ? "On (foreground)"
+                    : effectivePermission === "denied"
+                      ? "Blocked"
+                      : effectivePermission === "granted"
+                        ? "Permission granted, alerts off"
+                        : "Off (default)"}
+              </Chip>
+            </div>
+            <p className="mt-1.5 text-ash">
+              {!support.supported
+                ? "This browser has no Notification API. Telegram/ntfy remain available."
+                : effectivePermission === "denied"
+                  ? "Blocked in this browser's site settings. Change the site permission, then reload."
+                  : "Permission is never requested automatically; the toggle below asks for it. Notifications only fire while a dashboard tab is open."}
+            </p>
+            <p className="mt-1.5 text-ash/80">
+              Background delivery with the site closed: <span className="text-sand">not available</span>. That needs a
+              service worker plus a real Web Push sender and VAPID keys; this zero-budget deployment has no push server.
+              {" "}{support.serviceWorker ? "A notification-click service worker is installed." : "No service worker in this browser."}
+            </p>
+          </div>
           <div className="space-y-2">
             <Toggle
               label="Browser notifications"
               description={
-                permission === "denied"
+                effectivePermission === "denied"
                   ? "Blocked in your browser settings. Re-enable notifications for this site to use them."
-                  : "Fires for new shows, 3D/Infinity Vision releases and booking openings while the tab is open."
+                  : "Asks for permission on this toggle only. Fires while a dashboard tab is open."
               }
-              checked={settings.notifyBrowser && permission === "granted"}
+              checked={settings.notifyBrowser && effectivePermission === "granted"}
               onChange={(next) => {
                 if (next) void enableBrowser();
                 else updateSettings({ notifyBrowser: false });
               }}
             />
+            <div className="rounded-xl border border-white/[0.06] bg-black/20 p-2.5">
+              <p className="label mb-1.5">Movies</p>
+              {(snapshot?.movies ?? []).map((entry) => (
+                <Toggle
+                  key={entry.movie.id}
+                  label={entry.movie.title}
+                  description={entry.movie.id === "ramayana" ? "4DX 3D only · target dates" : "All Bengaluru formats"}
+                  checked={settings.notifyMovies[entry.movie.id] !== false}
+                  onChange={(next) => updateSettings({
+                    notifyMovies: { ...settings.notifyMovies, [entry.movie.id]: next },
+                  })}
+                />
+              ))}
+            </div>
             <Toggle
               label="New shows and theatre releases"
               checked={settings.notifyOn.shows}
@@ -151,6 +191,12 @@ on:
               description="Tracked separately from IMAX 3D."
               checked={settings.notifyOn.infinity}
               onChange={(next) => updateSettings({ notifyOn: { ...settings.notifyOn, infinity: next } })}
+            />
+            <Toggle
+              label="Availability changes"
+              description="Seat-count drops and sold-out changes. Availability is a signal, never confirmed sales."
+              checked={settings.notifyOn.availability}
+              onChange={(next) => updateSettings({ notifyOn: { ...settings.notifyOn, availability: next } })}
             />
             <Toggle
               label="Booking opened alerts"
@@ -185,7 +231,7 @@ on:
       <div className="panel p-4 sm:p-5">
         <SectionHeading
           eyebrow="Watchlist"
-          title="Theatres and platforms"
+          title="Theatres"
           description="These toggles control what this dashboard displays. To stop monitoring a theatre in the scheduled job, remove it from config/monitor.json (or disable its platform)."
           right={
             <button
@@ -209,26 +255,8 @@ on:
           ))}
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className="label">Platforms</span>
-          {ALL_PLATFORMS.map((platform) => {
-            const active = settings.enabledPlatforms.includes(platform);
-            return (
-              <button
-                key={platform}
-                type="button"
-                onClick={() =>
-                  updateSettings({
-                    enabledPlatforms: active
-                      ? settings.enabledPlatforms.filter((item) => item !== platform)
-                      : [...settings.enabledPlatforms, platform],
-                  })
-                }
-                className={`chip transition ${active ? "border-ember/30 bg-ember/10 text-flame" : "border-white/10 bg-white/5 text-ash"}`}
-              >
-                {platform === "bookmyshow" ? "BookMyShow" : "District"} {active ? "on" : "off"}
-              </button>
-            );
-          })}
+          <span className="label">Source</span>
+          <span className="chip border-emerald-400/20 bg-emerald-400/10 text-emerald-300">District only</span>
           <span className="ml-auto text-[11px] text-ash">
             {settings.enabledTheatres === null ? "All theatres shown" : `${enabledTheatres.length}/${theatreIds.length} theatres shown`}
           </span>

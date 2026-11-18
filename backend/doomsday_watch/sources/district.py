@@ -19,6 +19,7 @@ from typing import Any, Iterable
 from urllib.parse import quote, urlencode
 
 from ..config import IST, AppConfig, MovieConfig, TheatreConfig, iso_ist
+from ..formats import normalise_format
 from ..http import FetchResult, HttpClient
 from ..models import SourceResult, TheatreObservation, make_show
 from .base import SourceError, SourceUnavailable
@@ -225,7 +226,43 @@ def _observations_from_groups(
     observations: dict[str, TheatreObservation] = {}
     observed_dates: set[str] = set()
 
-    for theatre in config.theatres:
+    theatre_cfgs = list(config.theatres_for(movie_cfg))
+    known_district_ids = {t.district_id for t in theatre_cfgs if t.district_id}
+    if movie_cfg.required_format_keys:
+        # A newly listed 4DX venue is eligible even before it is added to the
+        # repo config. Only an explicit target-format session can trigger it.
+        for group in groups:
+            data_blob = group.get("data") or {}
+            group_id = str(data_blob.get("id") or "")
+            if not group_id or group_id in known_district_ids:
+                continue
+            eligible = False
+            for session in group.get("sessions") or []:
+                if not _valid_session(session):
+                    continue
+                try:
+                    local = display_datetime(str(session["showTime"]))
+                except ValueError:
+                    continue
+                if local.strftime("%Y-%m-%d") not in movie_cfg.target_dates:
+                    continue
+                fmt = normalise_format(str(session.get("scrnFmt") or ""))["key"]
+                if fmt in movie_cfg.required_format_keys:
+                    eligible = True
+                    break
+            if not eligible:
+                continue
+            name = str(data_blob.get("name") or group.get("entityName") or f"District cinema {group_id}")
+            theatre_cfgs.append(TheatreConfig(
+                id=f"district-{group_id}",
+                name=name,
+                area="Bengaluru (newly discovered)",
+                aliases=(),
+                notes="Discovered from an explicit eligible source session; not yet in config.",
+                district_id=group_id,
+            ))
+
+    for theatre in theatre_cfgs:
         group = next((g for g in groups if _cinema_in_group(g, theatre)), None)
         if group is None:
             registry_entry = registry.get(theatre.district_id or "", {})
@@ -395,7 +432,7 @@ def fetch(
     message = (
         f"{len(groups)} Bengaluru cinemas listed for this movie; "
         f"target-date shows found at {sum(1 for o in observations.values() if o.shows)} of "
-        f"{len(config.theatres)} monitored theatres."
+        f"{len(config.theatres_for(movie))} monitored theatres."
     )
     return SourceResult(
         source="district",
@@ -470,7 +507,7 @@ def result_from_payload(
         raise SourceError("District inbox payload has no cinema groups list")
     groups = [g for g in groups if isinstance(g, dict)]
 
-    valid_ids = {t.district_id for t in config.theatres if t.district_id}
+    valid_ids = {t.district_id for t in config.theatres_for(movie_cfg) if t.district_id}
     seen_ids: set[str] = set()
     for group in groups:
         data_blob = group.get("data") or {}
@@ -499,20 +536,18 @@ def result_from_payload(
             if not _parse_date(str(raw_date)):
                 raise SourceError(f"District inbox cinema {group_id!r} has an invalid available_date")
 
-    # Unknown cinemas are not mapped into configured theatres, but flag an
-    # entirely mismatched payload instead of silently reporting everything absent.
     matched = {
         str((g.get("data") or {}).get("id") or "")
         for g in groups
         if str((g.get("data") or {}).get("id") or "") in valid_ids
     }
-    if groups and valid_ids and not matched:
-        raise SourceError("District inbox payload contains none of the configured cinema IDs")
 
     base_url = config.sources.get("district", {}).get("base_url", "https://www.district.in")
     observations, observed_dates = _observations_from_groups(
         movie_cfg, config, groups, movie_meta, content_id, base_url, {},
     )
+    if groups and valid_ids and not matched and not any(o.shows for o in observations.values()):
+        raise SourceError("District inbox payload contains none of the configured cinema IDs")
     collector = payload.get("collector") if isinstance(payload.get("collector"), dict) else {}
     movie_url = source_url or payload.get("movie_url") or (
         f"{base_url}/movies/{movie_cfg.district_slug}" if movie_cfg.district_slug else None
@@ -523,7 +558,7 @@ def result_from_payload(
         message=(
             f"{len(groups)} cinema group(s) supplied by the NAS collector; target-date shows "
             f"found at {sum(1 for o in observations.values() if o.shows)} of "
-            f"{len(config.theatres)} monitored theatres."
+            f"{len(config.theatres_for(movie_cfg))} monitored theatres."
         ),
         checked_at=collected_at,
         evidence={

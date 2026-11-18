@@ -48,7 +48,7 @@ def test_district_parses_real_page(config, fixture_html, tmp_path):
     assert result.status == "ok"
     assert result.movie["title"] == "Avengers: Doomsday"
     assert result.movie["content_id"] == "176735"
-    assert len(result.observations) == len(config.theatres)
+    assert len(result.observations) == len(config.theatres_for(config.primary_movie))
 
 
 def test_target_theatres_resolved_by_id(config, fixture_html, tmp_path):

@@ -210,7 +210,8 @@ than 3 hours old or in the future, or a timestamp older than the current snapsho
 An `unavailable`/`error` movie entry is accepted and preserves that movie's last
 good snapshot while the other movie updates. A payload whose canonical data hash
 equals the previous snapshot (and whose `normalizer_version` is current) is ignored
-without writing data.
+without writing data. The current normalizer version is **4**; bumping it permits
+one safe re-ingest after a normalisation change.
 
 Schema-v1 single-movie payloads are still accepted for compatibility; the other
 configured movie is recorded as missing/partial rather than silently dropped.
@@ -222,8 +223,13 @@ configured movie is recorded as missing/partial rather than silently dropped.
 - `required_format_keys: ["4dx_3d"]` filters only after the source format is
   normalised. District's `4DX-3D` maps to `4dx_3d`; `3D`, `4DX`, `IMAX 3D` and
   `Infinity Vision 4DX 3D` do not.
-- A movie with no published sessions remains present with zero shows. Nothing is
-  invented for unpublished dates.
+- A movie with no published sessions remains present with zero shows. Every
+  target date carries a `state`: `published`, `unpublished`, `source_failed` or
+  `incomplete`. A failed request is never labelled unpublished.
+- Each movie uses its own `theatre_ids`; Doomsday's six theatres are not reused
+  for Ramayana's eight 4DX venues.
+- A newly listed venue with an explicit target-format session is included as a
+  discovered venue, without guessing its capabilities.
 - All `showTime` values are naive UTC from District; conversion to Asia/Kolkata
   happens once in the Python adapter. `source_time` retains the raw value.
 

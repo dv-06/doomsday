@@ -1,0 +1,13 @@
+{
+  "name": "Doomsday Watch — Bengaluru",
+  "short_name": "Doomsday Watch",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "description": "Hourly Bengaluru showtime and seat-availability watch for Avengers: Doomsday and Ramayana 4DX 3D.",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
