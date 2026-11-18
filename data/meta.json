@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-18T12:11:37+05:30",
-  "run_id": "20261118T121137-43866f",
+  "generated_at": "2026-11-18T12:15:25+05:30",
+  "run_id": "20261118T121525-da9196",
   "run_status": "ok",
   "trigger": "nas",
   "movies": [
@@ -19,21 +19,21 @@
   "monitoring": {
     "interval_minutes": 60,
     "timezone": "Asia/Kolkata",
-    "next_check_at": "2026-11-18T13:11:37+05:30",
+    "next_check_at": "2026-11-18T13:15:25+05:30",
     "schedule_note": "Hourly collection by the Indian-egress OpenWrt NAS collector; GitHub Actions validates, ingests and deploys the snapshot."
   },
-  "last_success_at": "2026-11-18T12:11:37+05:30",
+  "last_success_at": "2026-11-18T12:15:25+05:30",
   "counts": {
-    "theatres_with_listings": 5,
-    "shows_total": 22,
-    "shows_3d": 22,
+    "theatres_with_listings": 3,
+    "shows_total": 19,
+    "shows_3d": 19,
     "shows_infinity_vision_3d": 19,
     "shows_imax_3d": 0,
-    "shows_4dx": 7,
-    "shows_4dx_3d": 3,
-    "bookable_shows": 8,
-    "seats_available_total": 1173,
-    "theatres_monitored": 6,
+    "shows_4dx": 4,
+    "shows_4dx_3d": 0,
+    "bookable_shows": 7,
+    "seats_available_total": 1132,
+    "theatres_monitored": 14,
     "movies_tracked": 2,
     "dates": {
       "2026-12-17": {
@@ -49,13 +49,6 @@
         "shows_3d": 0,
         "shows_infinity_vision_3d": 0,
         "shows_4dx_3d": 0
-      },
-      "2026-11-18": {
-        "shows": 3,
-        "theatres": 2,
-        "shows_3d": 3,
-        "shows_infinity_vision_3d": 0,
-        "shows_4dx_3d": 3
       },
       "2026-11-19": {
         "shows": 0,
@@ -200,14 +193,12 @@
     },
     "theatre_errors": []
   },
-  "events_last_run": 2,
-  "event_types_last_run": [
-    "seats_dropped"
-  ],
+  "events_last_run": 0,
+  "event_types_last_run": [],
   "sources": {
     "district": {
       "status": "ok",
-      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres. | 8 cinema group(s) supplied by the NAS collector; target-date shows found at 2 of 6 monitored theatres.",
+      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres. | 8 cinema group(s) supplied by the NAS collector; target-date shows found at 0 of 8 monitored theatres.",
       "checked_at": "2026-11-18T12:11:20+05:30",
       "last_success_at": "2026-11-18T12:11:20+05:30"
     }
@@ -218,7 +209,7 @@
     "errors": []
   },
   "host": {
-    "github_run_id": "44253195313",
+    "github_run_id": "44253614966",
     "repository": "dv-06/doomsday",
     "server_url": "https://github.com"
   },
@@ -233,10 +224,10 @@
     },
     "transport": "nas_inbox",
     "collected_at": "2026-11-18T12:11:20+05:30",
-    "ingested_at": "2026-11-18T12:11:37+05:30",
+    "ingested_at": "2026-11-18T12:15:25+05:30",
     "content_sha256": "f6fa6f50f33dc3b8139640194b1df9c0bf93b15c4db25485b1c2d513715cc4ba",
     "payload_schema_version": 2,
-    "normalizer_version": 3,
+    "normalizer_version": 4,
     "movies": [
       "avengers-doomsday",
       "ramayana"

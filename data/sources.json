@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "checked_at": "2026-11-18T12:11:37+05:30",
+  "checked_at": "2026-11-18T12:15:25+05:30",
   "sources": {
     "district": {
       "source": "district",
       "status": "ok",
-      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres. | 8 cinema group(s) supplied by the NAS collector; target-date shows found at 2 of 6 monitored theatres.",
+      "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres. | 8 cinema group(s) supplied by the NAS collector; target-date shows found at 0 of 8 monitored theatres.",
       "checked_at": "2026-11-18T12:11:20+05:30",
       "evidence": {
         "transport": "nas_inbox",
