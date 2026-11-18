@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-18T12:15:25+05:30",
-  "run_id": "20261118T121525-da9196",
+  "generated_at": "2026-11-18T12:18:26+05:30",
+  "run_id": "20261118T121826-7bceeb",
   "run_status": "ok",
   "trigger": "nas",
   "movies": [
@@ -19,10 +19,10 @@
   "monitoring": {
     "interval_minutes": 60,
     "timezone": "Asia/Kolkata",
-    "next_check_at": "2026-11-18T13:15:25+05:30",
+    "next_check_at": "2026-11-18T13:18:26+05:30",
     "schedule_note": "Hourly collection by the Indian-egress OpenWrt NAS collector; GitHub Actions validates, ingests and deploys the snapshot."
   },
-  "last_success_at": "2026-11-18T12:15:25+05:30",
+  "last_success_at": "2026-11-18T12:18:26+05:30",
   "counts": {
     "theatres_with_listings": 3,
     "shows_total": 19,
@@ -209,7 +209,7 @@
     "errors": []
   },
   "host": {
-    "github_run_id": "44253614966",
+    "github_run_id": "44254031987",
     "repository": "dv-06/doomsday",
     "server_url": "https://github.com"
   },
@@ -224,10 +224,10 @@
     },
     "transport": "nas_inbox",
     "collected_at": "2026-11-18T12:11:20+05:30",
-    "ingested_at": "2026-11-18T12:15:25+05:30",
+    "ingested_at": "2026-11-18T12:18:26+05:30",
     "content_sha256": "f6fa6f50f33dc3b8139640194b1df9c0bf93b15c4db25485b1c2d513715cc4ba",
     "payload_schema_version": 2,
-    "normalizer_version": 4,
+    "normalizer_version": 5,
     "movies": [
       "avengers-doomsday",
       "ramayana"
