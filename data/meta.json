@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-18T04:37:18+05:30",
-  "run_id": "20261118T043718-91103c",
+  "generated_at": "2026-11-18T06:37:17+05:30",
+  "run_id": "20261118T063717-656236",
   "run_status": "partial",
   "trigger": "nas",
   "monitoring": {
     "interval_minutes": 60,
     "timezone": "Asia/Kolkata",
-    "next_check_at": "2026-11-18T05:37:18+05:30",
+    "next_check_at": "2026-11-18T07:37:17+05:30",
     "schedule_note": "Hourly collection by the Indian-egress OpenWrt NAS collector; GitHub Actions validates, ingests and deploys the snapshot."
   },
-  "last_success_at": "2026-11-18T04:37:18+05:30",
+  "last_success_at": "2026-11-18T06:37:17+05:30",
   "counts": {
     "theatres_monitored": 6,
     "theatres_with_listings": 3,
@@ -20,7 +20,7 @@
     "shows_imax_3d": 0,
     "shows_4dx": 4,
     "bookable_shows": 5,
-    "seats_available_total": 1243,
+    "seats_available_total": 1230,
     "dates": {
       "2026-12-17": {
         "shows": 19,
@@ -45,13 +45,13 @@
     "district": {
       "status": "ok",
       "message": "3 cinema group(s) supplied by the NAS collector; target-date shows found at 3 of 6 monitored theatres.",
-      "checked_at": "2026-11-18T04:37:00+05:30",
-      "last_success_at": "2026-11-18T04:37:00+05:30"
+      "checked_at": "2026-11-18T06:37:00+05:30",
+      "last_success_at": "2026-11-18T06:37:00+05:30"
     },
     "bookmyshow": {
       "status": "blocked",
       "message": "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). The Indian-egress collector covers District only; no block was bypassed.",
-      "checked_at": "2026-11-18T04:37:18+05:30",
+      "checked_at": "2026-11-18T06:37:17+05:30",
       "last_success_at": "2026-11-17T19:48:12+05:30"
     }
   },
@@ -61,7 +61,7 @@
     "errors": []
   },
   "host": {
-    "github_run_id": "44196457125",
+    "github_run_id": "44213292257",
     "repository": "dv-06/doomsday",
     "server_url": "https://github.com"
   },
@@ -75,9 +75,9 @@
       "parser": "district-next-data"
     },
     "transport": "nas_inbox",
-    "collected_at": "2026-11-18T04:37:00+05:30",
-    "ingested_at": "2026-11-18T04:37:18+05:30",
-    "content_sha256": "f0e1820e40d28d7f60c96ca953d5659c5b5793c0d038a04df30fd8ee39e035bb",
+    "collected_at": "2026-11-18T06:37:00+05:30",
+    "ingested_at": "2026-11-18T06:37:17+05:30",
+    "content_sha256": "34f3d5958965a416709770432a13e547239dfcd3e59e2e435d3c1d6110a7e38f",
     "payload_schema_version": 1,
     "normalizer_version": 2
   }
