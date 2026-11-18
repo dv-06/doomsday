@@ -270,6 +270,7 @@ export default function History() {
                 <button
                   key={item.id}
                   type="button"
+                  aria-label={item.id === "all" ? "All movies" : item.title}
                   aria-pressed={active}
                   onClick={() => { setMovie(item.id); setLimit(PAGE); }}
                   className={`min-h-[40px] shrink-0 rounded-xl border px-3 text-[12px] font-medium transition ${

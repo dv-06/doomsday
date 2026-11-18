@@ -189,13 +189,21 @@ def diff_snapshot(
                             "booking_opened", theatre_id=tid, theatre_name=name, platform=platform,
                             date=show["date"], start=show["start"], screen=show.get("screen"),
                             message=f"{name}: booking open for {show['start']} on {show['date']} ({_format_phrase(show)})",
-                            data={"booking_url": show.get("booking_url")},
+                            data={
+                                "booking_url": show.get("booking_url"),
+                                "format": show["format"]["label"],
+                                "format_key": show["format"]["key"],
+                            },
                         ))
                     elif prev_status in {"bookable", "few_left", "filling_fast"} and new_status == "sold_out":
                         events.append(_make_event(
                             "sold_out", theatre_id=tid, theatre_name=name, platform=platform,
                             date=show["date"], start=show["start"], screen=show.get("screen"),
                             message=f"{name}: source now reports {show['start']} on {show['date']} as sold out/unavailable",
+                            data={
+                                "format": show["format"]["label"],
+                                "format_key": show["format"]["key"],
+                            },
                         ))
                     prev_avail = prev_show.get("available_seats")
                     new_avail = show["availability"]["available_seats"]
@@ -207,7 +215,12 @@ def diff_snapshot(
                                 f"{name}: available seats for {show['start']} on {show['date']} "
                                 f"fell from {prev_avail} to {new_avail} (availability, not confirmed sales)"
                             ),
-                            data={"before": prev_avail, "after": new_avail},
+                            data={
+                                "before": prev_avail,
+                                "after": new_avail,
+                                "format": show["format"]["label"],
+                                "format_key": show["format"]["key"],
+                            },
                             dedupe=(prev_avail, new_avail),
                         ))
                     prev_price = prev_show.get("price_min")
@@ -217,7 +230,12 @@ def diff_snapshot(
                             "price_changed", theatre_id=tid, theatre_name=name, platform=platform,
                             date=show["date"], start=show["start"], screen=show.get("screen"),
                             message=f"{name}: {show['start']} on {show['date']} price changed ₹{prev_price} → ₹{new_price}",
-                            data={"before": prev_price, "after": new_price},
+                            data={
+                                "before": prev_price,
+                                "after": new_price,
+                                "format": show["format"]["label"],
+                                "format_key": show["format"]["key"],
+                            },
                             dedupe=(prev_price, new_price),
                         ))
 

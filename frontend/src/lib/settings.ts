@@ -1,7 +1,8 @@
 import type { Meta, Snapshot } from "../types";
 
 const SETTINGS_KEY = "dw:settings:v1";
-const SEEN_KEY = "dw:seen-events:v1";
+const SEEN_KEY = "dw:seen:v1";
+const LEGACY_SEEN_KEY = "dw:seen-events:v1";
 
 export interface Settings {
   enabledTheatres: string[] | null;
@@ -53,7 +54,8 @@ export function saveSettings(settings: Settings): void {
 
 export function seenEventIds(): Set<string> {
   try {
-    return new Set(JSON.parse(localStorage.getItem(SEEN_KEY) ?? "[]") as string[]);
+    const raw = localStorage.getItem(SEEN_KEY) ?? localStorage.getItem(LEGACY_SEEN_KEY) ?? "[]";
+    return new Set(JSON.parse(raw) as string[]);
   } catch {
     return new Set();
   }

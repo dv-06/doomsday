@@ -27,8 +27,10 @@ computer off. Each movie has its own venue list: 6 theatres for Doomsday and all
 - Renders a dark cinematic dashboard: hero status, stat cards, format/date/platform
   filters, per-theatre show rows, and a seat-comfort guide.
 - Keeps an append-only history of snapshots and change events in the repository.
-- Sends **Telegram**, **ntfy.sh** and generic webhook alerts (all free), plus
-  in-browser notifications while the tab is open.
+- Sends **foreground Android/browser notifications** while the dashboard tab is open.
+  Background Web Push is deliberately not claimed: see
+  [`docs/NOTIFICATIONS.md`](docs/NOTIFICATIONS.md). Optional server-side Telegram,
+  ntfy.sh and webhook channels remain available to the ingestion job.
 - Degrades honestly: if one movie page is unavailable, its last good snapshot is
   preserved and labelled while the other movie continues updating. BookMyShow is
   disabled in this deployment; District is the sole source.
@@ -90,7 +92,8 @@ GitHub Actions (cron: 5 * * * *)
   free for public repositories, Telegram/ntfy free.
 
 Full details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) ·
-[`docs/DATA_SCHEMA.md`](docs/DATA_SCHEMA.md) · [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+[`docs/DATA_SCHEMA.md`](docs/DATA_SCHEMA.md) · [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) ·
+[`docs/NOTIFICATIONS.md`](docs/NOTIFICATIONS.md).
 
 ---
 

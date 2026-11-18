@@ -1,8 +1,14 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAppData } from "../App";
 import { exportMonitorConfig } from "../lib/settings";
-import { ensurePermission, notificationSupport } from "../lib/notifications";
-import { relativeTime, timeUntil } from "../lib/data";
+import {
+  ensurePermission,
+  notificationDiagnostics,
+  notificationSupport,
+  sendTestNotification,
+  type NotificationDiagnostics,
+} from "../lib/notifications";
+import { formatDateTime, relativeTime, timeUntil } from "../lib/data";
 import { Chip, SectionHeading, Toggle } from "../components/ui";
 function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
@@ -30,8 +36,31 @@ export default function SettingsPage() {
   const [permission, setPermission] = useState<NotificationPermission | null>(
     typeof Notification !== "undefined" ? Notification.permission : null,
   );
+  const [diagnostics, setDiagnostics] = useState<NotificationDiagnostics | null>(null);
+  const [testState, setTestState] = useState<{ ok: boolean; text: string } | null>(null);
+  const [testing, setTesting] = useState(false);
   const support = notificationSupport();
   const effectivePermission = permission ?? (support.permission === "unsupported" ? null : support.permission);
+
+  const refreshDiagnostics = useCallback(async () => {
+    const next = await notificationDiagnostics();
+    setDiagnostics(next);
+    setPermission(next.permission === "unsupported" ? null : next.permission);
+  }, []);
+
+  useEffect(() => {
+    void refreshDiagnostics();
+    const onNotification = () => void refreshDiagnostics();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void refreshDiagnostics();
+    };
+    window.addEventListener("dw:notification", onNotification);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("dw:notification", onNotification);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [refreshDiagnostics]);
 
   const theatreIds = useMemo(() => snapshot?.theatres.map((theatre) => theatre.id) ?? [], [snapshot]);
   const enabledTheatres = settings.enabledTheatres ?? theatreIds;
@@ -62,7 +91,72 @@ on:
     const result = await ensurePermission();
     setPermission(result);
     if (result === "granted") updateSettings({ notifyBrowser: true });
+    await refreshDiagnostics();
   };
+
+  const runTestNotification = async () => {
+    setTesting(true);
+    setTestState(null);
+    try {
+      const result = await sendTestNotification();
+      setTestState({
+        ok: result.ok,
+        text: result.ok
+          ? `Test notification sent via ${result.via === "service-worker" ? "the service worker" : "the page Notification API"}.`
+          : result.error ?? "The browser refused the test notification.",
+      });
+    } catch (error) {
+      setTestState({
+        ok: false,
+        text: error instanceof Error ? error.message : "Could not send the test notification.",
+      });
+    } finally {
+      setTesting(false);
+      await refreshDiagnostics();
+    }
+  };
+
+  const permissionLabel = !support.supported
+    ? "Unsupported"
+    : effectivePermission === "granted"
+      ? "Granted"
+      : effectivePermission === "denied"
+        ? "Blocked"
+        : effectivePermission === "default"
+          ? "Not requested"
+          : "Unknown";
+  const workerLabel = !diagnostics
+    ? "Checking…"
+    : diagnostics.serviceWorker === "active"
+      ? "Active"
+      : diagnostics.serviceWorker === "installing"
+        ? "Installing"
+        : diagnostics.serviceWorker === "waiting"
+          ? "Waiting to activate"
+          : diagnostics.serviceWorker === "unsupported"
+            ? "Unsupported"
+            : diagnostics.serviceWorker === "error"
+              ? "Registration error"
+              : "Not registered";
+  const pushLabel = !diagnostics
+    ? "Checking…"
+    : diagnostics.push === "subscribed"
+      ? "Subscribed"
+      : diagnostics.push === "not-subscribed"
+        ? "Not subscribed"
+        : diagnostics.push === "unregistered"
+          ? "Waiting for worker"
+          : "Unsupported";
+  const canTest = support.supported && effectivePermission === "granted";
+  const testButtonLabel = testing
+    ? "Sending…"
+    : effectivePermission === "denied"
+      ? "Blocked in browser settings"
+      : !support.supported
+        ? "Notifications unsupported"
+        : !canTest
+          ? "Enable notifications first"
+          : "Send test notification";
 
   return (
     <div className="space-y-4 sm:space-y-5">
@@ -117,8 +211,8 @@ on:
         <div className="panel min-w-0 p-3 sm:p-5">
           <SectionHeading
             eyebrow="Notifications"
-            title="Alert channels"
-            description="Browser alerts are foreground-only. For phone alerts with your computer off, use Telegram or ntfy — both free."
+            title="Android browser alerts"
+            description="Browser notifications are opt-in. Permission is requested only when you press the Enable control, never on page load."
           />
           <div className="mb-3 rounded-xl border border-white/[0.06] bg-black/30 p-2.5 text-[11px] leading-relaxed sm:p-3">
             <div className="flex items-center justify-between gap-2">
@@ -127,7 +221,7 @@ on:
                 {!support.supported
                   ? "Unsupported browser"
                   : effectivePermission === "granted" && settings.notifyBrowser
-                    ? "On (foreground)"
+                    ? "On (dashboard open)"
                     : effectivePermission === "denied"
                       ? "Blocked"
                       : effectivePermission === "granted"
@@ -137,24 +231,89 @@ on:
             </div>
             <p className="mt-1.5 text-ash">
               {!support.supported
-                ? "This browser has no Notification API. Telegram/ntfy remain available."
+                ? "This browser has no Notification API. Use a current Chrome, Edge, Firefox or Safari release."
                 : effectivePermission === "denied"
-                  ? "Blocked in this browser's site settings. Change the site permission, then reload."
-                  : "Permission is never requested automatically; the toggle below asks for it. Notifications only fire while a dashboard tab is open."}
-            </p>
-            <p className="mt-1.5 text-ash/80">
-              Background delivery with the site closed: <span className="text-sand">not available</span>. That needs a
-              service worker plus a real Web Push sender and VAPID keys; this zero-budget deployment has no push server.
-              {" "}{support.serviceWorker ? "A notification-click service worker is installed." : "No service worker in this browser."}
+                  ? "Notifications are blocked for this site. Open the browser's site settings, allow notifications, then reload this page."
+                  : effectivePermission === "default"
+                    ? "Permission has not been requested. Turn on Browser notifications below; Android Chrome will show its own permission prompt."
+                    : "Permission is granted. Alerts are checked every five minutes while this dashboard is open."}
             </p>
           </div>
-          <div className="space-y-2">
+
+          <dl className="mb-3 space-y-2 rounded-xl border border-white/[0.06] bg-black/20 p-3 text-[11px]">
+            <div className="flex items-start justify-between gap-3">
+              <dt className="text-ash">Permission</dt>
+              <dd className="text-right font-medium text-white">{permissionLabel}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-3">
+              <dt className="text-ash">Service worker</dt>
+              <dd className="min-w-0 text-right font-medium text-white">
+                {workerLabel}
+                {diagnostics?.scope ? (
+                  <span className="mt-0.5 block break-all font-normal text-ash">{diagnostics.scope}</span>
+                ) : null}
+              </dd>
+            </div>
+            <div className="flex items-start justify-between gap-3">
+              <dt className="text-ash">Push subscription</dt>
+              <dd className="text-right font-medium text-white">{pushLabel}</dd>
+            </div>
+            <div className="flex items-start justify-between gap-3">
+              <dt className="text-ash">Background delivery</dt>
+              <dd className="text-right font-medium text-sand">Unavailable — no push sender</dd>
+            </div>
+          </dl>
+
+          <div className="rounded-xl border border-white/[0.06] bg-black/20 p-2.5">
+            <p className="label mb-1.5">Last notification event</p>
+            {diagnostics?.last ? (
+              <div className="space-y-1">
+                <p className="break-words text-[11px] font-medium text-white">{diagnostics.last.title}</p>
+                <p className="break-words text-[11px] leading-relaxed text-ash">{diagnostics.last.body}</p>
+                <p className="text-[10px] text-ash/80">
+                  {formatDateTime(diagnostics.last.at)} · {diagnostics.last.ok ? "Delivered" : "Not delivered"} via{" "}
+                  {diagnostics.last.via === "service-worker" ? "service worker" : diagnostics.last.via === "page" ? "page API" : "no channel"}
+                </p>
+                {diagnostics.last.error ? (
+                  <p className="break-words text-[10.5px] text-red-300">{diagnostics.last.error}</p>
+                ) : null}
+              </div>
+            ) : (
+              <p className="text-[11px] text-ash">No notification has been sent from this browser yet.</p>
+            )}
+          </div>
+
+          <div className="mt-3">
+            <button
+              type="button"
+              className="btn min-h-[44px] w-full !py-2 text-xs"
+              disabled={!canTest || testing}
+              onClick={() => void runTestNotification()}
+            >
+              {testButtonLabel}
+            </button>
+            <p className="mt-1.5 text-[10.5px] leading-relaxed text-ash/80">
+              The test is a harmless sample. It uses the same title, movie, cinema, date, IST time, format and event-type
+              formatter as real session alerts.
+            </p>
+            {testState ? (
+              <p
+                role="status"
+                aria-live="polite"
+                className={`mt-1.5 break-words text-[11px] ${testState.ok ? "text-emerald-300" : "text-red-300"}`}
+              >
+                {testState.text}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="mt-3 space-y-2">
             <Toggle
               label="Browser notifications"
               description={
                 effectivePermission === "denied"
-                  ? "Blocked in your browser settings. Re-enable notifications for this site to use them."
-                  : "Asks for permission on this toggle only. Fires while a dashboard tab is open."
+                  ? "Blocked in your browser settings. Re-enable notifications for this site, then reload."
+                  : "Requests permission only when switched on. Alerts are delivered while a dashboard tab is open."
               }
               checked={settings.notifyBrowser && effectivePermission === "granted"}
               onChange={(next) => {
@@ -163,12 +322,16 @@ on:
               }}
             />
             <div className="rounded-xl border border-white/[0.06] bg-black/20 p-2.5">
-              <p className="label mb-1.5">Movies</p>
+              <p className="label mb-1.5">Movie preferences</p>
               {(snapshot?.movies ?? []).map((entry) => (
                 <Toggle
                   key={entry.movie.id}
                   label={entry.movie.title}
-                  description={entry.movie.id === "ramayana" ? "4DX 3D only · target dates" : "All Bengaluru formats"}
+                  description={
+                    entry.movie.id === "ramayana"
+                      ? "Explicit 4DX 3D sessions only · 8 venues · 10 target dates"
+                      : "Configured Bengaluru venues and supported formats"
+                  }
                   checked={settings.notifyMovies[entry.movie.id] !== false}
                   onChange={(next) => updateSettings({
                     notifyMovies: { ...settings.notifyMovies, [entry.movie.id]: next },
@@ -177,7 +340,8 @@ on:
               ))}
             </div>
             <Toggle
-              label="New shows and theatre releases"
+              label="New shows and first sessions"
+              description="New session at a monitored cinema, or the first session published for a target date."
               checked={settings.notifyOn.shows}
               onChange={(next) => updateSettings({ notifyOn: { ...settings.notifyOn, shows: next } })}
             />
@@ -188,13 +352,13 @@ on:
             />
             <Toggle
               label="Infinity Vision 3D alerts"
-              description="Tracked separately from IMAX 3D."
+              description="Tracked separately from IMAX 3D and 4DX 3D."
               checked={settings.notifyOn.infinity}
               onChange={(next) => updateSettings({ notifyOn: { ...settings.notifyOn, infinity: next } })}
             />
             <Toggle
               label="Availability changes"
-              description="Seat-count drops and sold-out changes. Availability is a signal, never confirmed sales."
+              description="Source-reported seat-count drops and sold-out changes. Availability is never treated as confirmed sales."
               checked={settings.notifyOn.availability}
               onChange={(next) => updateSettings({ notifyOn: { ...settings.notifyOn, availability: next } })}
             />
@@ -203,26 +367,15 @@ on:
               checked={settings.notifyOn.booking}
               onChange={(next) => updateSettings({ notifyOn: { ...settings.notifyOn, booking: next } })}
             />
-            <Toggle
-              label="Source blocked / recovered"
-              checked={settings.notifyOn.sourceIssues}
-              onChange={(next) => updateSettings({ notifyOn: { ...settings.notifyOn, sourceIssues: next } })}
-            />
           </div>
-          <div className="mt-4 rounded-xl border border-white/[0.06] bg-black/30 p-3">
-            <p className="label mb-1.5">Phone alerts (free)</p>
-            <p className="text-[11px] leading-relaxed text-ash">
-              Add repository secrets <code className="text-flame">TELEGRAM_BOT_TOKEN</code> +{" "}
-              <code className="text-flame">TELEGRAM_CHAT_ID</code> (or <code className="text-flame">NTFY_TOPIC</code>) in
-              GitHub → Settings → Secrets and variables → Actions. Optional Redis-free dedupe is handled in the run state.
-            </p>
-            <div className="mt-2 flex items-start justify-between gap-2">
-              <code className="break-all text-[10.5px] text-sand">gh secret set TELEGRAM_BOT_TOKEN</code>
-              <CopyButton text="gh secret set TELEGRAM_BOT_TOKEN" label="Copy" />
-            </div>
-            <p className="mt-2 text-[11px] text-ash/80">
-              Test locally with <code className="text-flame">python -m doomsday_watch notify-test</code> after exporting the
-              variables.
+
+          <div className="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/[0.05] p-3">
+            <p className="label text-sand">Background push is not implemented</p>
+            <p className="mt-1 text-[11px] leading-relaxed text-ash">
+              GitHub Pages is a static host and cannot act as a push sender. This deployment has no server-side
+              subscription store or VAPID private key, so the browser never creates a push subscription. Notifications
+              therefore work only while the dashboard tab is open. They stop when the tab is backgrounded long enough
+              for Chrome to freeze it, when Chrome is closed, or when the phone is locked.
             </p>
           </div>
         </div>
