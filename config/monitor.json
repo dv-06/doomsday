@@ -1,23 +1,5 @@
 {
-  "schema_version": 1,
-  "movie": {
-    "title": "Avengers: Doomsday",
-    "release_date": "2026-12-17",
-    "language": "English",
-    "district": {
-      "city": "bengaluru",
-      "content_id": "176735",
-      "slug": "avengers-doomsday-movie-tickets-in-bengaluru-MV176735"
-    },
-    "bookmyshow": {
-      "movie_code": null,
-      "event_code_note": "Leave movie_code null: the adapter discovers the event code from BookMyShow's public Bengaluru movie list each run."
-    }
-  },
-  "target_dates": [
-    "2026-12-17",
-    "2026-12-18"
-  ],
+  "schema_version": 2,
   "monitoring": {
     "interval_minutes": 60,
     "timezone": "Asia/Kolkata",
@@ -165,9 +147,65 @@
       "registry_cache_hours": 24
     },
     "bookmyshow": {
-      "enabled": true,
+      "enabled": false,
       "base_url": "https://in.bookmyshow.com",
-      "probe_path": "/explore/movies-bengaluru"
+      "probe_path": "/explore/movies-bengaluru",
+      "note": "Disabled: District is the sole source for this deployment."
     }
-  }
+  },
+  "movies": [
+    {
+      "id": "avengers-doomsday",
+      "title": "Avengers: Doomsday",
+      "release_date": "2026-12-17",
+      "district": {
+        "city": "bengaluru",
+        "content_id": "176735",
+        "slug": "avengers-doomsday-movie-tickets-in-bengaluru-MV176735"
+      },
+      "target_dates": [
+        "2026-12-17",
+        "2026-12-18"
+      ],
+      "required_format_keys": [],
+      "notes": "Primary Marvel tracking. All published formats are retained."
+    },
+    {
+      "id": "ramayana",
+      "title": "Ramayana",
+      "release_date": "2026-11-05",
+      "district": {
+        "city": "bengaluru",
+        "content_id": "176276",
+        "slug": "ramayana-movie-tickets-in-bengaluru-MV176276"
+      },
+      "target_dates": [
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-26",
+        "2026-12-27"
+      ],
+      "required_format_keys": [
+        "4dx_3d"
+      ],
+      "notes": "November 18-30 plus December weekend dates. Only explicit source sessions whose format normalises to 4DX 3D are retained."
+    }
+  ]
 }

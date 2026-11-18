@@ -1,18 +1,23 @@
 # OpenWrt Indian-egress collector
 
 This collector runs on the JioRouter AX6000 (OpenWrt 25.12-SNAPSHOT,
-aarch64) once per hour. It fetches District's public Bengaluru movie page over
-the home connection, extracts the six configured cinemas and the two target
-dates, validates the result, and uploads one compact inbox file:
+aarch64) once per hour. It fetches each configured District movie page over the
+home connection, extracts the six configured cinemas, validates the result, and
+uploads one compact multi-movie inbox file:
 
 ```
 data/inbox/district.json
 ```
 
+Tracked movies:
+
+- `avengers-doomsday` (`176735`) — 17–18 Dec 2026.
+- `ramayana` (`176276`) — November + December weekend dates, filtered to explicit
+  `4DX-3D` by the Python normaliser.
+
 It does not fetch BookMyShow, bypass Cloudflare/Akamai, use proxies, or invent
-seats. BookMyShow remains a separately reported, blocked source. GitHub
-Actions ingests the inbox through the existing Python pipeline and deploys
-Pages.
+seats. BookMyShow is disabled for this deployment. GitHub Actions ingests the
+inbox through the existing Python pipeline and deploys Pages.
 
 ## Files on the router
 
@@ -20,7 +25,7 @@ Pages.
 |---|---|
 | `/opt/doomsday-watch/collect.sh` | lock, fetch, validate, upload, log |
 | `/opt/doomsday-watch/collector.uc` | `__NEXT_DATA__` extraction and filtering |
-| `/opt/doomsday-watch/config.json` | movie URL, cinema IDs, target dates, limits |
+| `/opt/doomsday-watch/config.json` | `movies[]` URLs/IDs, cinema IDs, limits |
 | `/opt/doomsday-watch/state.json` | last successful hash/upload (created at runtime) |
 | `/etc/doomsday-watch/token` | fine-grained PAT, mode `600`, never in the repo |
 | `/mnt/seagate/doomsday/logs/` | daily logs, 14-day retention, 5 MB cap per file |
@@ -74,9 +79,13 @@ DW_FORCE=1 /opt/doomsday-watch/collect.sh
 ## Failure behaviour
 
 * Low memory (<80 MB available): abort before fetching.
-* Fetch timeout / non-200 / oversized or tiny page: abort, preserve state.
-* Missing/malformed `__NEXT_DATA__`: abort, preserve state.
-* No configured cinema IDs or no movie metadata: abort, preserve state.
+* Fetch timeout / non-200 / oversized or tiny page for one movie: mark that
+  movie `unavailable`, still upload the other movie.
+* Every movie fetch fails: abort, preserve state.
+* Missing/malformed `__NEXT_DATA__` for one movie: mark it unavailable/error;
+  the other movie still uploads.
+* No configured cinema IDs for a movie: that movie is recorded with zero groups;
+  the other movie is unaffected.
 * GitHub 401/403 or network failure: log status, keep local state so the next
   run retries the same content.
 * GitHub 409: refresh the file SHA and retry once.

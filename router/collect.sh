@@ -40,8 +40,7 @@ if [ ! -r "$CONFIG" ]; then
     log "FATAL config missing: $CONFIG"
     exit 1
 fi
-URL=$(jsonfilter -e '@.movie_url' < "$CONFIG" 2>/dev/null)
-CONTENT_ID=$(jsonfilter -e '@.content_id' < "$CONFIG" 2>/dev/null)
+MOVIE_IDS=$(jsonfilter -e '@.movies[*].id' < "$CONFIG" 2>/dev/null)
 REPO=$(jsonfilter -e '@.repository' < "$CONFIG" 2>/dev/null)
 BRANCH=$(jsonfilter -e '@.branch' < "$CONFIG" 2>/dev/null)
 INBOX=$(jsonfilter -e '@.inbox_path' < "$CONFIG" 2>/dev/null)
@@ -52,7 +51,11 @@ TIMEOUT=$(jsonfilter -e '@.limits.fetch_timeout_seconds' < "$CONFIG" 2>/dev/null
 MIN_MB=${MIN_MB:-80}
 MAX_BYTES=${MAX_BYTES:-3000000}
 TIMEOUT=${TIMEOUT:-30}
-for value in "$URL" "$CONTENT_ID" "$REPO" "$BRANCH" "$INBOX" "$UA"; do
+if [ -z "$MOVIE_IDS" ]; then
+    log "FATAL config has no movies: $CONFIG"
+    exit 1
+fi
+for value in "$REPO" "$BRANCH" "$INBOX" "$UA"; do
     if [ -z "$value" ]; then
         log "FATAL incomplete config: $CONFIG"
         exit 1
@@ -74,48 +77,77 @@ if ! flock -n 9; then
 fi
 
 TMP=$(mktemp -d /tmp/doomsday.XXXXXX) || { log "FATAL cannot create temp dir"; exit 1; }
-HTML="$TMP/district.html"
 PAYLOAD="$TMP/payload.json"
 CONTENT="$TMP/content.json"
+MANIFEST="$TMP/manifest.json"
 ERR="$TMP/parse.err"
 cleanup() {
     rm -rf "$TMP"
 }
 trap cleanup EXIT INT TERM
 
-log "start host=openwrt content_id=$CONTENT_ID available_mb=$AVAIL_MB upload=$UPLOAD force=$FORCE"
-
-# ---------- fetch (bounded retries, no bypass) ----------
-fetch_ok=0
-attempt=1
-while [ "$attempt" -le 2 ]; do
-    if wget -q -T "$TIMEOUT" -U "$UA" -O "$HTML" "$URL"; then
-        fetch_ok=1
-        break
-    fi
-    rc=$?
-    log "fetch attempt $attempt failed rc=$rc"
-    attempt=$((attempt + 1))
-    [ "$attempt" -le 2 ] && sleep 5
-done
-if [ "$fetch_ok" -ne 1 ]; then
-    log "FATAL District fetch failed; previous snapshot and state preserved"
-    exit 1
-fi
-
-BYTES=$(wc -c < "$HTML" 2>/dev/null || echo 0)
-if [ "$BYTES" -lt 100000 ] || [ "$BYTES" -gt "$MAX_BYTES" ]; then
-    log "FATAL District response size ${BYTES} outside allowed range; previous snapshot preserved"
-    exit 1
-fi
-
-# ---------- extract + validate ----------
 COLLECTED_AT=$(TZ=IST-5:30 date '+%Y-%m-%dT%H:%M:%S+05:30')
-if ! ucode "$BASE/collector.uc" "$CONFIG" "$HTML" "$COLLECTED_AT" "$CONTENT" > "$PAYLOAD" 2>"$ERR"; then
+MOVIE_COUNT=$(printf '%s\n' "$MOVIE_IDS" | wc -w)
+log "start host=openwrt movies=$MOVIE_COUNT available_mb=$AVAIL_MB upload=$UPLOAD force=$FORCE"
+
+# ---------- fetch every movie page (bounded retries, no bypass) ----------
+printf '{"collected_at":"%s","items":[' "$COLLECTED_AT" > "$MANIFEST"
+fetch_ok_count=0
+movie_index=0
+first_item=1
+for MOVIE_ID in $MOVIE_IDS; do
+    URL=$(jsonfilter -e "@.movies[$movie_index].movie_url" < "$CONFIG" 2>/dev/null)
+    HTML="$TMP/district-$movie_index.html"
+    if [ -z "$URL" ]; then
+        log "FATAL movie $MOVIE_ID has no movie_url"
+        exit 1
+    fi
+    fetch_ok=0
+    attempt=1
+    while [ "$attempt" -le 2 ]; do
+        if wget -q -T "$TIMEOUT" -U "$UA" -O "$HTML" "$URL"; then
+            fetch_ok=1
+            break
+        fi
+        rc=$?
+        log "fetch $MOVIE_ID attempt $attempt failed rc=$rc"
+        attempt=$((attempt + 1))
+        [ "$attempt" -le 2 ] && sleep 5
+    done
+    item_ok=0
+    item_error=""
+    if [ "$fetch_ok" -eq 1 ]; then
+        BYTES=$(wc -c < "$HTML" 2>/dev/null || echo 0)
+        if [ "$BYTES" -ge 100000 ] && [ "$BYTES" -le "$MAX_BYTES" ]; then
+            item_ok=1
+            fetch_ok_count=$((fetch_ok_count + 1))
+            log "fetch $MOVIE_ID ok bytes=$BYTES"
+        else
+            item_error="response size ${BYTES} outside allowed range"
+            log "fetch $MOVIE_ID rejected: $item_error"
+        fi
+    else
+        item_error="page fetch failed"
+        log "fetch $MOVIE_ID failed; other movies continue"
+    fi
+    if [ "$first_item" -eq 0 ]; then printf ',' >> "$MANIFEST"; fi
+    first_item=0
+    printf '{"id":"%s","html":"%s","ok":%s,"error":"%s"}'         "$MOVIE_ID" "$HTML" "$item_ok" "$item_error" >> "$MANIFEST"
+    movie_index=$((movie_index + 1))
+done
+printf ']}' >> "$MANIFEST"
+
+if [ "$fetch_ok_count" -eq 0 ]; then
+    log "FATAL every District movie fetch failed; previous snapshot and state preserved"
+    exit 1
+fi
+
+# ---------- extract each movie + validate ----------
+if ! ucode "$BASE/collector.uc" "$CONFIG" "$MANIFEST" "$CONTENT" > "$PAYLOAD" 2>"$ERR"; then
     log "FATAL District parse failed: $(head -c 300 "$ERR" | tr '\n' ' ')"
     exit 1
 fi
-if ! jsonfilter -e '@.groups[0].data.id' < "$PAYLOAD" >/dev/null 2>&1; then
+if ! jsonfilter -e '@.movies[0].id' < "$PAYLOAD" >/dev/null 2>&1; then
     log "FATAL parsed payload failed validation; previous snapshot preserved"
     exit 1
 fi
@@ -243,7 +275,7 @@ if ! ucode -e 'import {readfile,writefile} from "fs"; writefile(ARGV[1],b64enc(r
     exit 1
 fi
 
-MSG="data(nas): District snapshot ${COLLECTED_AT}"
+MSG="data(nas): District multi-movie snapshot ${COLLECTED_AT}"
 COMMIT=""
 upload_ok=0
 attempt=1

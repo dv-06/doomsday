@@ -26,10 +26,11 @@ def _show(theatre_id: str = "lulu-global-mall"):
     )
 
 
-def _fake_district(config, client, cache_dir=None):
+def _fake_district(config, client, cache_dir=None, *, movie=None):
     observations = {}
+    primary = movie is None or movie.id == config.primary_movie.id
     for theatre in config.theatres:
-        listed = theatre.id == "lulu-global-mall"
+        listed = primary and theatre.id == "lulu-global-mall"
         observations[theatre.id] = TheatreObservation(
             platform="district",
             theatre_id=theatre.id,
@@ -38,10 +39,14 @@ def _fake_district(config, client, cache_dir=None):
             venue={"id": theatre.district_id, "name": theatre.name, "url": "https://example.test/venue"},
             shows=[_show(theatre.id)] if listed else [],
         )
-    return SourceResult(source="district", status="ok", message="fixture", observations=observations)
+    return SourceResult(
+        source="district", status="ok", message="fixture",
+        movie_id=(movie.id if movie else config.primary_movie.id),
+        observations=observations,
+    )
 
 
-def _blocked_district(config, client, cache_dir=None):
+def _blocked_district(config, client, cache_dir=None, *, movie=None):
     observations = {
         theatre.id: TheatreObservation(
             platform="district", theatre_id=theatre.id, status="blocked",
@@ -49,10 +54,14 @@ def _blocked_district(config, client, cache_dir=None):
         )
         for theatre in config.theatres
     }
-    return SourceResult(source="district", status="blocked", message="challenge", observations=observations)
+    return SourceResult(
+        source="district", status="blocked", message="challenge",
+        movie_id=(movie.id if movie else config.primary_movie.id),
+        observations=observations,
+    )
 
 
-def _empty_bookmyshow(config, client, cache_dir=None):
+def _empty_bookmyshow(config, client, cache_dir=None, **kwargs):
     observations = {
         theatre.id: TheatreObservation(
             platform="bookmyshow", theatre_id=theatre.id, status="not_listed",
@@ -149,13 +158,10 @@ def test_partial_source_failure_keeps_previous_listings(config, tmp_path, monkey
     monkeypatch.setattr(monitor, "ADAPTERS", {"district": _fake_district})
     monitor.run_monitor(config_path=repo_config(config), data_dir=data_dir)
 
-    monkeypatch.setattr(monitor, "ADAPTERS", {
-        "district": _blocked_district,
-        "bookmyshow": _empty_bookmyshow,
-    })
+    monkeypatch.setattr(monitor, "ADAPTERS", {"district": _blocked_district})
     result = monitor.run_monitor(config_path=repo_config(config), data_dir=data_dir)
 
-    assert result["status"] == "partial"
+    assert result["status"] == "degraded"
     latest = monitor.Store(data_dir).load_latest()
     lulu = next(t for t in latest["theatres"] if t["id"] == "lulu-global-mall")
     assert lulu["shows"], "previous listing must survive a blocked source"
@@ -172,7 +178,7 @@ def repo_config(config) -> Path:
     return CONFIG_PATH
 
 
-def _partial_bookmyshow(config, client, cache_dir=None):
+def _partial_bookmyshow(config, client, cache_dir=None, **kwargs):
     observations = {
         theatre.id: TheatreObservation(
             platform="bookmyshow", theatre_id=theatre.id, status="not_listed",
@@ -186,14 +192,26 @@ def _partial_bookmyshow(config, client, cache_dir=None):
     )
 
 
+def _partial_ramayana(config, client, cache_dir=None, *, movie=None):
+    if movie is not None and movie.id == config.primary_movie.id:
+        return _fake_district(config, client, cache_dir, movie=movie)
+    return SourceResult(
+        source="district", status="partial", message="second movie page blocked",
+        movie_id=(movie.id if movie else config.primary_movie.id),
+        observations={
+            theatre.id: TheatreObservation(
+                platform="district", theatre_id=theatre.id, status="error", listed=None,
+                error="second movie page blocked",
+            ) for theatre in config.theatres
+        },
+    )
+
+
 def test_partial_source_is_reported_as_partial_coverage(config, tmp_path, monkeypatch):
-    monkeypatch.setattr(monitor, "ADAPTERS", {
-        "district": _fake_district,
-        "bookmyshow": _partial_bookmyshow,
-    })
+    monkeypatch.setattr(monitor, "ADAPTERS", {"district": _partial_ramayana})
     result = monitor.run_monitor(config_path=repo_config(config), data_dir=tmp_path / "data")
     assert result["status"] == "partial"
-    assert result["sources"] == {"district": "ok", "bookmyshow": "partial"}
+    assert result["sources"] == {"district": "partial"}
 
 
 def test_degraded_run_returns_exit_code_3(monkeypatch, capsys, repo_root):

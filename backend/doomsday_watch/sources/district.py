@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import quote, urlencode
 
-from ..config import IST, AppConfig, TheatreConfig, iso_ist
+from ..config import IST, AppConfig, MovieConfig, TheatreConfig, iso_ist
 from ..http import FetchResult, HttpClient
 from ..models import SourceResult, TheatreObservation, make_show
 from .base import SourceError, SourceUnavailable
@@ -156,26 +156,29 @@ def fetch_registry(client: HttpClient, base_url: str, path: str) -> dict[str, An
     return cinemas
 
 
-def discover_movie_url(client: HttpClient, config: AppConfig) -> str | None:
+def discover_movie_url(client: HttpClient, config: AppConfig, movie: MovieConfig) -> str | None:
     """Find the Bengaluru movie page slug when the configured one is stale."""
     base = config.sources.get("district", {}).get("base_url", "https://www.district.in")
     registry_path = config.sources.get("district", {}).get("cinema_registry_path", "/movies/cinemas-in-bengaluru")
     result = client.get(f"{base}{registry_path}")
     if not result.ok:
         return None
-    for href in sorted(set(re.findall(r'href="(?:https?://www\.district\.in)?(/movies/[a-z0-9-]*doomsday[a-z0-9-]*)"', result.text))):
+    token = re.sub(r"[^a-z0-9]+", "-", movie.title.lower()).strip("-")
+    pattern = re.compile(r'href="(?:https?://www\.district\.in)?(/movies/[a-z0-9-]*' + re.escape(token) + r'[a-z0-9-]*)"')
+    for href in sorted(set(pattern.findall(result.text))):
         if "movie-tickets" in href:
             return f"{base}{href}"
     return None
 
 
-def _movie_page_url(config: AppConfig, override: str | None = None) -> str:
+def _movie_page_url(movie: MovieConfig, config: AppConfig, override: str | None = None) -> str:
     base = config.sources.get("district", {}).get("base_url", "https://www.district.in")
     if override:
         return override
-    if config.district_slug:
-        return f"{base}/movies/{config.district_slug}"
-    return f"{base}/movies/avengers-doomsday-movie-tickets-in-{config.district_city}"
+    if movie.district_slug:
+        return f"{base}/movies/{movie.district_slug}"
+    slug = re.sub(r"[^a-z0-9]+", "-", movie.title.lower()).strip("-")
+    return f"{base}/movies/{slug}-movie-tickets-in-{movie.district_city}"
 
 
 def _parse_date(value: str) -> str | None:
@@ -204,6 +207,7 @@ def display_datetime(value: str) -> datetime:
 
 
 def _observations_from_groups(
+    movie_cfg: MovieConfig,
     config: AppConfig,
     groups: list[dict[str, Any]],
     movie: dict[str, Any],
@@ -250,6 +254,7 @@ def _observations_from_groups(
         registry_entry = registry.get(theatre.district_id or "", {})
         shows: list[dict[str, Any]] = []
         session_dates: set[str] = set()
+        raw_show_count = 0
 
         for session in group.get("sessions") or []:
             if not _valid_session(session):
@@ -261,11 +266,12 @@ def _observations_from_groups(
                 continue
             day = local.strftime("%Y-%m-%d")
             start = local.strftime("%H:%M")
+            raw_show_count += 1
             session_dates.add(day)
-            if day not in config.target_dates:
+            if day not in movie_cfg.target_dates:
                 continue
             areas = _session_areas(session)
-            shows.append(make_show(
+            show = make_show(
                 platform="district",
                 theatre_id=theatre.id,
                 date=day,
@@ -281,7 +287,10 @@ def _observations_from_groups(
                 source_time=raw_time,
                 languages=[str(movie.get("primary_language") or "")] if movie.get("primary_language") else [],
                 tags=[str(t) for t in (session.get("tags") or [])],
-            ))
+            )
+            if movie_cfg.required_format_keys and show["format"]["key"] not in movie_cfg.required_format_keys:
+                continue
+            shows.append(show)
 
         observed_dates.update(session_dates)
         observations[theatre.id] = TheatreObservation(
@@ -302,17 +311,33 @@ def _observations_from_groups(
             },
             shows=shows,
             available_dates=sorted(session_dates),
-            notes=[] if shows else [
-                "Cinema is listed for this movie, but has no sessions on the target dates yet."
-            ],
+            raw_show_count=raw_show_count,
+            required_format_keys=list(movie_cfg.required_format_keys),
+            notes=(
+                [] if shows else
+                [
+                    "Cinema is listed for this movie, but the source has no matching "
+                    + (", ".join(movie_cfg.required_format_keys) or "target-date")
+                    + " sessions yet."
+                ] if raw_show_count else [
+                    "Cinema is listed for this movie, but has no sessions on the target dates yet."
+                ]
+            ),
         )
 
     return observations, observed_dates
 
 
-def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) -> SourceResult:
+def fetch(
+    config: AppConfig,
+    client: HttpClient,
+    cache_dir: Path | None = None,
+    *,
+    movie: MovieConfig | None = None,
+) -> SourceResult:
+    movie = movie or config.primary_movie
     base_url = config.sources.get("district", {}).get("base_url", "https://www.district.in")
-    url = _movie_page_url(config)
+    url = _movie_page_url(movie, config)
     result = client.get(url)
 
     if result.status == "robots_disallowed":
@@ -329,7 +354,7 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) 
         )
     if not result.ok:
         if result.http_status in (404, 410):
-            discovered = discover_movie_url(client, config)
+            discovered = discover_movie_url(client, config, movie)
             if discovered:
                 url = discovered
                 result = client.get(url)
@@ -341,9 +366,9 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) 
     data = _next_data(result.text)
     page_props = ((data.get("props") or {}).get("pageProps") or {})
     state = page_props.get("initialState") or {}
-    content_id = str(page_props.get("data", {}).get("contentId") or config.district_content_id)
-    movie = _movie_meta(state, content_id)
-    if not movie.get("title"):
+    content_id = str(page_props.get("data", {}).get("contentId") or movie.district_content_id)
+    movie_meta = _movie_meta(state, content_id)
+    if not movie_meta.get("title"):
         raise SourceError("District page parsed but no movie metadata was found")
 
     groups = _find_session_groups(state)
@@ -364,7 +389,7 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) 
             save_registry(cache_dir, fresh)
 
     observations, observed_dates = _observations_from_groups(
-        config, groups, movie, content_id, base_url, registry,
+        movie, config, groups, movie_meta, content_id, base_url, registry,
     )
     all_dates = set(observed_dates)
     message = (
@@ -384,10 +409,11 @@ def fetch(config: AppConfig, client: HttpClient, cache_dir: Path | None = None) 
             "dates_with_sessions": sorted(all_dates),
         },
         movie={
-            **movie,
+            **movie_meta,
             "url": result.url,
             "show_dates": sorted(all_dates),
         },
+        movie_id=movie.id,
         observations=observations,
         notes=[
             "Area-wise seat counts are published by District; individual seat numbers are not, "
@@ -400,6 +426,7 @@ def result_from_payload(
     config: AppConfig,
     payload: dict[str, Any],
     *,
+    movie: MovieConfig | None = None,
     source_url: str | None = None,
 ) -> SourceResult:
     """Build a District result from the NAS collector's compact inbox payload.
@@ -408,6 +435,7 @@ def result_from_payload(
     before any snapshot is written: a malformed or incomplete message must
     never replace the last good snapshot.
     """
+    movie_cfg = movie or config.primary_movie
     if not isinstance(payload, dict):
         raise SourceError("District inbox payload is not a JSON object")
     if str(payload.get("source") or "") != "district":
@@ -415,18 +443,18 @@ def result_from_payload(
     content_id = str(payload.get("content_id") or "")
     if not content_id:
         raise SourceError("District inbox payload is missing content_id")
-    if config.district_content_id and content_id != config.district_content_id:
+    if movie_cfg.district_content_id and content_id != movie_cfg.district_content_id:
         raise SourceError(
             f"District inbox content_id {content_id!r} does not match configured "
-            f"{config.district_content_id!r}"
+            f"{movie_cfg.district_content_id!r} for {movie_cfg.id}"
         )
 
-    movie = payload.get("movie")
-    if not isinstance(movie, dict) or not movie.get("title"):
+    movie_meta = payload.get("movie")
+    if not isinstance(movie_meta, dict) or not movie_meta.get("title"):
         raise SourceError("District inbox payload has no movie metadata")
-    if config.title and str(movie["title"]).strip() != config.title:
+    if movie_cfg.title and str(movie_meta["title"]).strip() != movie_cfg.title:
         raise SourceError(
-            f"District inbox movie title {movie['title']!r} does not match configured {config.title!r}"
+            f"District inbox movie title {movie_meta['title']!r} does not match configured {movie_cfg.title!r}"
         )
 
     collected_at = payload.get("collected_at")
@@ -438,11 +466,9 @@ def result_from_payload(
         raise SourceError(f"District inbox collected_at is invalid: {exc}") from exc
 
     groups = payload.get("groups")
-    if not isinstance(groups, list) or not groups:
-        raise SourceError("District inbox payload has no cinema groups")
+    if not isinstance(groups, list):
+        raise SourceError("District inbox payload has no cinema groups list")
     groups = [g for g in groups if isinstance(g, dict)]
-    if not groups:
-        raise SourceError("District inbox payload has no usable cinema groups")
 
     valid_ids = {t.district_id for t in config.theatres if t.district_id}
     seen_ids: set[str] = set()
@@ -465,7 +491,7 @@ def result_from_payload(
                     f"District inbox cinema {group_id!r} has an invalid showTime"
                 ) from exc
             day = local.strftime("%Y-%m-%d")
-            if day not in config.target_dates:
+            if day not in movie_cfg.target_dates:
                 # The collector may include adjacent UTC dates so IST midnight
                 # sessions are not lost. Non-target local dates are filtered.
                 continue
@@ -480,16 +506,16 @@ def result_from_payload(
         for g in groups
         if str((g.get("data") or {}).get("id") or "") in valid_ids
     }
-    if valid_ids and not matched:
+    if groups and valid_ids and not matched:
         raise SourceError("District inbox payload contains none of the configured cinema IDs")
 
     base_url = config.sources.get("district", {}).get("base_url", "https://www.district.in")
     observations, observed_dates = _observations_from_groups(
-        config, groups, movie, content_id, base_url, {},
+        movie_cfg, config, groups, movie_meta, content_id, base_url, {},
     )
     collector = payload.get("collector") if isinstance(payload.get("collector"), dict) else {}
     movie_url = source_url or payload.get("movie_url") or (
-        f"{base_url}/movies/{config.district_slug}" if config.district_slug else None
+        f"{base_url}/movies/{movie_cfg.district_slug}" if movie_cfg.district_slug else None
     )
     return SourceResult(
         source="district",
@@ -509,10 +535,11 @@ def result_from_payload(
             "collector": collector,
         },
         movie={
-            **movie,
+            **movie_meta,
             "url": movie_url,
             "show_dates": sorted(observed_dates),
         },
+        movie_id=movie_cfg.id,
         observations=observations,
         notes=[
             "Collected by the Indian-egress NAS collector and ingested without a network fetch.",

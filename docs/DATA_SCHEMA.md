@@ -26,10 +26,26 @@ before each build, so the static site always ships the committed snapshot.
 
 ```jsonc
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_at": "2026-11-17T20:00:00+05:30",
   "checked_at": "2026-11-17T20:00:00+05:30",   // IST ISO-8601
   "status": "ok | partial | degraded",          // ok = every source fully healthy; partial = at least one blocked/partial
+  // Multi-movie source of truth. Each entry has its own movie, totals,
+  // theatres, sources and events. Session IDs are namespaced by content ID.
+  "movies": [
+    {
+      "movie": { "id": "avengers-doomsday", "title": "Avengers: Doomsday", "required_format_keys": [] },
+      "totals": { "shows_total": 20 },
+      "theatres": [ /* same theatre shape as below */ ],
+      "events": [ /* movie_id + movie_title on every event */ ]
+    },
+    {
+      "movie": { "id": "ramayana", "title": "Ramayana", "required_format_keys": ["4dx_3d"] },
+      "totals": { "shows_total": 2, "shows_4dx_3d": 2 },
+      "theatres": [ /* only explicit 4DX-3D sessions */ ]
+    }
+  ],
+  // Compatibility aliases = primary movie (Avengers). Do not use for new code.
   "movie": {
     "title": "Avengers: Doomsday",
     "release_date": "2026-12-17",
@@ -47,6 +63,9 @@ before each build, so the static site always ships the committed snapshot.
     "shows_3d": 20,
     "shows_infinity_vision_3d": 20,
     "shows_imax_3d": 0,
+    "shows_4dx": 0,
+    "shows_4dx_3d": 0,
+    "movies_tracked": 2,
     "bookable_shows": 20,
     "seats_available_total": 0,
     "formats": ["4dx", "infinity_vision_3d"],
@@ -143,38 +162,76 @@ CLI:
 
 ```jsonc
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "source": "district",
   "collected_at": "2026-11-17T23:00:00+05:30",
-  "collector": { "name": "openwrt-ucode", "host": "openwrt", "egress": "IN" },
-  "content_id": "176735",
-  "movie_url": "https://www.district.in/movies/...",
-  "movie": { "title": "Avengers: Doomsday", "release_date": "..." },
-  "groups": [
+  "collector": { "name": "openwrt-ucode", "version": "2.0.0", "host": "openwrt", "egress": "IN" },
+  "movies": [
     {
-      "data": { "id": "56450", "name": "Cinepolis Lulu Global Mall..." },
-      "sessions": [
-        { "sid": "...", "showTime": "2026-12-17T13:40",  // naive UTC in District payload
-          "audi": "MACRO XE", "scrnFmt": "MS INFINITY VISION 3D",
-          "total": 277, "avail": 41, "seatStatus": "Filling Fast",
-          "areas": [{ "label": "NORMAL", "price": 890, "sTotal": 19, "sAvail": 19 }] }
-      ],
-      "available_dates": ["2026-12-17"]
+      "id": "avengers-doomsday",
+      "status": "ok | unavailable | error",
+      "content_id": "176735",
+      "movie_url": "https://www.district.in/movies/...",
+      "movie": { "title": "Avengers: Doomsday", "release_date": "..." },
+      "groups": [
+        {
+          "data": { "id": "56450", "name": "Cinepolis Lulu Global Mall..." },
+          "sessions": [
+            { "sid": "...", "showTime": "2026-12-17T13:40",  // naive UTC in District payload
+              "audi": "MACRO XE", "scrnFmt": "MS INFINITY VISION 3D",
+              "total": 277, "avail": 41, "seatStatus": "Filling Fast",
+              "areas": [{ "label": "NORMAL", "price": 890, "sTotal": 19, "sAvail": 19 }] }
+          ],
+          "available_dates": ["2026-12-17"]
+        }
+      ]
+    },
+    {
+      "id": "ramayana",
+      "status": "ok",
+      "content_id": "176276",
+      "movie": { "title": "Ramayana", "release_date": "2026-11-05" },
+      "groups": [
+        {
+          "data": { "id": "1022299", "name": "PVR Orion Mall..." },
+          "sessions": [
+            { "sid": "...", "showTime": "2026-11-18T06:10", "scrnFmt": "4DX-3D", "areas": [] }
+          ]
+        }
+      ]
     }
   ]
 }
 ```
 
-Ingestion rejects a payload with a wrong content ID/title, no movie metadata, no
-configured cinemas, malformed sessions, non-target local dates after conversion, a timestamp
-more than 3 hours old or in the future, or a timestamp older than the current
-snapshot. A payload whose canonical data hash equals the previous snapshot is
-ignored without writing data.
+Ingestion rejects a payload with a wrong content ID/title, a missing configured
+movie, no movie metadata for an `ok` entry, malformed sessions, a timestamp more
+than 3 hours old or in the future, or a timestamp older than the current snapshot.
+An `unavailable`/`error` movie entry is accepted and preserves that movie's last
+good snapshot while the other movie updates. A payload whose canonical data hash
+equals the previous snapshot (and whose `normalizer_version` is current) is ignored
+without writing data.
+
+Schema-v1 single-movie payloads are still accepted for compatibility; the other
+configured movie is recorded as missing/partial rather than silently dropped.
+
+### Multi-movie invariants
+
+- Doomsday and Ramayana have distinct `movie.id`, `district_content_id`, session
+  IDs, snapshot totals and event IDs.
+- `required_format_keys: ["4dx_3d"]` filters only after the source format is
+  normalised. District's `4DX-3D` maps to `4dx_3d`; `3D`, `4DX`, `IMAX 3D` and
+  `Infinity Vision 4DX 3D` do not.
+- A movie with no published sessions remains present with zero shows. Nothing is
+  invented for unpublished dates.
+- All `showTime` values are naive UTC from District; conversion to Asia/Kolkata
+  happens once in the Python adapter. `source_time` retains the raw value.
 
 ### Normalised format enum
 
-`imax_3d`, `imax_2d`, `infinity_vision_3d`, `infinity_vision_4dx_3d`, `4dx`, `ice_3d`, `3d`, `2d`, `dolby_cinema`,
-`screenx`, `pxl`, `laser`, `imax`, `unknown`.
+`imax_3d`, `imax_2d`, `infinity_vision_3d`, `infinity_vision_4dx_3d`, `4dx_3d`,
+`4dx_2d`, `ice_3d`, `dolby_3d`, `dolby_2d`, `screenx_3d`, `screenx_2d`, `pxl_3d`,
+`pxl_2d`, `laser_3d`, `3d`, `2d`, `unknown`.
 
 Infinity Vision 3D is intentionally **separate** from IMAX 3D. `format_raw`
 keeps the platform's original string so the mapping can be audited.

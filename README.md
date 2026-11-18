@@ -1,8 +1,12 @@
 # Doomsday Watch
 
-Hourly ticket-availability tracker for **Avengers: Doomsday** in **Bengaluru**, for
-**17 Dec 2026** and **18 Dec 2026**, across six theatres on **District** and
-**BookMyShow**. Static dashboard, no paid services, runs with your computer off.
+Hourly ticket-availability tracker for **Avengers: Doomsday** and **Ramayana** in
+**Bengaluru**, across six theatres on **District**. Static dashboard, no paid
+services, runs with your computer off.
+
+- **Avengers: Doomsday** — 17–18 Dec 2026, every published format.
+- **Ramayana** — remaining November 2026 dates plus December weekends, **4DX 3D
+  only**, matched only when District's source label is `4DX-3D`.
 
 > **Data honesty first.** Every show, format, price and seat count below comes from
 > a public source page. Missing data is shown as missing. Seat drops are
@@ -13,17 +17,20 @@ Hourly ticket-availability tracker for **Avengers: Doomsday** in **Bengaluru**, 
 
 ## What it does
 
-- Watches **six Bengaluru theatres** every hour via GitHub Actions.
+- Watches **six Bengaluru theatres** every hour via the Indian-egress OpenWrt
+  collector and GitHub Actions, tracking two movies as separate snapshots.
+- Keeps movie identities, showtimes, sessions and availability histories separate.
 - Detects show listings, new showtimes, **formats** (2D, 3D, IMAX 3D, **Infinity
-  Vision 3D**, 4DX, ICE, Dolby, ScreenX, P[XL], laser), booking openings, sell-outs,
-  price changes and availability drops between snapshots.
+  Vision 3D**, **4DX 3D**, 4DX, ICE, Dolby, ScreenX, P[XL], laser), booking
+  openings, sell-outs, price changes and availability drops between snapshots.
 - Renders a dark cinematic dashboard: hero status, stat cards, format/date/platform
   filters, per-theatre show rows, and a seat-comfort guide.
 - Keeps an append-only history of snapshots and change events in the repository.
 - Sends **Telegram**, **ntfy.sh** and generic webhook alerts (all free), plus
   in-browser notifications while the tab is open.
-- Degrades honestly: if BookMyShow blocks the runner, the run is marked `partial`,
-  the last BookMyShow snapshot is preserved and labelled, and District keeps working.
+- Degrades honestly: if one movie page is unavailable, its last good snapshot is
+  preserved and labelled while the other movie continues updating. BookMyShow is
+  disabled in this deployment; District is the sole source.
 
 ### Cloud access reality (verified 2026-11-17)
 
@@ -220,8 +227,9 @@ twice. Set `DASHBOARD_URL` to include a link in messages.
 
 | Key | Purpose |
 |---|---|
-| `movie.district.content_id` / `slug` | District movie page identity (`176735`). |
-| `target_dates` | `2026-12-17`, `2026-12-18` (IST calendar dates). |
+| `movies[]` | One tracked film per entry. Each has its own `id`, District `content_id`/`slug`, `target_dates` and optional `required_format_keys`. |
+| `movies[].target_dates` | IST calendar dates. Doomsday: 17–18 Dec 2026. Ramayana: 18–30 Nov 2026 plus 5/6, 12/13, 19/20, 26/27 Dec 2026. |
+| `movies[].required_format_keys` | `["4dx_3d"]` for Ramayana. Only explicit source `4DX-3D` sessions are kept; plain 3D, 4DX and IMAX never substitute. |
 | `monitoring.interval_minutes` | Displayed interval; the real cadence is the workflow cron. |
 | `monitoring.request_timeout_seconds` / `max_retries` | HTTP resilience. |
 | `monitoring.user_agent` | Descriptive UA; identifies this as a personal tracker. |
@@ -230,6 +238,20 @@ twice. Set `DASHBOARD_URL` to include a link in messages.
 | `retention` | Snapshot pruning (hourly 72, daily 90). |
 | `sources.*.enabled` | Disable an adapter without deleting code. |
 | `notifications` | Channel enable flags and env-var names. |
+
+### Multi-movie model
+
+Snapshots store a top-level `movies[]` array. Each entry has its own movie
+metadata, totals, theatres and events. The dashboard switches between movies and
+resets filters per movie; History can filter by movie. Top-level `movie` and
+`theatres` are compatibility aliases for the primary (Avengers) entry.
+
+The router sends a schema-v2 payload containing both movies in one commit. Each
+movie has its own content ID, so a Ramayana session can never be merged into an
+Avengers theatre listing. If one page fails, the collector records that movie as
+`unavailable` and still uploads the other; ingestion preserves the failed movie's
+last good snapshot. Identical payloads are skipped using a content hash plus the
+normaliser version.
 
 ### Venues tracked
 
@@ -298,12 +320,13 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-45 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
+48 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
 ingestion, duplicate/stale payload protection, format normalisation (including
-Infinity Vision ≠ IMAX), District parsing against a trimmed real fixture, UTC→IST
+Infinity Vision ≠ IMAX, explicit 4DX 3D vs plain 3D), District parsing against a trimmed real fixture, multi-movie config and payloads, UTC→IST
 show-clock conversion and date boundaries, legacy-snapshot migration without
 duplicate events, seat heuristics, diff/notification rules, snapshot retention,
-and the end-to-end pipeline with blocked sources.
+duplicate-safe combined ingestion of two movies, and the end-to-end pipeline with
+blocked sources.
 
 Frontend checks:
 

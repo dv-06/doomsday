@@ -147,7 +147,9 @@ is explicitly selected.
 
 - Add a theatre: add its exact `platform_ids.district` ID to config, verify the name
   in the Sources page, no code change.
-- Add a date: append to `target_dates`.
+- Add a date: append to the movie's `movies[].target_dates`.
+- Add a movie: add a `movies[]` entry with its own District `content_id`, dates and
+  optional `required_format_keys`. No new snapshot or ingest code is needed.
 - Add a source: implement the adapter interface in `sources/`, register it in
   `monitor.ADAPTERS`, then enable it in config.
 - Change cadence: edit the root cron on the router and

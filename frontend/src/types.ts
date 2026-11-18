@@ -187,13 +187,41 @@ export interface Totals {
   shows_infinity_vision_3d: number;
   shows_imax_3d: number;
   shows_4dx: number;
+  shows_4dx_3d: number;
+  movies_tracked?: number;
   bookable_shows: number;
   seats_available_total: number;
   dates: Record<
     string,
-    { shows: number; theatres: number; shows_3d: number; shows_infinity_vision_3d: number }
+    { shows: number; theatres: number; shows_3d: number; shows_infinity_vision_3d: number; shows_4dx_3d?: number }
   >;
   theatre_errors: { theatre_id: string; error: string }[];
+}
+
+export interface MovieInfo {
+  id: string;
+  title: string;
+  release_date: string;
+  target_dates: string[];
+  required_format_keys?: string[];
+  district_content_id: string;
+  district_url: string | null;
+  poster: string | null;
+  duration_minutes: number | null;
+}
+
+/** One tracked film inside a multi-movie snapshot. */
+export interface MovieSnapshot {
+  schema_version: number;
+  run_id: string;
+  checked_at: string;
+  status: "ok" | "partial" | "degraded";
+  movie: MovieInfo;
+  totals: Totals;
+  theatres: Theatre[];
+  sources: SourceInfo[];
+  events: HistoryEvent[];
+  provenance?: Record<string, unknown>;
 }
 
 export interface Snapshot {
@@ -203,15 +231,8 @@ export interface Snapshot {
   started_at: string;
   duration_ms: number;
   status: "ok" | "partial" | "degraded";
-  movie: {
-    title: string;
-    release_date: string;
-    target_dates: string[];
-    district_content_id: string;
-    district_url: string | null;
-    poster: string | null;
-    duration_minutes: number | null;
-  };
+  movie: MovieInfo;
+  movies?: MovieSnapshot[];
   totals: Totals;
   theatres: Theatre[];
   sources: SourceInfo[];
@@ -240,6 +261,8 @@ export interface Meta {
 }
 
 export interface HistoryEvent {
+  movie_id?: string;
+  movie_title?: string;
   id: string;
   type: string;
   severity: "high" | "medium" | "low";

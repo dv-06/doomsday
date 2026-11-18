@@ -20,21 +20,22 @@ from pathlib import Path
 
 from .config import ConfigError, iso_ist, load_config, now_ist, parse_iso
 from .http import HttpClient
+from .models import SourceResult
 from .monitor import ADAPTERS, run_monitor
 from .notify import Notifier
-from .sources import bookmyshow, district
+from .sources import district
 from .store import Store
 
 # Bump when the meaning/shape of a normally-identical inbox payload changes.
 # Snapshot provenance records it so a one-time re-ingest can repair old data
 # without weakening duplicate protection for every future run.
-PAYLOAD_NORMALIZER_VERSION = 2
+PAYLOAD_NORMALIZER_VERSION = 3
 
 
 def _summarise(result: dict) -> str:
     totals = result["totals"]
     return (
-        f"status={result['status']} shows={totals['shows_total']} "
+        f"status={result['status']} movies={totals.get('movies_tracked', 1)} shows={totals['shows_total']} "
         f"3D={totals['shows_3d']} InfinityVision3D={totals['shows_infinity_vision_3d']} "
         f"theatres_with_listings={totals['theatres_with_listings']}/{totals['theatres_monitored']} "
         f"events={len(result['events'])} sources={result['sources']}"
@@ -72,7 +73,7 @@ def _write_step_summary(result: dict) -> None:
         return
     totals = result["totals"]
     lines = [
-        f"## Doomsday Watch — {result['status']}",
+        f"## Doomsday Watch â€” {result['status']}",
         "",
         f"- Theatres with listings: **{totals['theatres_with_listings']}/{totals['theatres_monitored']}**",
         f"- Shows: **{totals['shows_total']}** (3D: {totals['shows_3d']}, Infinity Vision 3D: {totals['shows_infinity_vision_3d']})",
@@ -83,7 +84,7 @@ def _write_step_summary(result: dict) -> None:
         "### Changes this run",
     ]
     if result["events"]:
-        lines += [f"- **{e['type']}** — {e['message']}" for e in result["events"][:25]]
+        lines += [f"- **{e['type']}** â€” {e['message']}" for e in result["events"][:25]]
     else:
         lines.append("- No changes detected.")
     Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -91,13 +92,50 @@ def _write_step_summary(result: dict) -> None:
 
 def _payload_digest(payload: dict) -> str:
     """Stable hash of the source data, excluding collection timestamps."""
-    canonical = {
-        "content_id": payload.get("content_id"),
-        "movie": payload.get("movie"),
-        "groups": payload.get("groups"),
-    }
+    if int(payload.get("schema_version", 0)) >= 2:
+        canonical = {
+            "movies": [
+                {
+                    "id": entry.get("id"),
+                    "status": entry.get("status"),
+                    "content_id": entry.get("content_id"),
+                    "error": entry.get("error"),
+                    "movie": entry.get("movie"),
+                    "show_dates": entry.get("show_dates"),
+                    "groups": entry.get("groups"),
+                }
+                for entry in payload.get("movies", [])
+                if isinstance(entry, dict)
+            ]
+        }
+    else:
+        canonical = {
+            "content_id": payload.get("content_id"),
+            "movie": payload.get("movie"),
+            "groups": payload.get("groups"),
+        }
     raw = json.dumps(canonical, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _movie_entries(payload: dict, config) -> list[tuple[object, dict]]:
+    """Return (movie config, entry payload) pairs for schema 1 or 2."""
+    version = int(payload.get("schema_version", 0))
+    if version == 1:
+        return [(config.primary_movie, payload)]
+    if version != 2:
+        raise ValueError(f"unsupported payload schema_version {payload.get('schema_version')!r}")
+    raw_movies = payload.get("movies")
+    if not isinstance(raw_movies, list) or not raw_movies:
+        raise ValueError("payload has no movies list")
+    entries = {
+        str(entry.get("id") or ""): entry
+        for entry in raw_movies if isinstance(entry, dict)
+    }
+    missing = [movie.id for movie in config.movies if movie.id not in entries]
+    if missing:
+        raise ValueError(f"payload is missing configured movie(s): {', '.join(missing)}")
+    return [(movie, entries[movie.id]) for movie in config.movies]
 
 
 def cmd_ingest(args: argparse.Namespace) -> int:
@@ -108,7 +146,8 @@ def cmd_ingest(args: argparse.Namespace) -> int:
         payload = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(payload, dict):
             raise ValueError("payload is not a JSON object")
-        if int(payload.get("schema_version", 0)) != 1:
+        version = int(payload.get("schema_version", 0))
+        if version not in (1, 2):
             raise ValueError(f"unsupported payload schema_version {payload.get('schema_version')!r}")
 
         collected = parse_iso(str(payload.get("collected_at") or ""))
@@ -118,9 +157,44 @@ def cmd_ingest(args: argparse.Namespace) -> int:
         if now - collected > timedelta(hours=3):
             raise ValueError("payload is more than 3 hours old; refusing to overwrite newer data")
 
-        source = district.result_from_payload(
-            config, payload, source_url=payload.get("movie_url"),
-        )
+        entries = _movie_entries(payload, config)
+        covered = {movie.id for movie, _ in entries}
+        source_results = []
+        for movie in config.movies:
+            if movie.id in covered:
+                continue
+            source_results.append(SourceResult(
+                source="district",
+                status="partial",
+                movie_id=movie.id,
+                message=f"{movie.title} is not present in this collector payload",
+                checked_at=payload.get("collected_at") or iso_ist(),
+                evidence={"transport": "nas_inbox", "movie_id": movie.id},
+            ))
+        for movie, entry in entries:
+            status = str(entry.get("status") or "ok")
+            if status in {"unavailable", "error"}:
+                source_results.append(SourceResult(
+                    source="district",
+                    status="error",
+                    movie_id=movie.id,
+                    message=str(entry.get("error") or f"District page unavailable for {movie.title}"),
+                    checked_at=payload.get("collected_at") or iso_ist(),
+                    evidence={"transport": "nas_inbox", "movie_id": movie.id},
+                ))
+                continue
+            entry_payload = {
+                **entry,
+                "source": "district",
+                "collected_at": payload.get("collected_at"),
+                "content_id": entry.get("content_id") or movie.district_content_id,
+            }
+            source_results.append(district.result_from_payload(
+                config,
+                entry_payload,
+                movie=movie,
+                source_url=entry.get("movie_url"),
+            ))
         digest = _payload_digest(payload)
 
         store = Store(args.data)
@@ -141,22 +215,11 @@ def cmd_ingest(args: argparse.Namespace) -> int:
             and previous_prov.get("normalizer_version") == PAYLOAD_NORMALIZER_VERSION
         )
         if same_payload:
-            print(f"District inbox unchanged (sha256={digest[:12]}…); no data written.")
+            print(f"District inbox unchanged (sha256={digest[:12]}â€¦); no data written.")
             if args.github_summary:
                 _write_ingest_summary(None, digest, unchanged=True)
             return 0
 
-        bms = bookmyshow.blocked_result(
-            config,
-            "BookMyShow showtimes remain behind a Cloudflare challenge (HTTP 403). "
-            "The Indian-egress collector covers District only; no block was bypassed.",
-            evidence={
-                "transport": "nas_inbox",
-                "bypassed": False,
-                "http_status": 403,
-                "checked_at": payload.get("collected_at"),
-            },
-        )
         provenance = {
             "collector": payload.get("collector") or {},
             "transport": "nas_inbox",
@@ -165,6 +228,7 @@ def cmd_ingest(args: argparse.Namespace) -> int:
             "content_sha256": digest,
             "payload_schema_version": payload.get("schema_version"),
             "normalizer_version": PAYLOAD_NORMALIZER_VERSION,
+            "movies": [movie.id for movie, _ in entries],
         }
         result = run_monitor(
             args.config,
@@ -172,12 +236,12 @@ def cmd_ingest(args: argparse.Namespace) -> int:
             dry_run=args.dry_run,
             skip_notifications=args.skip_notifications,
             trigger=args.trigger,
-            prefetched_results=[source, bms],
+            prefetched_results=source_results,
             provenance=provenance,
         )
         print(_summarise(result))
         for event in result["events"]:
-            print(f"  [{event['severity']}] {event['type']}: {event['message']}")
+            print(f"  [{event['severity']}] {event.get('movie_title', '')} {event['type']}: {event['message']}")
         if args.github_summary:
             _write_ingest_summary(result, digest, unchanged=False)
         return 0
@@ -192,7 +256,7 @@ def _write_ingest_summary(result: dict | None, digest: str, *, unchanged: bool) 
         return
     if unchanged or result is None:
         lines = [
-            "## Doomsday Watch — NAS ingest",
+            "## Doomsday Watch â€” NAS ingest",
             "",
             f"- District payload SHA-256: `{digest}`",
             "- Content unchanged; no data files were written.",
@@ -200,7 +264,7 @@ def _write_ingest_summary(result: dict | None, digest: str, *, unchanged: bool) 
     else:
         totals = result["totals"]
         lines = [
-            f"## Doomsday Watch — NAS ingest ({result['status']})",
+            f"## Doomsday Watch â€” NAS ingest ({result['status']})",
             "",
             f"- District payload SHA-256: `{digest}`",
             f"- Theatres with listings: **{totals['theatres_with_listings']}/{totals['theatres_monitored']}**",
@@ -209,7 +273,7 @@ def _write_ingest_summary(result: dict | None, digest: str, *, unchanged: bool) 
             f"- Sources: `{json.dumps(result['sources'])}`",
         ]
         if result["events"]:
-            lines += ["", "### Changes"] + [f"- **{e['type']}** — {e['message']}" for e in result["events"][:25]]
+            lines += ["", "### Changes"] + [f"- **{e['type']}** â€” {e['message']}" for e in result["events"][:25]]
         else:
             lines += ["", "No change events detected."]
     Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -268,7 +332,7 @@ def cmd_notify_test(args: argparse.Namespace) -> int:
                 print(f"  {channel}: ok")
             except Exception as exc:  # noqa: BLE001
                 errors.append(channel)
-                print(f"  {channel}: FAILED — {type(exc).__name__}: {exc}")
+                print(f"  {channel}: FAILED â€” {type(exc).__name__}: {exc}")
     return 1 if errors else 0
 
 

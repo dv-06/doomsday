@@ -4,27 +4,15 @@ import { Chip, ExternalLink, SectionHeading, StatusDot } from "../components/ui"
 
 const sourceNotes: Record<string, { headline: string; detail: string; evidenceKeys: [string, string][] }> = {
   district: {
-    headline: "Public pages, parsed once per run",
+    headline: "Public movie pages, parsed once per run",
     detail:
-      "District server-renders its Bengaluru movie page with session, screen, format, price and area-wise seat counts. We request that single page once an hour and parse the embedded JSON. No private API, no login, no browser automation.",
+      "District server-renders each Bengaluru movie page with session, screen, format, price and area-wise seat counts. We request one page per tracked movie once an hour and parse the embedded JSON. No private API, no login, no browser automation.",
     evidenceKeys: [
       ["http_status", "HTTP"],
       ["latency_ms", "Latency"],
       ["attempts", "Attempts"],
       ["session_groups", "Cinemas in session list"],
       ["dates_with_sessions", "Dates with sessions"],
-    ],
-  },
-  bookmyshow: {
-    headline: "Listing checked, showtimes blocked",
-    detail:
-      "BookMyShow's movie list and movie page are public, so we can confirm the film exists and its release date. Its showtimes and seat pages are protected by a Cloudflare challenge; the adapter reports that and stops. It does not solve CAPTCHAs, rotate identities or call private endpoints.",
-    evidenceKeys: [
-      ["explore_url", "Probe URL"],
-      ["movie_url", "Movie page"],
-      ["showtimes_url", "Showtimes URL"],
-      ["showtimes_http", "Showtimes HTTP"],
-      ["movie_code", "Event code"],
     ],
   },
 };
@@ -172,7 +160,7 @@ export default function Sources() {
         {[
           {
             title: "What we request",
-            body: "One District movie page and two BookMyShow pages per hour. A descriptive User-Agent identifies this as a personal tracker. robots.txt is checked before each request and cached for a day.",
+            body: "One District page per tracked movie per hour (Avengers and Ramayana). A descriptive User-Agent identifies this as a personal tracker. robots.txt is checked before each request and cached for a day.",
           },
           {
             title: "What we never do",

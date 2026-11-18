@@ -35,17 +35,22 @@ def _source(config, shows, status="ok", source="district"):
                    "name": theatre.name, "url": f"https://example.test/{theatre.id}"},
             shows=[s for s in shows if s["theatre_id"] == theatre.id],
         )
-    return SourceResult(source=source, status=status, message="test", observations=observations)
+    return SourceResult(
+        source=source, status=status, message="test", movie_id=config.primary_movie.id,
+        observations=observations,
+    )
 
 
 def _snapshot(config, previous, sources):
-    snap, _, _ = build_snapshot(config, sources, previous, iso_ist(), 10, "test-run")
+    snap, _, _ = build_snapshot(
+        config.primary_movie, config, sources, previous, iso_ist(), 10, "test-run",
+    )
     return snap
 
 
 def test_first_run_emits_discovery_events_once(config):
     snap = _snapshot(config, {}, [_source(config, [_show("10:00"), _show("14:00")])])
-    events, state = diff_snapshot({}, snap["theatres"], config, snap["sources"])
+    events, state = diff_snapshot({}, snap["theatres"], config, snap["sources"], movie=config.primary_movie)
     types = [e["type"] for e in events]
     assert all(e["time_basis"] == "ist" for e in events)
     assert "theatre_listed" in types
@@ -61,10 +66,10 @@ def test_first_run_emits_discovery_events_once(config):
 
 def test_new_show_and_first_show_on_second_date(config):
     first = _snapshot(config, {}, [_source(config, [_show("10:00")])])
-    _, state = diff_snapshot({}, first["theatres"], config, first["sources"])
+    _, state = diff_snapshot({}, first["theatres"], config, first["sources"], movie=config.primary_movie)
 
     second = _snapshot(config, first, [_source(config, [_show("10:00"), _show("18:00"), _show("09:00", "2026-12-18")])])
-    events, _ = diff_snapshot(state, second["theatres"], config, second["sources"])
+    events, _ = diff_snapshot(state, second["theatres"], config, second["sources"], movie=config.primary_movie)
     types = [e["type"] for e in events]
     assert "show_added" in types
     assert "first_show" in types
@@ -93,16 +98,16 @@ def test_blocked_source_preserves_last_snapshot(config):
     assert len(district_obs["shows"]) == 1, "last good shows must be preserved"
     assert snap["status"] == "degraded"
 
-    events, _ = diff_snapshot({}, snap["theatres"], config, snap["sources"])
+    events, _ = diff_snapshot({}, snap["theatres"], config, snap["sources"], movie=config.primary_movie)
     assert "show_removed" not in [e["type"] for e in events]
     assert "source_blocked" in [e["type"] for e in events]
 
 
 def test_sold_out_and_seat_drop_are_availability_not_sales(config):
     first = _snapshot(config, {}, [_source(config, [_show("10:00", available=50)])])
-    _, state = diff_snapshot({}, first["theatres"], config, first["sources"])
+    _, state = diff_snapshot({}, first["theatres"], config, first["sources"], movie=config.primary_movie)
     second = _snapshot(config, first, [_source(config, [_show("10:00", available=0)])])
-    events, _ = diff_snapshot(state, second["theatres"], config, second["sources"])
+    events, _ = diff_snapshot(state, second["theatres"], config, second["sources"], movie=config.primary_movie)
     sold = [e for e in events if e["type"] == "sold_out"]
     assert sold, "status change to sold out must be detected"
     assert "sold" not in sold[0]["message"].replace("sold out", ""), "never claim confirmed ticket sales"
@@ -126,7 +131,8 @@ def test_layout_dir_used_for_seat_recommendation(config, tmp_path: Path):
     ]}
     (tmp_path / "lulu-global-mall.json").write_text(json.dumps(layout), encoding="utf-8")
     snap, _, _ = build_snapshot(
-        config, [_source(config, [_show("10:00")])], {}, iso_ist(), 5, "run", layout_dir=tmp_path,
+        config.primary_movie, config, [_source(config, [_show("10:00")])], {}, iso_ist(), 5, "run",
+        layout_dir=tmp_path,
     )
     lulu = next(t for t in snap["theatres"] if t["id"] == "lulu-global-mall")
     assert lulu["best_seats"]["mode"] == "layout"

@@ -19,7 +19,7 @@ def _write_payload(tmp_path: Path, payload: dict) -> Path:
     return path
 
 
-def test_ingest_updates_existing_schema_and_keeps_bookmyshow_blocked(
+def test_ingest_updates_existing_schema_without_network(
     config, fixture_html, tmp_path, repo_root
 ):
     payload = _payload_from_fixture(fixture_html, iso_ist())
@@ -36,11 +36,12 @@ def test_ingest_updates_existing_schema_and_keeps_bookmyshow_blocked(
     assert latest["provenance"]["transport"] == "nas_inbox"
     assert latest["provenance"]["content_sha256"]
     district_src = next(s for s in latest["sources"] if s["source"] == "district")
-    bms_src = next(s for s in latest["sources"] if s["source"] == "bookmyshow")
-    assert district_src["status"] == "ok"
+    assert district_src["status"] == "partial"
     assert district_src["checked_at"] == payload["collected_at"]
-    assert bms_src["status"] == "blocked"
     assert latest["totals"]["shows_total"] > 0
+    assert {m["movie"]["id"] for m in latest["movies"]} == {
+        "avengers-doomsday", "ramayana",
+    }
     # Existing dashboard schema is preserved.
     assert {"schema_version", "checked_at", "totals", "theatres", "sources"} <= set(latest)
 
@@ -113,7 +114,7 @@ def test_legacy_provenance_is_reingested_once_without_duplicate_sessions(
 
     assert main(args) == 0
     repaired = json.loads((data / "latest.json").read_text(encoding="utf-8"))
-    assert repaired["provenance"]["normalizer_version"] == 2
+    assert repaired["provenance"]["normalizer_version"] == 3
     assert len((data / "history/runs.jsonl").read_text(encoding="utf-8").splitlines()) == runs_before + 1
     ids = [s["id"] for t in repaired["theatres"] for s in t["shows"]]
     assert len(ids) == len(set(ids)), "re-ingestion must not duplicate sessions"

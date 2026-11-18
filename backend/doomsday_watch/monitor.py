@@ -115,6 +115,7 @@ def _merge_shows(platforms: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def build_snapshot(
+    movie: Any,
     config: AppConfig,
     source_results: list[SourceResult],
     previous: dict[str, Any],
@@ -171,7 +172,7 @@ def build_snapshot(
 
             merged_shows = _merge_shows(platforms)
             by_date: dict[str, Any] = {}
-            for date in config.target_dates:
+            for date in movie.target_dates:
                 day_shows = [s for s in merged_shows if s["date"] == date]
                 summary = summarise_shows(day_shows)
                 by_date[date] = {
@@ -185,9 +186,9 @@ def build_snapshot(
                         for s in day_shows if s.get("booking_url")
                     ][:6],
                 }
-            other_dates = sorted({s["date"] for s in merged_shows if s["date"] not in config.target_dates})
+            other_dates = sorted({s["date"] for s in merged_shows if s["date"] not in movie.target_dates})
 
-            all_shows = [s for s in merged_shows if s["date"] in config.target_dates]
+            all_shows = [s for s in merged_shows if s["date"] in movie.target_dates]
             best_seats = build_recommendation(
                 theatre_cfg.id,
                 [s for s in all_shows if s["availability"]["status"] != "sold_out"] or all_shows,
@@ -227,6 +228,8 @@ def build_snapshot(
                 "shows": all_shows,
                 "formats": [f for f in _format_list(all_shows)],
                 "format_keys": format_keys,
+                "required_format_keys": list(movie.required_format_keys),
+                "source_show_count": sum(int(p.get("raw_show_count") or 0) for p in platforms.values()),
                 "listed": bool(all_shows) or any(p.get("listed") for p in platforms.values()),
                 "booking": {
                     "url": primary_link,
@@ -259,6 +262,7 @@ def build_snapshot(
         "shows_infinity_vision_3d": sum(1 for s in all_shows if s["format"]["key"].startswith("infinity_vision")),
         "shows_imax_3d": sum(1 for s in all_shows if s["format"]["key"].startswith("imax")),
         "shows_4dx": sum(1 for s in all_shows if "4dx" in s["format"]["key"]),
+        "shows_4dx_3d": sum(1 for s in all_shows if s["format"]["key"] == "4dx_3d"),
         "bookable_shows": sum(1 for s in all_shows if s["availability"]["status"] in {"bookable", "few_left"}),
         "seats_available_total": sum(
             s["availability"]["available_seats"] or 0 for s in all_shows
@@ -271,8 +275,11 @@ def build_snapshot(
                 "shows_infinity_vision_3d": sum(
                     1 for s in all_shows if s["date"] == d and s["format"]["key"].startswith("infinity_vision")
                 ),
+                "shows_4dx_3d": sum(
+                    1 for s in all_shows if s["date"] == d and s["format"]["key"] == "4dx_3d"
+                ),
             }
-            for d in config.target_dates
+            for d in movie.target_dates
         },
         "theatre_errors": theatre_errors,
     }
@@ -300,17 +307,19 @@ def build_snapshot(
 
     checked_at = iso_ist()
     snapshot = {
-        "schema_version": 1,
+        "schema_version": 2,
         "run_id": run_id,
         "checked_at": checked_at,
         "started_at": started_at,
         "duration_ms": duration_ms,
         "status": run_status,
         "movie": {
-            "title": config.title,
-            "release_date": config.release_date,
-            "target_dates": list(config.target_dates),
-            "district_content_id": config.district_content_id,
+            "id": movie.id,
+            "title": movie.title,
+            "release_date": movie.release_date,
+            "target_dates": list(movie.target_dates),
+            "required_format_keys": list(movie.required_format_keys),
+            "district_content_id": movie.district_content_id,
             "district_url": next((r.movie.get("url") for r in source_results if r.movie.get("url")), None),
             "poster": next((r.movie.get("poster") for r in source_results if r.movie.get("poster")), None),
             "duration_minutes": next(
@@ -360,6 +369,51 @@ def _theatre_health(platforms: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _aggregate_sources(movie_snapshots: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rank = {"error": 4, "blocked": 3, "partial": 2, "ok": 1}
+    merged: dict[str, dict[str, Any]] = {}
+    messages: dict[str, list[str]] = {}
+    for snap in movie_snapshots:
+        for source in snap.get("sources", []) or []:
+            name = source["source"]
+            current = merged.get(name)
+            if current is None or rank.get(source.get("status"), 0) > rank.get(current.get("status"), 0):
+                merged[name] = dict(source)
+            msg = str(source.get("message") or "").strip()
+            if msg and msg not in messages.setdefault(name, []):
+                messages[name].append(msg)
+    for name, entry in merged.items():
+        entry["message"] = " | ".join(messages.get(name, []))
+    return list(merged.values())
+
+
+def _aggregate_totals(movie_snapshots: list[dict[str, Any]], theatre_count: int) -> dict[str, Any]:
+    numeric = [
+        "theatres_with_listings", "shows_total", "shows_3d",
+        "shows_infinity_vision_3d", "shows_imax_3d", "shows_4dx", "shows_4dx_3d",
+        "bookable_shows", "seats_available_total",
+    ]
+    totals: dict[str, Any] = {key: 0 for key in numeric}
+    totals["theatres_monitored"] = theatre_count
+    totals["movies_tracked"] = len(movie_snapshots)
+    totals["dates"] = {}
+    totals["theatre_errors"] = []
+    for snap in movie_snapshots:
+        t = snap.get("totals") or {}
+        for key in numeric:
+            totals[key] += int(t.get(key) or 0)
+        for day, summary in (t.get("dates") or {}).items():
+            entry = totals["dates"].setdefault(day, {
+                "shows": 0, "theatres": 0, "shows_3d": 0,
+                "shows_infinity_vision_3d": 0, "shows_4dx_3d": 0,
+            })
+            for key in ("shows", "theatres", "shows_3d", "shows_infinity_vision_3d"):
+                entry[key] += int(summary.get(key) or 0)
+            entry["shows_4dx_3d"] += int((summary or {}).get("shows_4dx_3d") or 0)
+        totals["theatre_errors"].extend(t.get("theatre_errors") or [])
+    return totals
+
+
 def run_monitor(
     config_path: str | Path | None = None,
     data_dir: str | Path = "data",
@@ -384,12 +438,16 @@ def run_monitor(
     started_at = iso_ist()
     run_id = datetime.fromisoformat(started_at).strftime("%Y%m%dT%H%M%S") + "-" + uuid4().hex[:6]
 
-    source_results: list[SourceResult] = []
+    by_movie: dict[str, list[SourceResult]] = {movie.id: [] for movie in config.movies}
     if prefetched_results is not None:
         # Ingest path: the NAS already fetched District. No network request is
         # made here, so an import can never bypass a source block or duplicate
         # a fetch.
-        source_results = list(prefetched_results)
+        for result in prefetched_results:
+            movie_id = result.movie_id or config.primary_movie.id
+            if movie_id not in by_movie:
+                raise ValueError(f"source result references unknown movie {movie_id!r}")
+            by_movie[movie_id].append(result)
     else:
         with HttpClient(
             user_agent=config.monitoring.user_agent,
@@ -398,51 +456,126 @@ def run_monitor(
             backoff_seconds=config.monitoring.retry_backoff_seconds,
             cache_dir=cache_dir,
         ) as client:
-            for name, adapter in ADAPTERS.items():
-                if not config.sources.get(name, {}).get("enabled", False):
-                    continue
-                try:
-                    source_results.append(adapter(config, client, cache_dir))
-                except Exception as exc:  # noqa: BLE001 - isolate source failures
-                    source_results.append(SourceResult(
-                        source=name,
-                        status="error",
-                        message=f"{type(exc).__name__}: {exc}",
-                        evidence={"traceback_tail": traceback.format_exc(limit=2)},
-                        observations={
-                            t.id: TheatreObservation(
-                                platform=name, theatre_id=t.id, status="error", listed=None,
-                                error=f"{type(exc).__name__}: {exc}",
-                            )
-                            for t in config.theatres
-                        },
-                    ))
+            for movie in config.movies:
+                for name, adapter in ADAPTERS.items():
+                    if not config.sources.get(name, {}).get("enabled", False):
+                        continue
+                    try:
+                        if name == "district":
+                            result = adapter(config, client, cache_dir, movie=movie)
+                        else:
+                            result = adapter(config, client, cache_dir)
+                        by_movie[movie.id].append(result)
+                    except Exception as exc:  # noqa: BLE001 - isolate source failures
+                        by_movie[movie.id].append(SourceResult(
+                            source=name,
+                            status="error",
+                            message=f"{type(exc).__name__}: {exc}",
+                            movie_id=movie.id,
+                            evidence={"traceback_tail": traceback.format_exc(limit=2)},
+                            observations={
+                                t.id: TheatreObservation(
+                                    platform=name, theatre_id=t.id, status="error", listed=None,
+                                    error=f"{type(exc).__name__}: {exc}",
+                                )
+                                for t in config.theatres
+                            },
+                        ))
 
     duration_ms = int((time.time() - started) * 1000)
-    snapshot, _, _ = build_snapshot(
-        config, source_results, previous, started_at, duration_ms, run_id,
-        layout_dir=store.root / "seatmaps", provenance=provenance,
-    )
+    previous_movies = {
+        (snap.get("movie") or {}).get("id"): snap
+        for snap in (previous.get("movies") or [])
+        if isinstance(snap, dict)
+    }
+    movie_snapshots: list[dict[str, Any]] = []
+    all_events: list[dict[str, Any]] = []
+    movie_states: dict[str, Any] = {}
 
-    events, new_state = diff_snapshot(previous_state, snapshot["theatres"], config, snapshot["sources"])
-    new_state["notified"] = previous_state.get("notified", {})
+    for movie in config.movies:
+        previous_movie = previous_movies.get(movie.id)
+        if previous_movie is None and movie.id == config.primary_movie.id:
+            previous_movie = {
+                "theatres": previous.get("theatres", []),
+                "sources": previous.get("sources", []),
+            }
+        snapshot, _, _ = build_snapshot(
+            movie, config, by_movie.get(movie.id, []), previous_movie or {},
+            started_at, duration_ms, run_id,
+            layout_dir=store.root / "seatmaps", provenance=provenance,
+        )
+        prev_movie_state = (previous_state.get("movies") or {}).get(movie.id)
+        if prev_movie_state is None and movie.id == config.primary_movie.id and "theatres" in previous_state:
+            prev_movie_state = previous_state
+        events, movie_state = diff_snapshot(
+            prev_movie_state or {}, snapshot["theatres"], config, snapshot["sources"], movie=movie,
+        )
+        snapshot["events"] = events
+        movie_states[movie.id] = movie_state
+        movie_snapshots.append(snapshot)
+        all_events.extend(events)
+
+    movie_statuses = [snap["status"] for snap in movie_snapshots]
+    if movie_statuses and all(s == "ok" for s in movie_statuses):
+        run_status = "ok"
+    elif any(s in {"ok", "partial"} for s in movie_statuses):
+        run_status = "partial"
+    else:
+        run_status = "degraded"
+
+    totals = _aggregate_totals(movie_snapshots, len(config.theatres))
+    sources_payload = _aggregate_sources(movie_snapshots)
+    primary = movie_snapshots[0]
+    checked_at = iso_ist()
+    snapshot = {
+        "schema_version": 2,
+        "run_id": run_id,
+        "checked_at": checked_at,
+        "started_at": started_at,
+        "duration_ms": duration_ms,
+        "status": run_status,
+        "movies": movie_snapshots,
+        # Compatibility aliases for older pages / API consumers. New code
+        # should read the selected entry from ``movies``.
+        "movie": primary["movie"],
+        "theatres": primary["theatres"],
+        "totals": totals,
+        "sources": sources_payload,
+        "excluded_lookalikes": list(config.excluded_lookalikes),
+        "events": all_events,
+    }
+    if provenance:
+        snapshot["provenance"] = provenance
+
+    new_state = {
+        "version": 2,
+        "updated_at": iso_ist(),
+        "movies": movie_states,
+        "notified": previous_state.get("notified", {}),
+    }
     prune_notified(new_state)
-    snapshot["events"] = events
 
-    notifications: dict[str, Any] = {"checked_at": iso_ist(), "channels": [], "candidates": 0, "sent": [], "skipped": [], "errors": []}
+    notifications: dict[str, Any] = {
+        "checked_at": iso_ist(), "channels": [], "candidates": 0,
+        "sent": [], "skipped": [], "errors": [],
+    }
     if not skip_notifications:
         notifier = Notifier(config, dry_run=dry_run)
-        notifications = notifier.dispatch(events, new_state)
+        notifications = notifier.dispatch(all_events, new_state)
     snapshot["notifications"] = notifications
 
     now = datetime.fromisoformat(snapshot["checked_at"])
     next_check = now + config.monitoring.interval_delta
     meta = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": snapshot["checked_at"],
         "run_id": run_id,
         "run_status": snapshot["status"],
         "trigger": trigger,
+        "movies": [
+            {"id": s["movie"]["id"], "title": s["movie"]["title"], "status": s["status"]}
+            for s in movie_snapshots
+        ],
         "monitoring": {
             "interval_minutes": config.monitoring.interval_minutes,
             "timezone": config.monitoring.timezone,
@@ -455,15 +588,15 @@ def run_monitor(
             ),
         },
         "last_success_at": snapshot["checked_at"] if snapshot["status"] in {"ok", "partial"} else previous.get("checked_at"),
-        "counts": snapshot["totals"],
-        "events_last_run": len(events),
-        "event_types_last_run": sorted({e["type"] for e in events}),
+        "counts": totals,
+        "events_last_run": len(all_events),
+        "event_types_last_run": sorted({e["type"] for e in all_events}),
         "sources": {
             s["source"]: {
                 "status": s["status"], "message": s["message"],
                 "checked_at": s["checked_at"], "last_success_at": s.get("last_success_at"),
             }
-            for s in snapshot["sources"]
+            for s in sources_payload
         },
         "notifications": {
             "channels": notifications.get("channels", []),
@@ -492,17 +625,17 @@ def run_monitor(
             "snapshot_path": None,
             "dry_run": True,
             "totals": snapshot["totals"],
-            "events": events,
+            "events": all_events,
             "notifications": notifications,
-            "sources": {s["source"]: s["status"] for s in snapshot["sources"]},
+            "sources": {s["source"]: s["status"] for s in sources_payload},
         }
     snapshot_path = store.write_run(
         snapshot=snapshot,
         state=state,
         meta=meta,
-        events=events,
-        sources={"schema_version": 1, "checked_at": snapshot["checked_at"], "sources": {
-            s["source"]: s for s in snapshot["sources"]
+        events=all_events,
+        sources={"schema_version": 2, "checked_at": snapshot["checked_at"], "sources": {
+            s["source"]: s for s in sources_payload
         }},
         retention=(config.retention.hourly_snapshots, config.retention.daily_snapshots),
     )
@@ -513,7 +646,7 @@ def run_monitor(
         "status": snapshot["status"],
         "snapshot_path": str(snapshot_path),
         "totals": snapshot["totals"],
-        "events": events,
+        "events": all_events,
         "notifications": notifications,
-        "sources": {s["source"]: s["status"] for s in snapshot["sources"]},
+        "sources": {s["source"]: s["status"] for s in sources_payload},
     }

@@ -129,6 +129,8 @@ class TheatreObservation:
     error: str | None = None
     checked_at: str = field(default_factory=iso_ist)
     notes: list[str] = field(default_factory=list)
+    raw_show_count: int = 0
+    required_format_keys: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         dates: dict[str, Any] = {}
@@ -153,6 +155,8 @@ class TheatreObservation:
             "error": self.error,
             "checked_at": self.checked_at,
             "notes": self.notes,
+            "raw_show_count": self.raw_show_count,
+            "required_format_keys": list(self.required_format_keys),
         }
 
 
@@ -164,6 +168,7 @@ class SourceResult:
     checked_at: str = field(default_factory=iso_ist)
     evidence: dict[str, Any] = field(default_factory=dict)
     movie: dict[str, Any] = field(default_factory=dict)
+    movie_id: str = ""
     observations: dict[str, TheatreObservation] = field(default_factory=dict)
     notes: list[str] = field(default_factory=list)
 
@@ -179,6 +184,7 @@ class SourceResult:
             "checked_at": self.checked_at,
             "evidence": self.evidence,
             "movie": self.movie,
+            "movie_id": self.movie_id,
             "notes": self.notes,
         }
 

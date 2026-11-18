@@ -1,18 +1,36 @@
 {
-  "schema_version": 1,
-  "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
-  "content_id": "176735",
-  "target_dates": [
-    "2026-12-17",
-    "2026-12-18"
-  ],
+  "schema_version": 2,
   "cinemas": [
-    {"id": "lulu-global-mall", "district_id": "56450", "name": "Lulu Global Mall"},
-    {"id": "orion-mall", "district_id": "1022299", "name": "Orion Mall"},
-    {"id": "mantri-square-mall", "district_id": "1020725", "name": "Mantri Square Mall"},
-    {"id": "gt-world-mall", "district_id": "1022303", "name": "GT World Mall"},
-    {"id": "miraj-sunkadakatte", "district_id": "52080", "name": "Miraj Sunkadakatte"},
-    {"id": "global-mall-mysore-road", "district_id": "1022307", "name": "Global Mall Mysore Road"}
+    {
+      "id": "lulu-global-mall",
+      "district_id": "56450",
+      "name": "Lulu Global Mall"
+    },
+    {
+      "id": "orion-mall",
+      "district_id": "1022299",
+      "name": "Orion Mall"
+    },
+    {
+      "id": "mantri-square-mall",
+      "district_id": "1020725",
+      "name": "Mantri Square Mall"
+    },
+    {
+      "id": "gt-world-mall",
+      "district_id": "1022303",
+      "name": "GT World Mall"
+    },
+    {
+      "id": "miraj-sunkadakatte",
+      "district_id": "52080",
+      "name": "Miraj Sunkadakatte"
+    },
+    {
+      "id": "global-mall-mysore-road",
+      "district_id": "1022307",
+      "name": "Global Mall Mysore Road"
+    }
   ],
   "repository": "dv-06/doomsday",
   "branch": "master",
@@ -23,5 +41,46 @@
     "fetch_timeout_seconds": 30,
     "max_sessions": 500
   },
-  "user_agent": "DoomsdayWatch-NAS/1.0 (+personal ticket-availability tracker; 1 request/hour; contact via repository issues)"
+  "user_agent": "DoomsdayWatch-NAS/1.0 (+personal ticket-availability tracker; 1 request/hour; contact via repository issues)",
+  "movies": [
+    {
+      "id": "avengers-doomsday",
+      "title": "Avengers: Doomsday",
+      "content_id": "176735",
+      "movie_url": "https://www.district.in/movies/avengers-doomsday-movie-tickets-in-bengaluru-MV176735",
+      "target_dates": [
+        "2026-12-17",
+        "2026-12-18"
+      ]
+    },
+    {
+      "id": "ramayana",
+      "title": "Ramayana",
+      "content_id": "176276",
+      "movie_url": "https://www.district.in/movies/ramayana-movie-tickets-in-bengaluru-MV176276",
+      "target_dates": [
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-26",
+        "2026-12-27"
+      ]
+    }
+  ]
 }

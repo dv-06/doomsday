@@ -12,7 +12,7 @@ from __future__ import annotations
 import hashlib
 from typing import Any, Iterable
 
-from .config import AppConfig, iso_ist
+from .config import AppConfig, MovieConfig, iso_ist
 
 SEVERITY = {
     "theatre_listed": "high",
@@ -74,7 +74,10 @@ def diff_snapshot(
     theatres: list[dict[str, Any]],
     config: AppConfig,
     sources: list[dict[str, Any]],
+    *,
+    movie: MovieConfig | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    movie = movie or config.primary_movie
     events: list[dict[str, Any]] = []
     prev_theatres = previous.get("theatres", {}) or {}
     state_theatres: dict[str, Any] = {}
@@ -252,7 +255,7 @@ def diff_snapshot(
                 *[d for d in (obs.get("dates") or {}).keys()],
             })
             for new_date in sorted(set(observed_dates) - prev_available_dates):
-                if prev_available_dates and new_date not in config.target_dates:
+                if prev_available_dates and new_date not in movie.target_dates:
                     events.append(_make_event(
                         "date_added", theatre_id=tid, theatre_name=name, platform=platform,
                         date=new_date,
@@ -294,6 +297,11 @@ def diff_snapshot(
                 "source_recovered", theatre_id="-", theatre_name=name.title(), platform=name,
                 message=f"{name}: access recovered, monitoring resumed",
             ))
+
+    for event in events:
+        event["movie_id"] = movie.id
+        event["movie_title"] = movie.title
+        event["id"] = _event_id(movie.id, event["id"])
 
     # Keep notified/alert bookkeeping that other modules own.
     new_state = {

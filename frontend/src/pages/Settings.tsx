@@ -250,7 +250,12 @@ on:
           <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-ash">
             <Chip tone="muted">{enabledTheatres.length} theatres</Chip>
             <Chip tone="muted">{settings.enabledPlatforms.join(" + ") || "no platforms"}</Chip>
-            <Chip tone="muted">{snapshot?.movie.target_dates.length ?? 0} target dates</Chip>
+            {(snapshot?.movies ?? []).map((entry) => (
+              <Chip key={entry.movie.id} tone="muted">
+                {entry.movie.title}: {entry.movie.target_dates.length} dates
+              </Chip>
+            ))}
+            {!snapshot?.movies && <Chip tone="muted">{snapshot?.movie.target_dates.length ?? 0} target dates</Chip>}
           </div>
         </div>
 

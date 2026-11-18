@@ -46,7 +46,7 @@ function Brand() {
       <span className="leading-none">
         <span className="block font-display text-xl tracking-[0.16em] text-white">DOOMSDAY WATCH</span>
         <span className="mt-1 block text-[10px] font-medium uppercase tracking-[0.28em] text-ash">
-          Bengaluru · Dec 2026
+          Bengaluru · hourly watch
         </span>
       </span>
     </NavLink>

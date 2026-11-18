@@ -100,14 +100,29 @@ class NotificationConfig:
 
 
 @dataclass(frozen=True)
-class AppConfig:
+class MovieConfig:
+    """One tracked film. Theatres are shared; dates and formats are not."""
+
+    id: str
     title: str
     release_date: str
     district_content_id: str
     district_slug: str
     district_city: str
-    bookmyshow_movie_code: str | None
     target_dates: tuple[str, ...]
+    required_format_keys: tuple[str, ...] = ()
+    notes: str = ""
+
+    @property
+    def district_url(self) -> str | None:
+        if not self.district_slug:
+            return None
+        return f"https://www.district.in/movies/{self.district_slug}"
+
+
+@dataclass(frozen=True)
+class AppConfig:
+    movies: tuple[MovieConfig, ...]
     monitoring: MonitoringConfig
     retention: RetentionConfig
     notifications: NotificationConfig
@@ -115,6 +130,42 @@ class AppConfig:
     excluded_lookalikes: tuple[dict[str, Any], ...]
     sources: dict[str, Any]
     raw: dict[str, Any]
+    bookmyshow_movie_code: str | None = None
+
+    @property
+    def primary_movie(self) -> MovieConfig:
+        return self.movies[0]
+
+    # Backward-compatible accessors used by older adapters and the Settings page.
+    @property
+    def title(self) -> str:
+        return self.primary_movie.title
+
+    @property
+    def release_date(self) -> str:
+        return self.primary_movie.release_date
+
+    @property
+    def district_content_id(self) -> str:
+        return self.primary_movie.district_content_id
+
+    @property
+    def district_slug(self) -> str:
+        return self.primary_movie.district_slug
+
+    @property
+    def district_city(self) -> str:
+        return self.primary_movie.district_city
+
+    @property
+    def target_dates(self) -> tuple[str, ...]:
+        return self.primary_movie.target_dates
+
+    def movie(self, movie_id: str) -> MovieConfig:
+        for movie in self.movies:
+            if movie.id == movie_id:
+                return movie
+        raise ConfigError(f"unknown movie id {movie_id!r}")
 
 
 def _require(mapping: dict[str, Any], key: str, where: str) -> Any:
@@ -132,17 +183,60 @@ def load_config(path: str | Path | None = None) -> AppConfig:
     except json.JSONDecodeError as exc:
         raise ConfigError(f"{path}: invalid JSON ({exc})") from exc
 
-    movie = _require(raw, "movie", "config")
-    district = movie.get("district", {})
-    bms = movie.get("bookmyshow", {})
-    dates = [str(d) for d in _require(raw, "target_dates", "config")]
-    if not dates:
-        raise ConfigError("config: target_dates must not be empty")
-    for d in dates:
-        try:
-            datetime.strptime(d, "%Y-%m-%d")
-        except ValueError as exc:
-            raise ConfigError(f"config: target_dates has invalid date {d!r}") from exc
+    movie_entries = raw.get("movies")
+    if movie_entries is None:
+        # Legacy single-movie config. Keep reading it forever so old inbox
+        # payloads and checkouts do not break during a rollout.
+        legacy_movie = _require(raw, "movie", "config")
+        dates = [str(d) for d in _require(raw, "target_dates", "config")]
+        movie_entries = [{
+            **legacy_movie,
+            "id": "avengers-doomsday",
+            "target_dates": dates,
+        }]
+        legacy = True
+    else:
+        legacy = False
+        if not isinstance(movie_entries, list) or not movie_entries:
+            raise ConfigError("config: movies must be a non-empty list")
+
+    movies: list[MovieConfig] = []
+    seen_movies: set[str] = set()
+    for index, item in enumerate(movie_entries):
+        if not isinstance(item, dict):
+            raise ConfigError(f"config: movies[{index}] is not an object")
+        mid = str(item.get("id") or "").strip()
+        if not mid:
+            raise ConfigError(f"config: movies[{index}].id is required")
+        if mid in seen_movies:
+            raise ConfigError(f"config: duplicate movie id {mid!r}")
+        seen_movies.add(mid)
+        dates = [str(d) for d in item.get("target_dates", [])]
+        if not dates:
+            raise ConfigError(f"config: movie {mid!r} has no target_dates")
+        for d in dates:
+            try:
+                datetime.strptime(d, "%Y-%m-%d")
+            except ValueError as exc:
+                raise ConfigError(f"config: movie {mid!r} has invalid date {d!r}") from exc
+        district = item.get("district", {})
+        content_id = str(district.get("content_id") or "")
+        if not content_id:
+            raise ConfigError(f"config: movie {mid!r} has no district.content_id")
+        required = item.get("required_format_keys", [])
+        if not isinstance(required, list):
+            raise ConfigError(f"config: movie {mid!r} required_format_keys must be a list")
+        movies.append(MovieConfig(
+            id=mid,
+            title=str(item.get("title") or mid).strip(),
+            release_date=str(item.get("release_date") or dates[0]),
+            district_content_id=content_id,
+            district_slug=str(district.get("slug") or ""),
+            district_city=str(district.get("city") or "bengaluru"),
+            target_dates=tuple(sorted(set(dates))),
+            required_format_keys=tuple(str(k) for k in required),
+            notes=str(item.get("notes") or ""),
+        ))
 
     seen: set[str] = set()
     theatres: list[TheatreConfig] = []
@@ -190,14 +284,10 @@ def load_config(path: str | Path | None = None) -> AppConfig:
         notify_on=tuple(notify_raw.get("notify_on", [])),
     )
 
+    bms = (movie_entries[0].get("bookmyshow") or {}) if movie_entries else {}
     return AppConfig(
-        title=str(movie.get("title", "Avengers: Doomsday")),
-        release_date=str(movie.get("release_date", dates[0])),
-        district_content_id=str(district.get("content_id", "")),
-        district_slug=str(district.get("slug", "")),
-        district_city=str(district.get("city", "bengaluru")),
+        movies=tuple(movies),
         bookmyshow_movie_code=(str(bms["movie_code"]) if bms.get("movie_code") else None),
-        target_dates=tuple(dates),
         monitoring=monitoring,
         retention=retention,
         notifications=notifications,

@@ -77,7 +77,7 @@ function ChartCard({ runs }: { runs: RunRecord[] }) {
               <stop offset="0%" stopColor="#e2571e" stopOpacity={0.45} />
               <stop offset="100%" stopColor="#e2571e" stopOpacity={0.02} />
             </linearGradient>
-undefined          </defs>
+          </defs>
           <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
           <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={40} tick={{ fill: "#7d7d8a", fontSize: 10 }} />
           <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "#7d7d8a", fontSize: 10 }} width={40} />
@@ -118,6 +118,7 @@ function TimelineEvent({ event }: { event: HistoryEvent }) {
       <div className="min-w-0 flex-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[12px] font-semibold text-sand">{eventLabels[event.type] ?? event.type}</span>
+          {event.movie_title && <Chip tone="ember" className="!px-1.5 !py-0 !text-[9px]">{event.movie_title}</Chip>}
           <span className="text-[11px] text-ash">{event.theatre_name}</span>
           {event.platform && <Chip tone="muted" className="!px-1.5 !py-0 !text-[9px]">{event.platform === "bookmyshow" ? "BookMyShow" : event.platform}</Chip>}
           {shownDate && (
@@ -142,6 +143,7 @@ export default function History() {
   const [error, setError] = useState<string | null>(null);
   const [type, setType] = useState("all");
   const [theatre, setTheatre] = useState("all");
+  const [movie, setMovie] = useState("all");
   const [limit, setLimit] = useState(PAGE);
 
   useEffect(() => {
@@ -169,9 +171,10 @@ export default function History() {
       events.filter(
         (event) =>
           (type === "all" || event.type === type) &&
-          (theatre === "all" || event.theatre_id === theatre),
+          (theatre === "all" || event.theatre_id === theatre) &&
+          (movie === "all" || event.movie_id === movie || event.movie_title === movie),
       ),
-    [events, type, theatre],
+    [events, type, theatre, movie],
   );
 
   const grouped = useMemo(() => {
@@ -253,6 +256,17 @@ export default function History() {
           description="Newest first. Each entry maps to a real diff between two stored snapshots."
           right={
             <div className="flex flex-wrap gap-2">
+              <select
+                aria-label="Filter events by movie"
+                value={movie}
+                onChange={(e) => { setMovie(e.target.value); setLimit(PAGE); }}
+                className="rounded-lg border border-white/10 bg-graphite px-2.5 py-2 text-[12px] text-sand"
+              >
+                <option value="all">All movies</option>
+                {(snapshot?.movies ?? []).map((entry) => (
+                  <option key={entry.movie.id} value={entry.movie.id}>{entry.movie.title}</option>
+                ))}
+              </select>
               <select
                 aria-label="Filter events by type"
                 value={type}
