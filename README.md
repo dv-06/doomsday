@@ -298,11 +298,12 @@ pip install -r requirements-dev.txt
 PYTHONPATH=backend pytest backend/tests -q
 ```
 
-40 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
+45 tests cover CLI parsing, dry-run isolation, normal and partial runs, NAS inbox
 ingestion, duplicate/stale payload protection, format normalisation (including
-Infinity Vision ≠ IMAX), District parsing against a trimmed real fixture, seat
-heuristics, diff/notification rules, snapshot retention, and the end-to-end
-pipeline with blocked sources.
+Infinity Vision ≠ IMAX), District parsing against a trimmed real fixture, UTC→IST
+show-clock conversion and date boundaries, legacy-snapshot migration without
+duplicate events, seat heuristics, diff/notification rules, snapshot retention,
+and the end-to-end pipeline with blocked sources.
 
 Frontend checks:
 
