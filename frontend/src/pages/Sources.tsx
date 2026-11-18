@@ -95,7 +95,7 @@ export default function Sources() {
           title="Theatre identity check"
           description="Each row is matched by the platform's own venue ID — not by name similarity alone. Similar-named malls are explicitly excluded below."
         />
-        <div className="overflow-x-auto">
+        <div className="w-full max-w-full min-w-0 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-[12px]">
             <thead>
               <tr className="border-b border-white/[0.08] text-[10px] uppercase tracking-wider text-ash">

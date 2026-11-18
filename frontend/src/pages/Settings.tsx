@@ -75,8 +75,8 @@ on:
         </p>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="panel p-4 sm:p-5">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-2">
+        <div className="panel min-w-0 p-4 sm:p-5">
           <SectionHeading
             eyebrow="Schedule"
             title="Hourly monitoring"
@@ -114,7 +114,7 @@ on:
           </div>
         </div>
 
-        <div className="panel p-4 sm:p-5">
+        <div className="panel min-w-0 p-4 sm:p-5">
           <SectionHeading
             eyebrow="Notifications"
             title="Alert channels"
@@ -263,15 +263,15 @@ on:
         </div>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.4fr,1fr]">
-        <div className="panel p-4 sm:p-5">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1.4fr),minmax(0,1fr)]">
+        <div className="panel min-w-0 overflow-hidden p-4 sm:p-5">
           <SectionHeading
             eyebrow="Repo config"
             title="Export your preferences"
             description="Commit these values to config/monitor.json so the hourly runner uses the same watchlist and interval. Display-only preferences stay in this browser."
             right={<CopyButton text={configJson} label="Copy JSON" />}
           />
-          <pre className="max-h-72 overflow-auto rounded-xl border border-white/[0.06] bg-black/40 p-3 text-[11px] leading-relaxed text-sand/90">
+          <pre className="max-h-72 max-w-full overflow-auto whitespace-pre-wrap break-words rounded-xl border border-white/[0.06] bg-black/40 p-3 text-[11px] leading-relaxed text-sand/90">
             <code>{configJson}</code>
           </pre>
           <p className="mt-1 text-[10.5px] text-ash/80">Scroll inside the box to see the full file. It contains no secrets.</p>
